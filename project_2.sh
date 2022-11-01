@@ -1,0 +1,1 @@
+rsync -aP /home/asier/vivadoprojects/project_2/ mystuff/project_2

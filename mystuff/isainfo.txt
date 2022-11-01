@@ -1,0 +1,42 @@
+0x0     R   ADD     r1, r2, r3      // Add two registers
+0x1     R   SUB     r1, r2, r3      // Subtract two registers
+0x2     R   MUL     r1, r2, r3      // Multiply two registers
+0x10    M   LDB     imm(r1), r0     // Load Byte; base register + offset
+0x11    M   LDW     imm(r1), r0     // Load Word; base register + offset
+0x12    M   STB     r0, imm(r1)     // Store Byte; base register + offset
+0x13    M   STW     r0, imm(r1)     // Store Word; base register + offset
+0x30    B   BEQ     r1, offset      // if r1==r2, PC=PC+offset
+0x31    B   JUMP    r1, offset      // PC = r1 + offset
+# others...
+0x14    M   MOV     rm0, dst, zeros   // 
+0x15    B   TLBWR   ...
+0x16    B   IRET    ...
+
+# encoding
+R-type 31-25    24-20       19-15       14-10               9-0
+       opcode   dst         src1        src2                zeroes
+M-type 31-25    24-20       19-15       14-0                
+       opcode   dst         src1        offset              
+B-type 31-25    24-20       19-15       14-10               9-0
+       opcode   offsethi    src1        src2/offsetmid      offsetlo
+
+
+
+# para quedarme tranquilo
+AND     r1, r2, r3
+OR      r1, r2, r3
+
+
+
+# suppported by MIPSWeste
+add     $1, $2, $3
+sub     $1, $2, $3
+and     $1, $2, $3
+or      $1, $2, $3
+slt     $1, $2, $3      set less than: $1 <- 1 if $2 < $3
+                                       $1 <- 0 otherwise
+addi    $1, $2, imm
+beq     $1, $2, imm
+j       destination
+lb      $1, imm($2)     load byte: $1 <- mem[$2 + imm]
+sb      $1, imm($2)     store byte: mem[$2 + imm] <- $1
