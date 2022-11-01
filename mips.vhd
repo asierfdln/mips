@@ -179,8 +179,8 @@ begin
     process (clk) begin
         if (clk'event and clk = '0' and memwrite = '1') then
             if (conv_integer(adr) = 76 and conv_integer(writedata) = 7) then
-                report "Simulation completed successfully";
-            else report "Simulation failed.";
+                report "Simulation result: success";
+            else report "Simulation result: NOPE";
             end if;
         end if;
     end process;
