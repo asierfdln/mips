@@ -214,7 +214,7 @@ begin
                         elsif 'a' <= ch and ch <= 'f' then
                             result := result*16 + character'pos(ch)-character'pos('a')+10;
                         else report "Format error on line " & integer'image(index)
-                             severity error;
+                            severity error;
                         end if;
                     end loop;
                 mem(index*4+3-j) := conv_std_logic_vector(result, width);
