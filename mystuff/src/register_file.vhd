@@ -41,12 +41,12 @@ entity register_file is
     port(
         i_clk           : in    STD_LOGIC;
         i_write_enable  : in    STD_LOGIC;
-        i_reg1_addr     : in    STD_LOGIC_VECTOR (regbits-1 downto 0);
-        i_reg2_addr     : in    STD_LOGIC_VECTOR (regbits-1 downto 0);
-        i_reg3_addr     : in    STD_LOGIC_VECTOR (regbits-1 downto 0);
-        i_write_data    : in    STD_LOGIC_VECTOR (width-1 downto 0);
-        o_reg2_contents : out   STD_LOGIC_VECTOR (width-1 downto 0);
-        o_reg3_contents : out   STD_LOGIC_VECTOR (width-1 downto 0)
+        i_reg1_addr     : in    STD_LOGIC_VECTOR(regbits-1 downto 0);
+        i_reg2_addr     : in    STD_LOGIC_VECTOR(regbits-1 downto 0);
+        i_reg3_addr     : in    STD_LOGIC_VECTOR(regbits-1 downto 0);
+        i_write_data    : in    STD_LOGIC_VECTOR(width-1 downto 0);
+        o_reg2_contents : out   STD_LOGIC_VECTOR(width-1 downto 0);
+        o_reg3_contents : out   STD_LOGIC_VECTOR(width-1 downto 0)
     );
 end register_file;
 

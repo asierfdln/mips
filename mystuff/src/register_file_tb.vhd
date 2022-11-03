@@ -48,30 +48,30 @@ architecture Behavioral of register_file_tb is
         port(
             i_clk           : in    STD_LOGIC;
             i_write_enable  : in    STD_LOGIC;
-            i_reg1_addr     : in    STD_LOGIC_VECTOR (regbits-1 downto 0);
-            i_reg2_addr     : in    STD_LOGIC_VECTOR (regbits-1 downto 0);
-            i_reg3_addr     : in    STD_LOGIC_VECTOR (regbits-1 downto 0);
-            i_write_data    : in    STD_LOGIC_VECTOR (width-1 downto 0);
-            o_reg2_contents : out   STD_LOGIC_VECTOR (width-1 downto 0);
-            o_reg3_contents : out   STD_LOGIC_VECTOR (width-1 downto 0)
+            i_reg1_addr     : in    STD_LOGIC_VECTOR(regbits-1 downto 0);
+            i_reg2_addr     : in    STD_LOGIC_VECTOR(regbits-1 downto 0);
+            i_reg3_addr     : in    STD_LOGIC_VECTOR(regbits-1 downto 0);
+            i_write_data    : in    STD_LOGIC_VECTOR(width-1 downto 0);
+            o_reg2_contents : out   STD_LOGIC_VECTOR(width-1 downto 0);
+            o_reg3_contents : out   STD_LOGIC_VECTOR(width-1 downto 0)
         );
     end component register_file;
 
     signal s_clk            : STD_LOGIC;
     signal s_write_enable   : STD_LOGIC;
-    signal s_reg1_addr      : STD_LOGIC_VECTOR (regbits-1 downto 0);
-    signal s_reg2_addr      : STD_LOGIC_VECTOR (regbits-1 downto 0);
-    signal s_reg3_addr      : STD_LOGIC_VECTOR (regbits-1 downto 0);
-    signal s_write_data     : STD_LOGIC_VECTOR (width-1 downto 0);
-    signal s_reg2_contents  : STD_LOGIC_VECTOR (width-1 downto 0);
-    signal s_reg3_contents  : STD_LOGIC_VECTOR (width-1 downto 0);
+    signal s_reg1_addr      : STD_LOGIC_VECTOR(regbits-1 downto 0);
+    signal s_reg2_addr      : STD_LOGIC_VECTOR(regbits-1 downto 0);
+    signal s_reg3_addr      : STD_LOGIC_VECTOR(regbits-1 downto 0);
+    signal s_write_data     : STD_LOGIC_VECTOR(width-1 downto 0);
+    signal s_reg2_contents  : STD_LOGIC_VECTOR(width-1 downto 0);
+    signal s_reg3_contents  : STD_LOGIC_VECTOR(width-1 downto 0);
 
 begin
     
     register_file_DUT : register_file
-    generic map(
-        width,
-        regbits
+        generic map(
+            width,
+            regbits
         )
         port map(
             i_clk               => s_clk,
@@ -136,11 +136,11 @@ begin
         s_reg3_addr     <= "00010";
         s_write_data    <= x"B0000000";
         wait for 10 ns;
-        -- write into register 1
+        -- write into register 1 and output some register (0) while in a write...
         s_write_enable  <= '1';
         s_reg1_addr     <= "00001";
         s_reg2_addr     <= "00001";
-        s_reg3_addr     <= "00010";
+        s_reg3_addr     <= "00000";
         s_write_data    <= x"C0000000";
         wait for 10 ns;
         -- read registers 1 and 0
