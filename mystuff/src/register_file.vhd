@@ -52,7 +52,7 @@ end register_file;
 
 
 -- three-ported register file
--- read two ports combinationally
+-- read two ports on rising edge of clock
 -- write third port on rising edge of clock
 
 
@@ -88,6 +88,19 @@ begin
                 o_reg3_contents <= s_regs(conv_integer(i_reg3_addr));
             end if;
         end if;
-    end process ; -- read_stuff
+    end process; -- read_stuff
+
+    -- read_stuff : process(i_reg2_addr, i_reg3_addr) begin
+    --     if (conv_integer(i_reg2_addr) = 0) then
+    --         o_reg2_contents <= conv_std_logic_vector(0, width); -- register 0 holds 0
+    --     else
+    --         o_reg2_contents <= s_regs(conv_integer(i_reg2_addr));
+    --     end if;
+    --     if (conv_integer(i_reg3_addr) = 0) then
+    --         o_reg3_contents <= conv_std_logic_vector(0, width); -- register 0 holds 0
+    --     else
+    --         o_reg3_contents <= s_regs(conv_integer(i_reg3_addr));
+    --     end if;
+    -- end process; -- read_stuff
 
 end Behavioral; -- register_file
