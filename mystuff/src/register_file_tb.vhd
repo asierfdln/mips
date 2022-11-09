@@ -38,6 +38,12 @@ entity register_file_tb is
     );
 end register_file_tb;
 
+
+-- three-ported register file
+-- read two ports on rising edge of clock
+-- write third port on rising edge of clock
+
+
 architecture Behavioral of register_file_tb is
 
     component register_file is
@@ -55,7 +61,7 @@ architecture Behavioral of register_file_tb is
             o_reg2_contents : out   STD_LOGIC_VECTOR(width-1 downto 0);
             o_reg3_contents : out   STD_LOGIC_VECTOR(width-1 downto 0)
         );
-    end component; --register_file
+    end component; -- register_file
 
     signal s_clk            : STD_LOGIC;
     signal s_write_enable   : STD_LOGIC;
@@ -90,7 +96,7 @@ begin
         wait for 5 ns;
         s_clk <= '0';
         wait for 5 ns;
-    end process; -- clk_gen
+    end process; -- s_clk_gen
 
     manual_signals : process
     begin
@@ -162,8 +168,8 @@ begin
         s_reg1_addr     <= "00000";
         s_reg2_addr     <= "00000";
         s_reg3_addr     <= "00000";
-        s_write_data    <= x"C0000000";
-        wait for 10 ns;
+        s_write_data    <= x"00000000";
+        wait;
     end process; -- manual_signals
 
-end Behavioral;
+end Behavioral; -- register_file_tb
