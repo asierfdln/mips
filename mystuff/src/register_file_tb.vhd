@@ -33,8 +33,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity register_file_tb is
     generic(
-        width   : integer   := 32;  -- width-bit wide registers
-        regbits : integer   := 5    -- 2**regbits number of registers
+        ent_width   : integer   := 32;  -- width-bit wide registers
+        ent_regbits : integer   := 5    -- 2**regbits number of registers
     );
 end register_file_tb;
 
@@ -42,8 +42,8 @@ architecture Behavioral of register_file_tb is
 
     component register_file is
         generic(
-            width   : integer   := 32;  -- width-bit wide registers
-            regbits : integer   := 5    -- 2**regbits number of registers
+            width   : integer;
+            regbits : integer
         );
         port(
             i_clk           : in    STD_LOGIC;
@@ -55,23 +55,23 @@ architecture Behavioral of register_file_tb is
             o_reg2_contents : out   STD_LOGIC_VECTOR(width-1 downto 0);
             o_reg3_contents : out   STD_LOGIC_VECTOR(width-1 downto 0)
         );
-    end component register_file;
+    end component; --register_file
 
     signal s_clk            : STD_LOGIC;
     signal s_write_enable   : STD_LOGIC;
-    signal s_reg1_addr      : STD_LOGIC_VECTOR(regbits-1 downto 0);
-    signal s_reg2_addr      : STD_LOGIC_VECTOR(regbits-1 downto 0);
-    signal s_reg3_addr      : STD_LOGIC_VECTOR(regbits-1 downto 0);
-    signal s_write_data     : STD_LOGIC_VECTOR(width-1 downto 0);
-    signal s_reg2_contents  : STD_LOGIC_VECTOR(width-1 downto 0);
-    signal s_reg3_contents  : STD_LOGIC_VECTOR(width-1 downto 0);
+    signal s_reg1_addr      : STD_LOGIC_VECTOR(ent_regbits-1 downto 0);
+    signal s_reg2_addr      : STD_LOGIC_VECTOR(ent_regbits-1 downto 0);
+    signal s_reg3_addr      : STD_LOGIC_VECTOR(ent_regbits-1 downto 0);
+    signal s_write_data     : STD_LOGIC_VECTOR(ent_width-1 downto 0);
+    signal s_reg2_contents  : STD_LOGIC_VECTOR(ent_width-1 downto 0);
+    signal s_reg3_contents  : STD_LOGIC_VECTOR(ent_width-1 downto 0);
 
 begin
     
     register_file_DUT : register_file
         generic map(
-            width,
-            regbits
+            width   => ent_width,
+            regbits => ent_regbits
         )
         port map(
             i_clk               => s_clk,
@@ -82,7 +82,7 @@ begin
             i_write_data        => s_write_data,
             o_reg2_contents     => s_reg2_contents,
             o_reg3_contents     => s_reg3_contents
-            );
+        );
 
     s_clk_gen : process
     begin
