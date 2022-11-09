@@ -101,32 +101,37 @@ begin
         s_a         <= x"00000001";
         s_b         <= x"00000003";
         s_alucont   <= "000";
+        wait for 5 ns;
         assert s_result = x"00000001" report "do 1 AND 3 failed";
-        wait for 10 ns;
+        wait for 5 ns;
         -- do 1 OR 3
         s_a         <= x"00000001";
         s_b         <= x"00000003";
         s_alucont   <= "001";
+        wait for 5 ns;
         assert s_result = x"00000003" report "do 1 OR 3 failed";
-        wait for 10 ns;
+        wait for 5 ns;
         -- do 1 ADD 1
         s_a         <= x"00000001";
         s_b         <= x"00000001";
         s_alucont   <= "010";
+        wait for 5 ns;
         assert s_result = x"00000002" report "do 1 ADD 1 failed";
-        wait for 10 ns;
+        wait for 5 ns;
         -- do 1 SUB 1
         s_a         <= x"00000001";
         s_b         <= x"00000001";
         s_alucont   <= "110";
+        wait for 5 ns;
         assert s_result = x"00000000" report "do 1 SUB 1 failed";
-        wait for 10 ns;
+        wait for 5 ns;
         -- do 1 SLT 1
-        s_a         <= x"00000001";
-        s_b         <= x"00000000";
+        s_a         <= x"00000000";
+        s_b         <= x"00000001";
         s_alucont   <= "111";
+        wait for 5 ns;
         assert s_result = x"00000001" report "do 1 SLT 0 failed";
-        wait for 10 ns;
+        wait for 5 ns;
         -- reset everything to 0
         s_a         <= x"00000000";
         s_b         <= x"00000000";

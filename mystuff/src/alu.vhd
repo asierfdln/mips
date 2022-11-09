@@ -38,51 +38,51 @@ entity alu is
         width: integer
     );
     port(
-        a         : in  STD_LOGIC_VECTOR(width-1 downto 0);
-        b         : in  STD_LOGIC_VECTOR(width-1 downto 0);
-        alucont   : in  STD_LOGIC_VECTOR(2 downto 0);
-        result    : out STD_LOGIC_VECTOR(width-1 downto 0)
+        i_a         : in  STD_LOGIC_VECTOR(width-1 downto 0);
+        i_b         : in  STD_LOGIC_VECTOR(width-1 downto 0);
+        i_alucont   : in  STD_LOGIC_VECTOR(2 downto 0);
+        o_result    : out STD_LOGIC_VECTOR(width-1 downto 0)
     );
 end alu;
 
 
 -- ALU with:
 --   AND
---     alucont "000"
+--     i_alucont "000"
 --   OR
---     alucont "001"
+--     i_alucont "001"
 --   add
---     alucont "010"
+--     i_alucont "010"
 --     for add/lb/lw/stb/stw instructions
 --   sub
---     alucont "110", see slt logic for why sudden change in opcodes...
+--     i_alucont "110", see s_slt logic for why sudden change in opcodes...
 --     for sub/beq instructions
 --   slt, set less than
---     alucont "111"
+--     i_alucont "111"
 --     "$1 <- 1" if "$2 < $3", otherwise "$1 <- 0"
 
 
 architecture Behavioral of alu is
 
-    signal b2   : STD_LOGIC_VECTOR(width-1 downto 0);
-    signal sum  : STD_LOGIC_VECTOR(width-1 downto 0);
-    signal slt  : STD_LOGIC_VECTOR(width-1 downto 0);
+    signal s_b2   : STD_LOGIC_VECTOR(width-1 downto 0);
+    signal s_sum  : STD_LOGIC_VECTOR(width-1 downto 0);
+    signal s_slt  : STD_LOGIC_VECTOR(width-1 downto 0);
 
 begin
 
-    -- for sub operation "a - b", see next line
-    b2 <= not b when alucont(2) = '1' else
-            b;
-    -- sum signal stores value of both sum and sub
-    sum <= a + b2 + alucont(2);
-    -- slt should be 1 if most significant bit of sum is 1
-    slt <= conv_std_logic_vector(1, width) when sum(width-1) = '1' else
+    -- for sub operation "i_a - i_b", see next line
+    s_b2 <= not i_b when i_alucont(2) = '1' else
+            i_b;
+    -- s_sum signal stores value of both s_sum and sub
+    s_sum <= i_a + s_b2 + i_alucont(2);
+    -- s_slt should be 1 if most significant bit of s_sum is 1
+    s_slt <= conv_std_logic_vector(1, width) when s_sum(width-1) = '1' else
         conv_std_logic_vector(0, width);
 
-    with alucont(1 downto 0) select
-        result <= a and b when "00",
-                    a or  b when "01",
-                    sum     when "10",
-                    slt     when others;
+    with i_alucont(1 downto 0) select
+        o_result <= i_a and i_b when "00",
+                    i_a or  i_b when "01",
+                    s_sum     when "10",
+                    s_slt     when others;
 
 end Behavioral; -- alu
