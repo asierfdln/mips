@@ -36,16 +36,18 @@ use IEEE.STD_LOGIC_ARITH.all;
 
 entity imem is
     generic(
-        width   : integer   := 8;   -- byte-structured memory...
-        adrbits : integer   := 8    -- 2**adrbits number of width-bit positions in memory array
+        g_width   : integer   := 8;   -- byte-structured memory...
+        g_adrbits : integer   := 8    -- 2**g_adrbits number of g_width-bit positions in memory array
     );
     port(
-        clk             : in    STD_LOGIC;
-        adr             : in    STD_LOGIC_VECTOR(adrbits-1 downto 0);
-        memwrite        : in    STD_LOGIC;
-        memwrite8or32   : in    STD_LOGIC;
-        writedata       : in    STD_LOGIC_VECTOR(31 downto 0);
-        memdata         : out   STD_LOGIC_VECTOR(31 downto 0)
+        i_clk             : in    STD_LOGIC;
+        i_adr             : in    STD_LOGIC_VECTOR(g_adrbits-1 downto 0);
+        i_memWctrl        : in    STD_LOGIC;
+        i_memWctrl8or32   : in    STD_LOGIC;
+        -- TO-DO this "31" is hardcoded...
+        i_memWdata        : in    STD_LOGIC_VECTOR(31 downto 0);
+        -- TO-DO this "31" is hardcoded...
+        o_memRdata        : out   STD_LOGIC_VECTOR(31 downto 0)
     );
 end imem;
 
@@ -58,8 +60,8 @@ architecture Behavioral of imem is
 
     -- see in process variables commented versions of "variable" type...
     -- do a CTRL+F of "variable-to-signal conversion"
-    type ramtype is array (2**adrbits - 1 downto 0) of STD_LOGIC_VECTOR(width-1 downto 0);
-    signal mem : ramtype;
+    type ramtype is array (2**g_adrbits - 1 downto 0) of STD_LOGIC_VECTOR(g_width-1 downto 0);
+    signal s_mem : ramtype;
 
 begin
 
@@ -70,19 +72,19 @@ begin
         variable    ch          : character;
         variable    index       : integer;
         variable    result      : integer;
-        -- type        ramtype is array (2**adrbits - 1 downto 0) of STD_LOGIC_VECTOR(width-1 downto 0);
-        -- variable    mem         : ramtype;
+        -- type        ramtype is array (2**g_adrbits - 1 downto 0) of STD_LOGIC_VECTOR(g_width-1 downto 0);
+        -- variable    s_mem         : ramtype;
 
     begin
 
         -- initialize memory from file
         -- memory in little-endian format
-        -- 80020044 means mem[3] = 80 and mem[0] = 44
+        -- 80020044 means s_mem[3] = 80 and s_mem[0] = 44
 
         for i in 0 to 255 loop -- set all contents low
             -- variable-to-signal conversion
-            -- mem(conv_integer(i)) := "00000000";
-            mem(conv_integer(i)) <= "00000000";
+            -- s_mem(conv_integer(i)) := "00000000";
+            s_mem(conv_integer(i)) <= "00000000";
         end loop;
         index := 0;
         while not endfile(mem_file) loop
@@ -100,8 +102,8 @@ begin
                         end if;
                     end loop;
                 -- variable-to-signal conversion
-                -- mem(index*4+3-j) := conv_std_logic_vector(result, width);
-                mem(index*4+3-j) <= conv_std_logic_vector(result, width);
+                -- s_mem(index*4+3-j) := conv_std_logic_vector(result, g_width);
+                s_mem(index*4+3-j) <= conv_std_logic_vector(result, g_width);
             end loop;
             index := index + 1;
         end loop;
@@ -111,37 +113,37 @@ begin
 
             -- write_stuff
             -- whahappens with 255, 254, 253 (regbits=8)?? --> loops back xD
-            if clk'event and clk = '1' then
-                if (memwrite = '1') then
-                    if memwrite8or32 = '0' then
+            if i_clk'event and i_clk = '1' then
+                if (i_memWctrl = '1') then
+                    if i_memWctrl8or32 = '0' then
                         -- variable-to-signal conversion
-                        -- mem(conv_integer(adr))      := writedata(7 downto 0);
-                        mem(conv_integer(adr))      <= writedata(7 downto 0);
+                        -- s_mem(conv_integer(i_adr))      := i_memWdata(7 downto 0);
+                        s_mem(conv_integer(i_adr))      <= i_memWdata(7 downto 0);
                     else
                         -- variable-to-signal conversion
-                        -- mem(conv_integer(adr + 3))  := writedata(31 downto 24);
-                        -- mem(conv_integer(adr + 2))  := writedata(23 downto 16);
-                        -- mem(conv_integer(adr + 1))  := writedata(15 downto 8);
-                        -- mem(conv_integer(adr))      := writedata(7  downto 0);
-                        mem(conv_integer(adr + 3))  <= writedata(31 downto 24);
-                        mem(conv_integer(adr + 2))  <= writedata(23 downto 16);
-                        mem(conv_integer(adr + 1))  <= writedata(15 downto 8);
-                        mem(conv_integer(adr))      <= writedata(7  downto 0);
+                        -- s_mem(conv_integer(i_adr + 3))  := i_memWdata(31 downto 24);
+                        -- s_mem(conv_integer(i_adr + 2))  := i_memWdata(23 downto 16);
+                        -- s_mem(conv_integer(i_adr + 1))  := i_memWdata(15 downto 8);
+                        -- s_mem(conv_integer(i_adr))      := i_memWdata(7  downto 0);
+                        s_mem(conv_integer(i_adr + 3))  <= i_memWdata(31 downto 24);
+                        s_mem(conv_integer(i_adr + 2))  <= i_memWdata(23 downto 16);
+                        s_mem(conv_integer(i_adr + 1))  <= i_memWdata(15 downto 8);
+                        s_mem(conv_integer(i_adr))      <= i_memWdata(7  downto 0);
                     end if;
                 end if;
             end if;
 
             -- read_stuff
             -- whahappens with 255, 254, 253 (regbits=8)?? --> loops back xD
-            if clk'event and clk = '1' then
-                memdata <= mem(conv_integer(adr + 3))
-                         & mem(conv_integer(adr + 2))
-                         & mem(conv_integer(adr + 1))
-                         & mem(conv_integer(adr));
+            if i_clk'event and i_clk = '1' then
+                o_memRdata <= s_mem(conv_integer(i_adr + 3))
+                            & s_mem(conv_integer(i_adr + 2))
+                            & s_mem(conv_integer(i_adr + 1))
+                            & s_mem(conv_integer(i_adr));
             end if;
 
             -- sensitivity list
-            wait on clk;
+            wait on i_clk;
 
         end loop;
 
