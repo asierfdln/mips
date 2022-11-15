@@ -2,14 +2,12 @@
 2020.2
 Apr 18 2022
 15:53:03
-/home/asier/Desktop/mips/mystuff/and_gate.vhd,1667313149,vhdl,,,,and_gate,,,,,,,,
-/home/asier/Desktop/mips/mystuff/and_gate_tb.vhd,1667313578,vhdl,,,,and_gate_tb,,,,,,,,
-/home/asier/Desktop/mips/mystuff/or_gate.vhd,1668006059,vhdl,,,,or_gate,,,,,,,,
-/home/asier/Desktop/mips/mystuff/or_gate_tb.vhd,1668008412,vhdl,,,,or_gate_tb,,,,,,,,
 /home/asier/Desktop/mips/mystuff/src/alu.vhd,1668009024,vhdl,,,,alu,,,,,,,,
 /home/asier/Desktop/mips/mystuff/src/alu_tb.vhd,1668009769,vhdl,,,,alu_tb,,,,,,,,
 /home/asier/Desktop/mips/mystuff/src/dmem.vhd,1668093414,vhdl,,,,dmem,,,,,,,,
 /home/asier/Desktop/mips/mystuff/src/dmem_tb.vhd,1668093487,vhdl,,,,dmem_tb,,,,,,,,
+/home/asier/Desktop/mips/mystuff/src/flopenr.vhd,1668526987,vhdl,,,,flopenr,,,,,,,,
+/home/asier/Desktop/mips/mystuff/src/flopenr_tb.vhd,1668528448,vhdl,,,,flopenr_tb,,,,,,,,
 /home/asier/Desktop/mips/mystuff/src/imem.vhd,1668092734,vhdl,,,,imem,,,,,,,,
 /home/asier/Desktop/mips/mystuff/src/imem_tb.vhd,1668092973,vhdl,,,,imem_tb,,,,,,,,
 /home/asier/Desktop/mips/mystuff/src/register_file.vhd,1667513052,vhdl,,,,register_file,,,,,,,,

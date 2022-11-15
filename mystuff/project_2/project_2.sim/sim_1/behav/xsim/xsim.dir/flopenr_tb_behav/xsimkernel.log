@@ -1,0 +1,7 @@
+Running: xsim.dir/flopenr_tb_behav/xsimk -simmode gui -wdb flopenr_tb_behav.wdb -simrunnum 0 -socket 48207
+Design successfully loaded
+Design Loading Memory Usage: 28812 KB (Peak: 29412 KB)
+Design Loading CPU Usage: 20 ms
+Simulation completed
+Simulation Memory Usage: 114648 KB (Peak: 168080 KB)
+Simulation CPU Usage: 30 ms
