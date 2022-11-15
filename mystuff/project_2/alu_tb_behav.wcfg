@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="alu_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="alu_tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0.000 ns"></ZoomStartTime>
+      <ZoomEndTime time="1,307.087 ns"></ZoomEndTime>
+      <Cursor1Time time="1,000.000 ns"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="276"></NameColumnWidth>
+      <ValueColumnWidth column_width="100"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="5" />
+   <wvobject type="array" fp_name="/alu_tb/s_a">
+      <obj_property name="ElementShortName">s_a[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_a[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/alu_tb/s_b">
+      <obj_property name="ElementShortName">s_b[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_b[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/alu_tb/s_alucont">
+      <obj_property name="ElementShortName">s_alucont[2:0]</obj_property>
+      <obj_property name="ObjectShortName">s_alucont[2:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/alu_tb/s_result">
+      <obj_property name="ElementShortName">s_result[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_result[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="other" fp_name="/alu_tb/ent_width">
+      <obj_property name="ElementShortName">ent_width</obj_property>
+      <obj_property name="ObjectShortName">ent_width</obj_property>
+   </wvobject>
+</wave_config>

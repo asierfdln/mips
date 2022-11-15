@@ -1,0 +1,1 @@
+--incr --debug "typical" --relax --mt "8" -L "xil_defaultlib" -L "secureip" --snapshot "dmem_tb_behav" "xil_defaultlib.dmem_tb" -log "elaborate.log" 
