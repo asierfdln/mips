@@ -72,6 +72,7 @@ begin
         variable    ch          : character;
         variable    index       : integer;
         variable    result      : integer;
+        -- variable-to-signal conversion
         -- type        ramtype is array (2**g_adrbits - 1 downto 0) of STD_LOGIC_VECTOR(g_width-1 downto 0);
         -- variable    s_mem         : ramtype;
 
@@ -112,7 +113,7 @@ begin
         loop
 
             -- write_stuff
-            -- whahappens with 255, 254, 253 (regbits=8)?? --> loops back xD
+            -- whahappens with 255, 254, 253 (adrbits=8)?? --> loops back xD
             if i_clk'event and i_clk = '1' then
                 if (i_memWctrl = '1') then
                     if i_memWctrl8or32 = '0' then
@@ -134,16 +135,14 @@ begin
             end if;
 
             -- read_stuff
-            -- whahappens with 255, 254, 253 (regbits=8)?? --> loops back xD
-            if i_clk'event and i_clk = '1' then
-                o_memRdata <= s_mem(conv_integer(i_adr + 3))
-                            & s_mem(conv_integer(i_adr + 2))
-                            & s_mem(conv_integer(i_adr + 1))
-                            & s_mem(conv_integer(i_adr));
-            end if;
+            -- whahappens with 255, 254, 253 (adrbits=8)?? --> loops back xD
+            o_memRdata <= s_mem(conv_integer(i_adr + 3))
+                        & s_mem(conv_integer(i_adr + 2))
+                        & s_mem(conv_integer(i_adr + 1))
+                        & s_mem(conv_integer(i_adr));
 
             -- sensitivity list
-            wait on i_clk;
+            wait on i_clk, i_adr;
 
         end loop;
 

@@ -54,8 +54,7 @@ architecture Behavioral of flopenr_tb is
             i_d       : in  STD_LOGIC_VECTOR(g_width-1 downto 0);
             o_q       : out STD_LOGIC_VECTOR(g_width-1 downto 0)
         );
-    end component; -- register_file
-
+    end component; -- flopenr
 
     signal si_clk     : STD_LOGIC;
     signal si_reset   : STD_LOGIC;

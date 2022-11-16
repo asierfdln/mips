@@ -35,18 +35,18 @@ use IEEE.STD_LOGIC_ARITH.all;
 
 entity register_file is
     generic(
-        width   : integer   := 32;  -- width-bit wide registers
-        regbits : integer   := 5    -- 2**regbits number of registers
+        g_width   : integer   := 32;  -- g_width-bit wide registers
+        g_regbits : integer   := 5    -- 2**g_regbits number of registers
     );
     port(
         i_clk           : in    STD_LOGIC;
         i_write_enable  : in    STD_LOGIC;
-        i_reg1_addr     : in    STD_LOGIC_VECTOR(regbits-1 downto 0);
-        i_reg2_addr     : in    STD_LOGIC_VECTOR(regbits-1 downto 0);
-        i_reg3_addr     : in    STD_LOGIC_VECTOR(regbits-1 downto 0);
-        i_write_data    : in    STD_LOGIC_VECTOR(width-1 downto 0);
-        o_reg2_contents : out   STD_LOGIC_VECTOR(width-1 downto 0);
-        o_reg3_contents : out   STD_LOGIC_VECTOR(width-1 downto 0)
+        i_reg1_addr     : in    STD_LOGIC_VECTOR(g_regbits-1 downto 0);
+        i_reg2_addr     : in    STD_LOGIC_VECTOR(g_regbits-1 downto 0);
+        i_reg3_addr     : in    STD_LOGIC_VECTOR(g_regbits-1 downto 0);
+        i_write_data    : in    STD_LOGIC_VECTOR(g_width-1 downto 0);
+        o_reg2_contents : out   STD_LOGIC_VECTOR(g_width-1 downto 0);
+        o_reg3_contents : out   STD_LOGIC_VECTOR(g_width-1 downto 0)
     );
 end register_file;
 
@@ -58,7 +58,7 @@ end register_file;
 
 architecture Behavioral of register_file is
 
-    type registers is array (2**regbits - 1 downto 0) of STD_LOGIC_VECTOR(width-1 downto 0);
+    type registers is array (2**g_regbits - 1 downto 0) of STD_LOGIC_VECTOR(g_width-1 downto 0);
     signal s_regs : registers;
 
 begin
@@ -77,13 +77,13 @@ begin
         if i_clk'event and i_clk = '1' then
             -- output reg2 address contents
             if (conv_integer(i_reg2_addr) = 0) then
-                o_reg2_contents <= conv_std_logic_vector(0, width); -- register 0 holds 0
+                o_reg2_contents <= conv_std_logic_vector(0, g_width); -- register 0 holds 0
             else
                 o_reg2_contents <= s_regs(conv_integer(i_reg2_addr));
             end if;
             -- output reg3 address contents
             if (conv_integer(i_reg3_addr) = 0) then
-                o_reg3_contents <= conv_std_logic_vector(0, width); -- register 0 holds 0
+                o_reg3_contents <= conv_std_logic_vector(0, g_width); -- register 0 holds 0
             else
                 o_reg3_contents <= s_regs(conv_integer(i_reg3_addr));
             end if;
@@ -93,12 +93,12 @@ begin
     -- -- combinational read_stuff
     -- read_stuff : process(i_reg2_addr, i_reg3_addr) begin
     --     if (conv_integer(i_reg2_addr) = 0) then
-    --         o_reg2_contents <= conv_std_logic_vector(0, width); -- register 0 holds 0
+    --         o_reg2_contents <= conv_std_logic_vector(0, g_width); -- register 0 holds 0
     --     else
     --         o_reg2_contents <= s_regs(conv_integer(i_reg2_addr));
     --     end if;
     --     if (conv_integer(i_reg3_addr) = 0) then
-    --         o_reg3_contents <= conv_std_logic_vector(0, width); -- register 0 holds 0
+    --         o_reg3_contents <= conv_std_logic_vector(0, g_width); -- register 0 holds 0
     --     else
     --         o_reg3_contents <= s_regs(conv_integer(i_reg3_addr));
     --     end if;

@@ -33,7 +33,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity alu_tb is
     generic(
-        ent_width   : integer   := 32   -- width-bit wide registers
+        ent_width   : integer   := 32   -- g_width-bit wide registers
     );
 end alu_tb;
 
@@ -58,13 +58,13 @@ architecture Behavioral of alu_tb is
 
     component alu is
         generic(
-            width: integer
+            g_width: integer
         );
         port(
-            i_a         : in  STD_LOGIC_VECTOR(width-1 downto 0);
-            i_b         : in  STD_LOGIC_VECTOR(width-1 downto 0);
+            i_a         : in  STD_LOGIC_VECTOR(g_width-1 downto 0);
+            i_b         : in  STD_LOGIC_VECTOR(g_width-1 downto 0);
             i_alucont   : in  STD_LOGIC_VECTOR(2 downto 0);
-            o_result    : out STD_LOGIC_VECTOR(width-1 downto 0)
+            o_result    : out STD_LOGIC_VECTOR(g_width-1 downto 0)
         );
     end component; -- alu
 
@@ -78,7 +78,7 @@ begin
     
     alu_DUT : alu
         generic map(
-            width   => ent_width
+            g_width   => ent_width
         )
         port map(
             i_a         => s_a,

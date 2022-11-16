@@ -51,12 +51,12 @@ architecture Behavioral of imem_tb is
             g_adrbits : integer
         );
         port(
-            i_clk             : in    STD_LOGIC;
-            i_adr             : in    STD_LOGIC_VECTOR(g_adrbits-1 downto 0);
-            i_memWctrl        : in    STD_LOGIC;
-            i_memWctrl8or32   : in    STD_LOGIC;
-            i_memWdata       : in    STD_LOGIC_VECTOR(31 downto 0);
-            o_memRdata         : out   STD_LOGIC_VECTOR(31 downto 0)
+            i_clk             : in  STD_LOGIC;
+            i_adr             : in  STD_LOGIC_VECTOR(g_adrbits-1 downto 0);
+            i_memWctrl        : in  STD_LOGIC;
+            i_memWctrl8or32   : in  STD_LOGIC;
+            i_memWdata        : in  STD_LOGIC_VECTOR(31 downto 0);
+            o_memRdata        : out STD_LOGIC_VECTOR(31 downto 0)
         );
     end component; -- imem
 

@@ -33,8 +33,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity register_file_tb is
     generic(
-        ent_width   : integer   := 32;  -- width-bit wide registers
-        ent_regbits : integer   := 5    -- 2**regbits number of registers
+        ent_width   : integer   := 32;  -- ent_width-bit wide registers
+        ent_regbits : integer   := 5    -- 2**ent_regbits number of registers
     );
 end register_file_tb;
 
@@ -48,18 +48,18 @@ architecture Behavioral of register_file_tb is
 
     component register_file is
         generic(
-            width   : integer;
-            regbits : integer
+            g_width   : integer;
+            g_regbits : integer
         );
         port(
             i_clk           : in    STD_LOGIC;
             i_write_enable  : in    STD_LOGIC;
-            i_reg1_addr     : in    STD_LOGIC_VECTOR(regbits-1 downto 0);
-            i_reg2_addr     : in    STD_LOGIC_VECTOR(regbits-1 downto 0);
-            i_reg3_addr     : in    STD_LOGIC_VECTOR(regbits-1 downto 0);
-            i_write_data    : in    STD_LOGIC_VECTOR(width-1 downto 0);
-            o_reg2_contents : out   STD_LOGIC_VECTOR(width-1 downto 0);
-            o_reg3_contents : out   STD_LOGIC_VECTOR(width-1 downto 0)
+            i_reg1_addr     : in    STD_LOGIC_VECTOR(g_regbits-1 downto 0);
+            i_reg2_addr     : in    STD_LOGIC_VECTOR(g_regbits-1 downto 0);
+            i_reg3_addr     : in    STD_LOGIC_VECTOR(g_regbits-1 downto 0);
+            i_write_data    : in    STD_LOGIC_VECTOR(g_width-1 downto 0);
+            o_reg2_contents : out   STD_LOGIC_VECTOR(g_width-1 downto 0);
+            o_reg3_contents : out   STD_LOGIC_VECTOR(g_width-1 downto 0)
         );
     end component; -- register_file
 
@@ -76,8 +76,8 @@ begin
     
     register_file_DUT : register_file
         generic map(
-            width   => ent_width,
-            regbits => ent_regbits
+            g_width   => ent_width,
+            g_regbits => ent_regbits
         )
         port map(
             i_clk               => s_clk,
