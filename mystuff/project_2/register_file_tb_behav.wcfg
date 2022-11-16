@@ -11,12 +11,12 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0.000 ns"></ZoomStartTime>
-      <ZoomEndTime time="121.801 ns"></ZoomEndTime>
+      <ZoomEndTime time="61.251 ns"></ZoomEndTime>
       <Cursor1Time time="0.000 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="276"></NameColumnWidth>
-      <ValueColumnWidth column_width="116"></ValueColumnWidth>
+      <NameColumnWidth column_width="270"></NameColumnWidth>
+      <ValueColumnWidth column_width="115"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="10" />
    <wvobject type="logic" fp_name="/register_file_tb/s_clk">
@@ -51,12 +51,12 @@
       <obj_property name="ElementShortName">s_reg3_contents[31:0]</obj_property>
       <obj_property name="ObjectShortName">s_reg3_contents[31:0]</obj_property>
    </wvobject>
-   <wvobject type="other" fp_name="/register_file_tb/width">
-      <obj_property name="ElementShortName">width</obj_property>
-      <obj_property name="ObjectShortName">width</obj_property>
+   <wvobject type="other" fp_name="/register_file_tb/ent_width">
+      <obj_property name="ElementShortName">ent_width</obj_property>
+      <obj_property name="ObjectShortName">ent_width</obj_property>
    </wvobject>
-   <wvobject type="other" fp_name="/register_file_tb/regbits">
-      <obj_property name="ElementShortName">regbits</obj_property>
-      <obj_property name="ObjectShortName">regbits</obj_property>
+   <wvobject type="other" fp_name="/register_file_tb/ent_regbits">
+      <obj_property name="ElementShortName">ent_regbits</obj_property>
+      <obj_property name="ObjectShortName">ent_regbits</obj_property>
    </wvobject>
 </wave_config>
