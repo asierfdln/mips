@@ -72,21 +72,19 @@ begin
         end if;
     end process; -- write_stuff
 
-    read_stuff : process(i_clk)
+    read_stuff : process(i_clk, i_reg2_addr, i_reg3_addr)
     begin
-        if i_clk'event and i_clk = '1' then
-            -- output reg2 address contents
-            if (conv_integer(i_reg2_addr) = 0) then
-                o_reg2_contents <= conv_std_logic_vector(0, g_width); -- register 0 holds 0
-            else
-                o_reg2_contents <= s_regs(conv_integer(i_reg2_addr));
-            end if;
-            -- output reg3 address contents
-            if (conv_integer(i_reg3_addr) = 0) then
-                o_reg3_contents <= conv_std_logic_vector(0, g_width); -- register 0 holds 0
-            else
-                o_reg3_contents <= s_regs(conv_integer(i_reg3_addr));
-            end if;
+        -- output reg2 address contents
+        if (conv_integer(i_reg2_addr) = 0) then
+            o_reg2_contents <= conv_std_logic_vector(0, g_width); -- register 0 holds 0
+        else
+            o_reg2_contents <= s_regs(conv_integer(i_reg2_addr));
+        end if;
+        -- output reg3 address contents
+        if (conv_integer(i_reg3_addr) = 0) then
+            o_reg3_contents <= conv_std_logic_vector(0, g_width); -- register 0 holds 0
+        else
+            o_reg3_contents <= s_regs(conv_integer(i_reg3_addr));
         end if;
     end process; -- read_stuff
 
