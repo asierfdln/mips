@@ -33,8 +33,9 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity dmem_tb is
     generic(
-        ent_width   : integer   := 8;   -- byte-structured memory...
-        ent_adrbits : integer   := 8    -- 2**ent_adrbits number of ent_width-bit positions in memory array
+        ent_struct      : integer   := 8;   -- byte-structured memory...
+        ent_datawidth   : integer   := 32;  -- width of data ports
+        ent_adrbits     : integer   := 8    -- 2**ent_adrbits number of ent_struct-bit positions in memory array
     );
 end dmem_tb;
 
@@ -47,16 +48,17 @@ architecture Behavioral of dmem_tb is
 
     component dmem is
         generic(
-            g_width   : integer;
-            g_adrbits : integer
+            g_struct    : integer;
+            g_datawidth : integer;
+            g_adrbits   : integer
         );
         port(
-            i_clk             : in    STD_LOGIC;
-            i_adr             : in    STD_LOGIC_VECTOR(g_adrbits-1 downto 0);
-            i_memWctrl        : in    STD_LOGIC;
-            i_memWctrl8or32   : in    STD_LOGIC;
-            i_memWdata       : in    STD_LOGIC_VECTOR(31 downto 0);
-            o_memRdata         : out   STD_LOGIC_VECTOR(31 downto 0)
+            i_clk             : in  STD_LOGIC;
+            i_adr             : in  STD_LOGIC_VECTOR(g_adrbits-1 downto 0);
+            i_memWctrl        : in  STD_LOGIC;
+            i_memWctrl8or32   : in  STD_LOGIC;
+            i_memWdata        : in  STD_LOGIC_VECTOR(g_datawidth-1 downto 0);
+            o_memRdata        : out STD_LOGIC_VECTOR(g_datawidth-1 downto 0)
         );
     end component; -- dmem
 
@@ -64,15 +66,16 @@ architecture Behavioral of dmem_tb is
     signal si_adr            : STD_LOGIC_VECTOR(ent_adrbits-1 downto 0);
     signal si_memwrite       : STD_LOGIC;
     signal si_memwrite8or32  : STD_LOGIC;
-    signal si_writedata      : STD_LOGIC_VECTOR(31 downto 0);
-    signal so_memdata        : STD_LOGIC_VECTOR(31 downto 0);
+    signal si_writedata      : STD_LOGIC_VECTOR(ent_datawidth-1 downto 0);
+    signal so_memdata        : STD_LOGIC_VECTOR(ent_datawidth-1 downto 0);
 
 begin
     
     dmem_DUT : dmem
         generic map(
-            g_width   => ent_width,
-            g_adrbits => ent_adrbits
+            g_struct    => ent_struct,
+            g_datawidth => ent_datawidth,
+            g_adrbits   => ent_adrbits
         )
         port map(
             i_clk             => si_clk,

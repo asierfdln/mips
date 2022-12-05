@@ -36,18 +36,17 @@ use IEEE.STD_LOGIC_ARITH.all;
 
 entity dmem is
     generic(
-        g_width   : integer   := 8;   -- byte-structured memory...
-        g_adrbits : integer   := 8    -- 2**g_adrbits number of g_width-bit positions in memory array
+        g_struct    : integer   := 8;   -- byte-structured memory...
+        g_datawidth : integer   := 32;  -- width of data ports
+        g_adrbits   : integer   := 8    -- 2**g_adrbits number of g_struct-bit positions in memory array
     );
     port(
         i_clk             : in    STD_LOGIC;
         i_adr             : in    STD_LOGIC_VECTOR(g_adrbits-1 downto 0);
         i_memWctrl        : in    STD_LOGIC;
         i_memWctrl8or32   : in    STD_LOGIC;
-        -- TO-DO this "31" is hardcoded...
-        i_memWdata        : in    STD_LOGIC_VECTOR(31 downto 0);
-        -- TO-DO this "31" is hardcoded...
-        o_memRdata        : out   STD_LOGIC_VECTOR(31 downto 0)
+        i_memWdata        : in    STD_LOGIC_VECTOR(g_datawidth-1 downto 0);
+        o_memRdata        : out   STD_LOGIC_VECTOR(g_datawidth-1 downto 0)
     );
 end dmem;
 
@@ -60,7 +59,7 @@ architecture Behavioral of dmem is
 
     -- see in process variables commented versions of "variable" type...
     -- do a CTRL+F of "variable-to-signal conversion"
-    type ramtype is array (2**g_adrbits - 1 downto 0) of STD_LOGIC_VECTOR(g_width-1 downto 0);
+    type ramtype is array (2**g_adrbits - 1 downto 0) of STD_LOGIC_VECTOR(g_struct-1 downto 0);
     signal s_mem : ramtype;
 
 begin
@@ -73,7 +72,7 @@ begin
         variable    index       : integer;
         variable    result      : integer;
         -- variable-to-signal conversion
-        -- type        ramtype is array (2**g_adrbits - 1 downto 0) of STD_LOGIC_VECTOR(g_width-1 downto 0);
+        -- type        ramtype is array (2**g_adrbits - 1 downto 0) of STD_LOGIC_VECTOR(g_struct-1 downto 0);
         -- variable    s_mem         : ramtype;
 
     begin
@@ -82,7 +81,7 @@ begin
         -- memory in little-endian format
         -- 80020044 means s_mem[3] = 80 and s_mem[0] = 44
 
-        for i in 0 to 255 loop -- set all contents low
+        for i in 0 to (2**g_adrbits - 1) loop -- set all contents low
             -- variable-to-signal conversion
             -- s_mem(conv_integer(i)) := "00000000";
             s_mem(conv_integer(i)) <= "00000000";
@@ -103,8 +102,8 @@ begin
                         end if;
                     end loop;
                 -- variable-to-signal conversion
-                -- s_mem(index*4+3-j) := conv_std_logic_vector(result, g_width);
-                s_mem(index*4+3-j) <= conv_std_logic_vector(result, g_width);
+                -- s_mem(index*4+3-j) := conv_std_logic_vector(result, g_struct);
+                s_mem(index*4+3-j) <= conv_std_logic_vector(result, g_struct);
             end loop;
             index := index + 1;
         end loop;
