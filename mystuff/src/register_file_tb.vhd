@@ -106,7 +106,11 @@ begin
         s_reg2_addr     <= "00000";
         s_reg3_addr     <= "00000";
         s_write_data    <= x"A0000000";
-        wait for 10 ns;
+        wait for 7 ns;
+        assert s_reg2_contents = x"00000000" report "read register 0 twice failed (1)";
+        assert s_reg3_contents = x"00000000" report "read register 0 twice failed (2)";
+        wait for 3 ns;
+
         -- read registers 1 and 2
         s_write_enable  <= '0';
         s_reg1_addr     <= "00000";
@@ -114,62 +118,93 @@ begin
         s_reg3_addr     <= "00010";
         s_write_data    <= x"A0000000";
         wait for 10 ns;
+
         -- write into register 1
         s_write_enable  <= '1';
         s_reg1_addr     <= "00001";
         s_reg2_addr     <= "00001";
         s_reg3_addr     <= "00010";
         s_write_data    <= x"A0000000";
-        wait for 10 ns;
+        wait for 7 ns;
+        assert s_reg2_contents = x"A0000000" report "write into register 1 failed";
+        wait for 3 ns;
+
         -- read registers 1 and 2
         s_write_enable  <= '0';
         s_reg1_addr     <= "00000";
         s_reg2_addr     <= "00001";
         s_reg3_addr     <= "00010";
         s_write_data    <= x"A0000000";
-        wait for 10 ns;
+        wait for 7 ns;
+        assert s_reg2_contents = x"A0000000" report "read registers 1 and 2 failed";
+        wait for 3 ns;
+
         -- write into register 2
         s_write_enable  <= '1';
         s_reg1_addr     <= "00010";
         s_reg2_addr     <= "00001";
         s_reg3_addr     <= "00010";
         s_write_data    <= x"B0000000";
-        wait for 10 ns;
+        wait for 7 ns;
+        assert s_reg2_contents = x"A0000000" report "write into register 2 failed (1)";
+        assert s_reg3_contents = x"B0000000" report "write into register 2 failed (2)";
+        wait for 3 ns;
+
         -- read registers 1 and 2
         s_write_enable  <= '0';
         s_reg1_addr     <= "00000";
         s_reg2_addr     <= "00001";
         s_reg3_addr     <= "00010";
         s_write_data    <= x"B0000000";
-        wait for 10 ns;
+        wait for 7 ns;
+        assert s_reg2_contents = x"A0000000" report "read registers 1 and 2 failed (1)";
+        assert s_reg3_contents = x"B0000000" report "read registers 1 and 2 failed (2)";
+        wait for 3 ns;
+
         -- write into register 1 and output some register (0) while in a write...
         s_write_enable  <= '1';
         s_reg1_addr     <= "00001";
         s_reg2_addr     <= "00001";
         s_reg3_addr     <= "00000";
         s_write_data    <= x"C0000000";
-        wait for 10 ns;
+        wait for 7 ns;
+        assert s_reg2_contents = x"C0000000" report "write into register 1 and output some register (0) while in a write... failed (1)";
+        assert s_reg3_contents = x"00000000" report "write into register 1 and output some register (0) while in a write... failed (2)";
+        wait for 3 ns;
+
         -- read registers 1 and 0
         s_write_enable  <= '0';
         s_reg1_addr     <= "00000";
         s_reg2_addr     <= "00001";
         s_reg3_addr     <= "00000";
         s_write_data    <= x"C0000000";
-        wait for 10 ns;
+        wait for 7 ns;
+        assert s_reg2_contents = x"C0000000" report "read registers 1 and 0 failed (1)";
+        assert s_reg3_contents = x"00000000" report "read registers 1 and 0 failed (2)";
+        wait for 3 ns;
+
         -- write into register 0
         s_write_enable  <= '1';
         s_reg1_addr     <= "00000";
         s_reg2_addr     <= "00001";
         s_reg3_addr     <= "00010";
         s_write_data    <= x"C0000000";
-        wait for 10 ns;
+        wait for 7 ns;
+        assert s_reg2_contents = x"C0000000" report "write into register 0 failed (1)";
+        assert s_reg3_contents = x"B0000000" report "write into register 0 failed (2)";
+        wait for 3 ns;
+
         -- read register 0 twice
         s_write_enable  <= '0';
         s_reg1_addr     <= "00000";
         s_reg2_addr     <= "00000";
         s_reg3_addr     <= "00000";
         s_write_data    <= x"00000000";
+        wait for 7 ns;
+        assert s_reg2_contents = x"00000000" report "read register 0 twice failed (1)";
+        assert s_reg3_contents = x"00000000" report "read register 0 twice failed (2)";
         wait;
+
     end process; -- manual_signals
 
 end Behavioral; -- register_file_tb
