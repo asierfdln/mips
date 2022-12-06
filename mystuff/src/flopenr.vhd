@@ -21,12 +21,12 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
-use IEEE.STD_LOGIC_UNSIGNED.all;
-use IEEE.STD_LOGIC_ARITH.all;
+-- use IEEE.STD_LOGIC_UNSIGNED.all;
+-- use IEEE.STD_LOGIC_ARITH.all;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx leaf cells in this code.
@@ -58,7 +58,7 @@ begin
     begin
         if i_clk'event and i_clk = '1' then
             if i_reset = '1' then
-                o_q <= CONV_STD_LOGIC_VECTOR(0, g_width); -- produce a vector of all zeros
+                o_q <= STD_LOGIC_VECTOR(to_unsigned(0, g_width)); -- produce a vector of all zeros
             elsif i_wen = '1' then
                 o_q <= i_d;
             end if;

@@ -21,9 +21,9 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
-use STD.TEXTIO.all;
 use IEEE.STD_LOGIC_UNSIGNED.all;
 use IEEE.STD_LOGIC_ARITH.all;
+use STD.TEXTIO.all;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values

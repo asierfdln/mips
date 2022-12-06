@@ -128,16 +128,16 @@ begin
         si_b         <= x"00000001";
         si_alucont   <= "110";
         wait for 5 ns;
-        assert so_result  = x"FFFFFFFF" report "do 1 SUB 1 failed";
-        assert so_zerodet =  '0'        report "do 1 SUB 1 failed in zerodet";
+        assert so_result  = x"FFFFFFFF" report "do 0 SUB 1 failed";
+        assert so_zerodet =  '0'        report "do 0 SUB 1 failed in zerodet";
         wait for 5 ns;
-        -- do 1 SLT 1
+        -- do 0 SLT 1
         si_a         <= x"00000000";
         si_b         <= x"00000001";
         si_alucont   <= "111";
         wait for 5 ns;
-        assert so_result  = x"00000001" report "do 1 SLT 0 failed";
-        assert so_zerodet =  '0'        report "do 1 SLT 0 failed in zerodet";
+        assert so_result  = x"00000001" report "do 0 SLT 1 failed";
+        assert so_zerodet =  '0'        report "do 0 SLT 1 failed in zerodet";
         wait for 5 ns;
         -- reset everything to 0
         si_a         <= x"00000000";

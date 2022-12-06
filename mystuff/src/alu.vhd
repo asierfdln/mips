@@ -23,7 +23,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 use IEEE.STD_LOGIC_UNSIGNED.all;
 use IEEE.STD_LOGIC_ARITH.all;
-use IEEE.STD_LOGIC_MISC.all;
+use IEEE.STD_LOGIC_MISC.or_reduce;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -77,7 +77,7 @@ begin
     s_b2 <= not i_b when i_alucont(2) = '1' else
             i_b;
 
-    -- s_sum signal stores value of both s_sum and sub
+    -- s_sum signal stores value of both s_sum and s_sub (s_sub is not a thing...)
     s_sum <= i_a + s_b2 + i_alucont(2);
 
     -- s_slt should be 1 if most significant bit of s_sum is 1
