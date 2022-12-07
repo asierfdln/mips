@@ -113,11 +113,25 @@ architecture Behavioral of datapath is
         );
     end component; -- alu
 
+    component mux2 is
+        generic(
+            g_width : integer := 32  -- g_width-bit wide registers
+        );
+        port(
+            i_a   : in STD_LOGIC_VECTOR(g_width-1 downto 0);
+            i_b   : in STD_LOGIC_VECTOR(g_width-1 downto 0);
+            i_sel : in STD_LOGIC;
+            o_res : out STD_LOGIC_VECTOR(g_width-1 downto 0)
+        );
+    end component; -- mux2
+
     -- PC register signals
     signal s_pcreg_wen      : STD_LOGIC;
+    signal s_pcreg_invalue  : STD_LOGIC_VECTOR(g_width-1 downto 0);
     signal s_pcreg_outvalue : STD_LOGIC_VECTOR(g_width-1 downto 0);
 
-        signal s_pcreg_invalue  : STD_LOGIC_VECTOR(g_width-1 downto 0);
+        signal s_pcreg_outvalue_plus4 : STD_LOGIC_VECTOR(g_width-1 downto 0);
+
 
     -- Instruction memory signals
     signal s_imem_memWctrl               : STD_LOGIC;
@@ -128,12 +142,18 @@ architecture Behavioral of datapath is
         signal s_imem_instrMtype_offset32bit        : STD_LOGIC_VECTOR(g_width-1 downto 0);
         signal s_imem_instrMtype_offset32bit_2shift : STD_LOGIC_VECTOR(g_width-1 downto 0);
         signal s_branchtarget                       : STD_LOGIC_VECTOR(g_width-1 downto 0);
+        signal s_pcsrc_ctrl                         : STD_LOGIC;
+
 
     -- Register file signals
     signal s_regfile_wen         : STD_LOGIC;
     signal s_regfile_inwritedata : STD_LOGIC_VECTOR(g_width-1 downto 0);
     signal s_regfile_reg2out     : STD_LOGIC_VECTOR(g_width-1 downto 0);
     signal s_regfile_reg3out     : STD_LOGIC_VECTOR(g_width-1 downto 0);
+
+        signal s_alusrc_ctrl    : STD_LOGIC;
+        signal s_alusrc_operand : STD_LOGIC_VECTOR(g_width-1 downto 0);
+
 
     -- ALU signals
     signal s_alunit_control : STD_LOGIC_VECTOR(2 downto 0);
@@ -142,9 +162,6 @@ architecture Behavioral of datapath is
 
 
 begin
-
-    -- increase of PC by 4
-    s_pcreg_invalue <= STD_LOGIC_VECTOR(unsigned(s_pcreg_outvalue) + 4);
 
     -- PC register
     pc_register : flopenr
@@ -160,6 +177,10 @@ begin
         );
         s_pcreg_wen <= '1';
 
+        -- increase of PC by 4
+        s_pcreg_outvalue_plus4 <= STD_LOGIC_VECTOR(unsigned(s_pcreg_outvalue) + 4);
+
+
     -- Instruction memory
     instruction_mem : imem
         generic map(
@@ -169,6 +190,7 @@ begin
         )
         port map(
             i_clk           => i_clk,                                  -- : in    STD_LOGIC;
+            -- TODO this could break if i_adr has more bits than PC...
             i_adr           => s_pcreg_outvalue(g_adrbits-1 downto 0), -- : in    STD_LOGIC_VECTOR(g_adrbits-1 downto 0);
             i_memWctrl      => s_imem_memWctrl,                        -- : in    STD_LOGIC;
             i_memWctrl8or32 => s_imem_memWctrl8or32,                   -- : in    STD_LOGIC;
@@ -184,7 +206,11 @@ begin
             -- s_imem_instrMtype_offset32bit(14 downto 0) <= s_imem_outdata(14 downto 0);
             -- s_imem_instrMtype_offset32bit(s_imem_instrMtype_offset32bit'left downto 15) <= (s_imem_instrMtype_offset32bit'left downto 15 => s_imem_outdata(14));
         s_imem_instrMtype_offset32bit_2shift <= STD_LOGIC_VECTOR(shift_left(unsigned(s_imem_instrMtype_offset32bit), 2));
-        s_branchtarget <= STD_LOGIC_VECTOR(unsigned(s_pcreg_invalue) + unsigned(s_imem_instrMtype_offset32bit_2shift));
+        s_branchtarget <= STD_LOGIC_VECTOR(unsigned(s_pcreg_outvalue_plus4) + unsigned(s_imem_instrMtype_offset32bit_2shift));
+
+        pcsrc : mux2 generic map(g_width) port map(s_pcreg_outvalue_plus4, s_branchtarget, s_pcsrc_ctrl, s_pcreg_invalue);
+            s_pcsrc_ctrl <= '1';
+
 
     -- Register file
     regfile : register_file
@@ -205,6 +231,10 @@ begin
         s_regfile_wen <= '0';
         s_regfile_inwritedata <= STD_LOGIC_VECTOR(to_unsigned(0, g_width));
 
+        alusrc : mux2 generic map(g_width) port map(s_regfile_reg3out, s_imem_instrMtype_offset32bit, s_alusrc_ctrl, s_alusrc_operand);
+            s_alusrc_ctrl <= '0';
+
+
     -- ALU
     alunit : alu
         generic map(
@@ -212,7 +242,7 @@ begin
         )
         port map(
             i_a       => s_regfile_reg2out, -- : in  STD_LOGIC_VECTOR(g_width-1 downto 0);
-            i_b       => s_regfile_reg3out, -- : in  STD_LOGIC_VECTOR(g_width-1 downto 0);
+            i_b       => s_alusrc_operand,  -- : in  STD_LOGIC_VECTOR(g_width-1 downto 0);
             i_alucont => s_alunit_control,  -- : in  STD_LOGIC_VECTOR(2 downto 0);
             o_zerodet => s_alunit_zerodet,  -- : out STD_LOGIC;
             o_result  => s_alunit_outval    -- : out STD_LOGIC_VECTOR(g_width-1 downto 0)
