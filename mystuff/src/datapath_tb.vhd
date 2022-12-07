@@ -33,8 +33,12 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity datapath_tb is
     generic(
-        ent_width   : integer   := 32; -- ent_width-bit wide registers
-        ent_regbits : integer   := 5   -- 2**ent_regbits number of registers
+        ent_width       : integer   := 32;  -- ent_width-bit wide registers
+        ent_regbits     : integer   := 5;   -- 2**ent_regbits number of registers
+        ent_struct      : integer   := 8;   -- byte-structured memory...
+     -- old parameter for {i,d}memories, register width is also width of memory data ports, see src
+     -- ent_datawidth   : integer   := 32;  -- width of data ports
+        ent_adrbits     : integer   := 8    -- 2**ent_adrbits number of ent_struct-bit positions in memory array
     );
 end datapath_tb;
 
@@ -46,8 +50,12 @@ architecture Behavioral of datapath_tb is
 
     component datapath is
         generic(
-            g_width   : integer   := 32; -- g_width-bit wide registers
-            g_regbits : integer   := 5   -- 2**g_regbits number of registers
+            g_width     : integer;  -- g_width-bit wide registers
+            g_regbits   : integer;  -- 2**g_regbits number of registers
+            g_struct    : integer;  -- byte-structured memory...
+         -- old parameter for {i,d}memories, register width is also width of memory data ports, see src
+         -- g_datawidth : integer;  -- width of data ports
+            g_adrbits   : integer   -- 2**g_adrbits number of g_struct-bit positions in memory array
         );
         port(
             i_clk     : in  STD_LOGIC;
@@ -55,19 +63,23 @@ architecture Behavioral of datapath_tb is
         );
     end component; -- datapath
 
-    signal si_clk     : STD_LOGIC;
-    signal si_reset   : STD_LOGIC;
+    signal si_clk   : STD_LOGIC;
+    signal si_reset : STD_LOGIC;
 
 begin
 
     datapath_DUT : datapath
         generic map(
-            g_width     => ent_width,
-            g_regbits   => ent_regbits
+            g_width     => ent_width,   -- : integer   := 32;
+            g_regbits   => ent_regbits, -- : integer   := 5;
+            g_struct    => ent_struct,  -- : integer   := 8;
+         -- old parameter for {i,d}memories, register width is also width of memory data ports, see src
+         -- g_datawidth => ent_width    -- : integer   := 32;
+            g_adrbits   => ent_adrbits  -- : integer   := 8 
         )
         port map(
-            i_clk       => si_clk,
-            i_reset     => si_reset
+            i_clk       => si_clk,  -- : in  STD_LOGIC;
+            i_reset     => si_reset -- : in  STD_LOGIC  -- reset is for PC...
         );
 
     si_clk_gen : process
