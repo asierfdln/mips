@@ -113,6 +113,22 @@ architecture Behavioral of datapath is
         );
     end component; -- alu
 
+    component dmem is
+        generic(
+            g_struct    : integer;
+            g_datawidth : integer;
+            g_adrbits   : integer
+        );
+        port(
+            i_clk           : in  STD_LOGIC;
+            i_adr           : in  STD_LOGIC_VECTOR(g_adrbits-1 downto 0);
+            i_memWctrl      : in  STD_LOGIC;
+            i_memWctrl8or32 : in  STD_LOGIC;
+            i_memWdata      : in  STD_LOGIC_VECTOR(g_datawidth-1 downto 0);
+            o_memRdata      : out STD_LOGIC_VECTOR(g_datawidth-1 downto 0)
+        );
+    end component; -- dmem
+
     component mux2 is
         generic(
             g_width : integer := 32  -- g_width-bit wide registers
@@ -147,7 +163,6 @@ architecture Behavioral of datapath is
 
     -- Register file signals
     signal s_regfile_wen         : STD_LOGIC;
-    signal s_regfile_inwritedata : STD_LOGIC_VECTOR(g_width-1 downto 0);
     signal s_regfile_reg2out     : STD_LOGIC_VECTOR(g_width-1 downto 0);
     signal s_regfile_reg3out     : STD_LOGIC_VECTOR(g_width-1 downto 0);
 
@@ -160,6 +175,14 @@ architecture Behavioral of datapath is
     signal s_alunit_outval  : STD_LOGIC_VECTOR(g_width-1 downto 0);
     signal s_alunit_zerodet : STD_LOGIC;
 
+
+    -- Data memory signals
+    signal s_dmem_memWctrl      : STD_LOGIC;
+    signal s_dmem_memWctrl8or32 : STD_LOGIC;
+    signal s_dmem_outdata       : STD_LOGIC_VECTOR(g_width-1 downto 0);
+
+        signal s_wbsrc_ctrl     : STD_LOGIC;
+        signal s_datawb_regfile : STD_LOGIC_VECTOR(g_width-1 downto 0);
 
 begin
 
@@ -197,9 +220,9 @@ begin
             i_memWdata      => s_imem_memWdata,                        -- : in    STD_LOGIC_VECTOR(g_datawidth-1 downto 0);
             o_memRdata      => s_imem_outdata                          -- : out   STD_LOGIC_VECTOR(g_datawidth-1 downto 0)
         );
-        s_imem_memWctrl               <= '0';
-        s_imem_memWctrl8or32          <= '0';
-        s_imem_memWdata               <= STD_LOGIC_VECTOR(to_unsigned(0, g_width));
+        s_imem_memWctrl      <= '0';
+        s_imem_memWctrl8or32 <= '0';
+        s_imem_memWdata      <= STD_LOGIC_VECTOR(to_unsigned(0, g_width));
 
         s_imem_instrMtype_offset32bit <= STD_LOGIC_VECTOR(resize(signed(s_imem_outdata(14 downto 0)), s_imem_instrMtype_offset32bit'length));
             -- -- above magic trick does the same as below...
@@ -209,7 +232,7 @@ begin
         s_branchtarget <= STD_LOGIC_VECTOR(unsigned(s_pcreg_outvalue_plus4) + unsigned(s_imem_instrMtype_offset32bit_2shift));
 
         pcsrc : mux2 generic map(g_width) port map(s_pcreg_outvalue_plus4, s_branchtarget, s_pcsrc_ctrl, s_pcreg_invalue);
-            s_pcsrc_ctrl <= '1';
+            s_pcsrc_ctrl <= '0';
 
 
     -- Register file
@@ -224,12 +247,11 @@ begin
             i_reg1_addr     => s_imem_outdata(24 downto 20), -- : in    STD_LOGIC_VECTOR(g_regbits-1 downto 0);
             i_reg2_addr     => s_imem_outdata(19 downto 15), -- : in    STD_LOGIC_VECTOR(g_regbits-1 downto 0);
             i_reg3_addr     => s_imem_outdata(14 downto 10), -- : in    STD_LOGIC_VECTOR(g_regbits-1 downto 0);
-            i_write_data    => s_regfile_inwritedata,        -- : in    STD_LOGIC_VECTOR(g_width-1 downto 0);
+            i_write_data    => s_datawb_regfile,             -- : in    STD_LOGIC_VECTOR(g_width-1 downto 0);
             o_reg2_contents => s_regfile_reg2out,            -- : out   STD_LOGIC_VECTOR(g_width-1 downto 0);
             o_reg3_contents => s_regfile_reg3out             -- : out   STD_LOGIC_VECTOR(g_width-1 downto 0)
         );
         s_regfile_wen <= '0';
-        s_regfile_inwritedata <= STD_LOGIC_VECTOR(to_unsigned(0, g_width));
 
         alusrc : mux2 generic map(g_width) port map(s_regfile_reg3out, s_imem_instrMtype_offset32bit, s_alusrc_ctrl, s_alusrc_operand);
             s_alusrc_ctrl <= '0';
@@ -248,5 +270,28 @@ begin
             o_result  => s_alunit_outval    -- : out STD_LOGIC_VECTOR(g_width-1 downto 0)
         );
         s_alunit_control <= "000";
+
+
+    -- Data memory
+    data_mem : dmem
+        generic map(
+            g_struct    => g_struct, -- : integer;
+            g_datawidth => g_width,  -- : integer;
+            g_adrbits   => g_adrbits -- : integer
+        )
+        port map(
+            i_clk           => i_clk,                                  -- : in    STD_LOGIC;
+            -- TODO this could break if i_adr has more bits than s_alunit_outval...
+            i_adr           => s_alunit_outval(g_adrbits-1 downto 0),  -- : in    STD_LOGIC_VECTOR(g_adrbits-1 downto 0);
+            i_memWctrl      => s_dmem_memWctrl,                        -- : in    STD_LOGIC;
+            i_memWctrl8or32 => s_dmem_memWctrl8or32,                   -- : in    STD_LOGIC;
+            i_memWdata      => s_regfile_reg3out,                      -- : in    STD_LOGIC_VECTOR(g_datawidth-1 downto 0);
+            o_memRdata      => s_dmem_outdata                          -- : out   STD_LOGIC_VECTOR(g_datawidth-1 downto 0)
+        );
+        s_dmem_memWctrl      <= '0';
+        s_dmem_memWctrl8or32 <= '0';
+
+        wbsrc : mux2 generic map(g_width) port map(s_dmem_outdata, s_alunit_outval, s_wbsrc_ctrl, s_datawb_regfile);
+            s_wbsrc_ctrl <= '0';
 
 end Behavioral; -- datapath

@@ -1,18 +1,23 @@
 0x0     R   ADD     r1, r2, r3      // Add two registers
 0x1     R   SUB     r1, r2, r3      // Subtract two registers
 0x2     R   MUL     r1, r2, r3      // Multiply two registers
+0x3     R   AND     r1, r2, r3
+0x4     R   OR      r1, r2, r3
+0x5     R   SLT     r1, r2, r3
+0x6     R   MOV     r1, r2, REG0_to_do_a_sum... // but this would make it an M-type instruction whose offset must always be zeroes... 
+       ADDI??... this would allow us to do fibonacci
 0x10    M   LDB     imm(r1), r0     // Load Byte; base register + offset
+       see [Neil Weste] definitions of LDB and STB, much better...
 0x11    M   LDW     imm(r1), r0     // Load Word; base register + offset
 0x12    M   STB     r0, imm(r1)     // Store Byte; base register + offset
 0x13    M   STW     r0, imm(r1)     // Store Word; base register + offset
 0x30    B   BEQ     r1, offset      // if r1==r2, PC=PC+offset
 0x31    B   JUMP    r1, offset      // PC = r1 + offset
-# others...
-0x14    M   MOV     rm0, dst, zeros   // 
+// others...
 0x15    B   TLBWR   ...
 0x16    B   IRET    ...
 
-# encoding
+// encoding
 R-type 31-25    24-20       19-15       14-10               9-0
        opcode   dst         src1        src2                zeroes
 M-type 31-25    24-20       19-15       14-0                
@@ -21,14 +26,9 @@ B-type 31-25    24-20       19-15       14-10               9-0
        opcode   offsethi    src1        src2/offsetmid      offsetlo
 
 
+[Neil Weste]
 
-# para quedarme tranquilo
-AND     r1, r2, r3
-OR      r1, r2, r3
-
-
-
-# suppported by MIPSWeste
+// suppported by MIPSWeste
 add     $1, $2, $3
 sub     $1, $2, $3
 and     $1, $2, $3
