@@ -52,7 +52,7 @@ end dmem;
 
 
 -- NWeste: "external memory accessed by MIPS"
--- main-memory-like instruction memory data array thing, soon-to-be Icache...
+-- main-memory-like instruction memory data array thing, soon-to-be Dcache...
 
 
 architecture Behavioral of dmem is
