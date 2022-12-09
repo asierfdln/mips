@@ -54,6 +54,20 @@ end datapath;
 
 architecture Behavioral of datapath is
 
+    component decoder is
+        port(
+            i_opcode             : in  STD_LOGIC_VECTOR(6 downto 0);
+            o_jmpsrc_ctrl        : out STD_LOGIC;
+            o_regfile_wen        : out STD_LOGIC;
+            o_alusrc_ctrl        : out STD_LOGIC;
+            o_pcsrc_ctrl         : out STD_LOGIC;
+            o_alunit_ctrl        : out STD_LOGIC_VECTOR(2 downto 0);
+            o_dmem_memWctrl      : out STD_LOGIC;
+            o_dmem_memWctrl8or32 : out STD_LOGIC;
+            o_wbsrc_ctrl         : out STD_LOGIC
+        );
+    end component; -- decoder
+
     component flopenr is
         generic(
             g_width : integer
@@ -150,15 +164,18 @@ architecture Behavioral of datapath is
 
 
     -- Instruction memory signals
-    signal s_imem_memWctrl               : STD_LOGIC;
-    signal s_imem_memWctrl8or32          : STD_LOGIC;
-    signal s_imem_memWdata               : STD_LOGIC_VECTOR(g_width-1 downto 0);
-    signal s_imem_outdata                : STD_LOGIC_VECTOR(g_width-1 downto 0);
+    signal s_imem_memWctrl      : STD_LOGIC;
+    signal s_imem_memWctrl8or32 : STD_LOGIC;
+    signal s_imem_memWdata      : STD_LOGIC_VECTOR(g_width-1 downto 0);
+    signal s_imem_outdata       : STD_LOGIC_VECTOR(g_width-1 downto 0);
 
         signal s_imem_instrMtype_offset32bit        : STD_LOGIC_VECTOR(g_width-1 downto 0);
         signal s_imem_instrMtype_offset32bit_2shift : STD_LOGIC_VECTOR(g_width-1 downto 0);
-        signal s_branchtarget                       : STD_LOGIC_VECTOR(g_width-1 downto 0);
         signal s_pcsrc_ctrl                         : STD_LOGIC;
+        signal s_branchtarget                       : STD_LOGIC_VECTOR(g_width-1 downto 0);
+        signal s_pcp4orbranch_value                 : STD_LOGIC_VECTOR(g_width-1 downto 0);
+        signal s_jmpsrc_ctrl                        : STD_LOGIC;
+        signal s_jump_value                         : STD_LOGIC_VECTOR(g_width-1 downto 0);
 
 
     -- Register file signals
@@ -171,9 +188,11 @@ architecture Behavioral of datapath is
 
 
     -- ALU signals
-    signal s_alunit_control : STD_LOGIC_VECTOR(2 downto 0);
+    signal s_alunit_ctrl    : STD_LOGIC_VECTOR(2 downto 0);
     signal s_alunit_outval  : STD_LOGIC_VECTOR(g_width-1 downto 0);
     signal s_alunit_zerodet : STD_LOGIC;
+
+        signal s_branchtaken : STD_LOGIC;
 
 
     -- Data memory signals
@@ -184,12 +203,28 @@ architecture Behavioral of datapath is
         signal s_wbsrc_ctrl     : STD_LOGIC;
         signal s_datawb_regfile : STD_LOGIC_VECTOR(g_width-1 downto 0);
 
+
 begin
+
+    -- Decoder
+    decodunit : decoder
+        port map(
+            i_opcode             => s_imem_outdata(31 downto 25), -- : in  STD_LOGIC_VECTOR(6 downto 0);
+            o_jmpsrc_ctrl        => s_jmpsrc_ctrl,                -- : out STD_LOGIC;
+            o_regfile_wen        => s_regfile_wen,                -- : out STD_LOGIC;
+            o_alusrc_ctrl        => s_alusrc_ctrl,                -- : out STD_LOGIC;
+            o_pcsrc_ctrl         => s_pcsrc_ctrl,                 -- : out STD_LOGIC;
+            o_alunit_ctrl        => s_alunit_ctrl,                -- : out STD_LOGIC_VECTOR(2 downto 0);
+            o_dmem_memWctrl      => s_dmem_memWctrl,              -- : out STD_LOGIC;
+            o_dmem_memWctrl8or32 => s_dmem_memWctrl8or32,         -- : out STD_LOGIC;
+            o_wbsrc_ctrl         => s_wbsrc_ctrl                  -- : out STD_LOGIC
+        );
+
 
     -- PC register
     pc_register : flopenr
         generic map(
-            g_width => g_width  -- : integer
+            g_width => g_width -- : integer
         )
         port map(
             i_clk   => i_clk,           -- : in  STD_LOGIC;
@@ -220,19 +255,23 @@ begin
             i_memWdata      => s_imem_memWdata,                        -- : in    STD_LOGIC_VECTOR(g_datawidth-1 downto 0);
             o_memRdata      => s_imem_outdata                          -- : out   STD_LOGIC_VECTOR(g_datawidth-1 downto 0)
         );
-        s_imem_memWctrl      <= '0';
-        s_imem_memWctrl8or32 <= '0';
-        s_imem_memWdata      <= STD_LOGIC_VECTOR(to_unsigned(0, g_width));
+        s_imem_memWctrl      <= '0';                                       -- TODO caches stuff, if time...
+        s_imem_memWctrl8or32 <= '0';                                       -- TODO caches stuff, if time...
+        s_imem_memWdata      <= STD_LOGIC_VECTOR(to_unsigned(0, g_width)); -- TODO caches stuff, if time...
 
-        s_imem_instrMtype_offset32bit <= STD_LOGIC_VECTOR(resize(signed(s_imem_outdata(14 downto 0)), s_imem_instrMtype_offset32bit'length));
-            -- -- above magic trick does the same as below...
-            -- s_imem_instrMtype_offset32bit(14 downto 0) <= s_imem_outdata(14 downto 0);
-            -- s_imem_instrMtype_offset32bit(s_imem_instrMtype_offset32bit'left downto 15) <= (s_imem_instrMtype_offset32bit'left downto 15 => s_imem_outdata(14));
+        -- -- below magic trick does the same as below...
+        -- s_imem_instrMtype_offset32bit(14 downto 0) <= s_imem_outdata(14 downto 0);
+        -- s_imem_instrMtype_offset32bit(s_imem_instrMtype_offset32bit'left downto 15) <= (s_imem_instrMtype_offset32bit'left downto 15 => s_imem_outdata(14));
+        s_imem_instrMtype_offset32bit        <= STD_LOGIC_VECTOR(resize(signed(s_imem_outdata(14 downto 0)), s_imem_instrMtype_offset32bit'length));
         s_imem_instrMtype_offset32bit_2shift <= STD_LOGIC_VECTOR(shift_left(unsigned(s_imem_instrMtype_offset32bit), 2));
-        s_branchtarget <= STD_LOGIC_VECTOR(unsigned(s_pcreg_outvalue_plus4) + unsigned(s_imem_instrMtype_offset32bit_2shift));
+        s_branchtarget                       <= STD_LOGIC_VECTOR(unsigned(s_pcreg_outvalue_plus4) + unsigned(s_imem_instrMtype_offset32bit_2shift));
 
-        pcsrc : mux2 generic map(g_width) port map(s_pcreg_outvalue_plus4, s_branchtarget, s_pcsrc_ctrl, s_pcreg_invalue);
-            s_pcsrc_ctrl <= '0';
+        pcsrc : mux2 generic map(g_width) port map(s_pcreg_outvalue_plus4, s_branchtarget, s_branchtaken, s_pcp4orbranch_value);
+        -- s_pcsrc_ctrl <= '0'; -- mapped to decoder
+
+        s_jump_value <= s_pcreg_outvalue_plus4(31 downto 27) & s_imem_outdata(24 downto 0) & "00";
+
+        jmpsrc : mux2 generic map(g_width) port map(s_pcp4orbranch_value, s_jump_value, s_jmpsrc_ctrl, s_pcreg_invalue);
 
 
     -- Register file
@@ -251,10 +290,10 @@ begin
             o_reg2_contents => s_regfile_reg2out,            -- : out   STD_LOGIC_VECTOR(g_width-1 downto 0);
             o_reg3_contents => s_regfile_reg3out             -- : out   STD_LOGIC_VECTOR(g_width-1 downto 0)
         );
-        s_regfile_wen <= '0';
+        -- s_regfile_wen <= '0'; -- mapped to decoder
 
         alusrc : mux2 generic map(g_width) port map(s_regfile_reg3out, s_imem_instrMtype_offset32bit, s_alusrc_ctrl, s_alusrc_operand);
-            s_alusrc_ctrl <= '0';
+            -- s_alusrc_ctrl <= '0'; -- mapped to decoder
 
 
     -- ALU
@@ -265,11 +304,13 @@ begin
         port map(
             i_a       => s_regfile_reg2out, -- : in  STD_LOGIC_VECTOR(g_width-1 downto 0);
             i_b       => s_alusrc_operand,  -- : in  STD_LOGIC_VECTOR(g_width-1 downto 0);
-            i_alucont => s_alunit_control,  -- : in  STD_LOGIC_VECTOR(2 downto 0);
+            i_alucont => s_alunit_ctrl,     -- : in  STD_LOGIC_VECTOR(2 downto 0);
             o_zerodet => s_alunit_zerodet,  -- : out STD_LOGIC;
             o_result  => s_alunit_outval    -- : out STD_LOGIC_VECTOR(g_width-1 downto 0)
         );
-        s_alunit_control <= "000";
+        -- s_alunit_ctrl <= "000"; -- mapped to decoder
+
+        s_branchtaken <= s_alunit_zerodet and s_pcsrc_ctrl;
 
 
     -- Data memory
@@ -288,10 +329,10 @@ begin
             i_memWdata      => s_regfile_reg3out,                      -- : in    STD_LOGIC_VECTOR(g_datawidth-1 downto 0);
             o_memRdata      => s_dmem_outdata                          -- : out   STD_LOGIC_VECTOR(g_datawidth-1 downto 0)
         );
-        s_dmem_memWctrl      <= '0';
-        s_dmem_memWctrl8or32 <= '0';
+        -- s_dmem_memWctrl      <= '0'; -- mapped to decoder
+        -- s_dmem_memWctrl8or32 <= '0'; -- mapped to decoder
 
         wbsrc : mux2 generic map(g_width) port map(s_dmem_outdata, s_alunit_outval, s_wbsrc_ctrl, s_datawb_regfile);
-            s_wbsrc_ctrl <= '0';
+            -- s_wbsrc_ctrl <= '0'; -- mapped to decoder
 
 end Behavioral; -- datapath

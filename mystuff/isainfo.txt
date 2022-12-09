@@ -1,42 +1,58 @@
-0x0     R   ADD     r1, r2, r3      // Add two registers
-0x1     R   SUB     r1, r2, r3      // Subtract two registers
-0x2     R   MUL     r1, r2, r3      // Multiply two registers
-0x3     R   AND     r1, r2, r3
-0x4     R   OR      r1, r2, r3
-0x5     R   SLT     r1, r2, r3
-0x6     R   MOV     r1, r2, REG0_to_do_a_sum... // but this would make it an M-type instruction whose offset must always be zeroes... 
-       ADDI??... this would allow us to do fibonacci
-0x10    M   LDB     imm(r1), r0     // Load Byte; base register + offset
-       see [Neil Weste] definitions of LDB and STB, much better...
-0x11    M   LDW     imm(r1), r0     // Load Word; base register + offset
-0x12    M   STB     r0, imm(r1)     // Store Byte; base register + offset
-0x13    M   STW     r0, imm(r1)     // Store Word; base register + offset
-0x30    B   BEQ     r1, offset      // if r1==r2, PC=PC+offset
-0x31    B   JUMP    r1, offset      // PC = r1 + offset
+0x0     R   ADD     r1, r2, r3
+0x1     R   SUB     r1, r2, r3
+0x2     R   AND     r1, r2, r3
+0x3     R   OR      r1, r2, r3
+0x4     R   SLT     r1, r2, r3
+0x5     R   MUL     r1, r2, r3
+    TODO diff block and such, buff...
+0x6     R   MOV     r1, r2, REG0_to_do_a_sum...
+    but this would make it an M-type instruction whose offset must always be zeroes...
+    TODO this is a bit of a chapuza, must have some block to set all r3 bits to zero governed by a control signal... like just a bunch of and_gates with all the remaining bits of r3andbeyond and ALUctrl set to add stuff... or just a mux2 with aluresult and move result... this is much better
+(Rñeh) ADDI??... this would allow us to do fibonacci
+    TODO should be as simple as playing around with control signals i think...
+0x10    M   LDB     imm(r1), r0
+    // load byte: $1 <- mem[$2 + imm]
+0x11    M   LDW     imm(r1), r0
+    // load byte: $1 <- mem[$2 + imm]
+0x12    M   STB     r0, imm(r1)
+    // store byte: mem[$2 + imm] <- $1
+0x13    M   STW     r0, imm(r1)
+    // store byte: mem[$2 + imm] <- $1
+0x30    B   BEQ     r1, r2, offset
+    // if r1==r2, PC = PC + offset
+0x31    B   JUMP    r1, offset
+    // PC = r1 + offset
 // others...
 0x15    B   TLBWR   ...
 0x16    B   IRET    ...
 
-// encoding
-R-type 31-25    24-20       19-15       14-10               9-0
-       opcode   dst         src1        src2                zeroes
-M-type 31-25    24-20       19-15       14-0                
-       opcode   dst         src1        offset              
-B-type 31-25    24-20       19-15       14-10               9-0
-       opcode   offsethi    src1        src2/offsetmid      offsetlo
+
+[encoding]
+
+    [R-type]
+    31-25    24-20       19-15       14-10               9-0
+    opcode   dst         src1        src2                zeroes
+
+    [M-type]
+    31-25    24-20       19-15       14-0
+    opcode   dst         src1        offset
+
+    [B-type]
+    31-25    24-20       19-15       14-10               9-0
+    opcode   offsethi    src1        src2/offsetmid      offsetlo
 
 
 [Neil Weste]
 
-// suppported by MIPSWeste
-add     $1, $2, $3
-sub     $1, $2, $3
-and     $1, $2, $3
-or      $1, $2, $3
-slt     $1, $2, $3      set less than: $1 <- 1 if $2 < $3
-                                       $1 <- 0 otherwise
-addi    $1, $2, imm
-beq     $1, $2, imm
-j       destination
-lb      $1, imm($2)     load byte: $1 <- mem[$2 + imm]
-sb      $1, imm($2)     store byte: mem[$2 + imm] <- $1
+    // suppported by MIPSWeste
+    add     $1, $2, $3
+    sub     $1, $2, $3
+    and     $1, $2, $3
+    or      $1, $2, $3
+    slt     $1, $2, $3      set less than: $1 <- 1 if $2 < $3
+                                        $1 <- 0 otherwise
+    addi    $1, $2, imm
+    beq     $1, $2, imm
+    j       destination
+    lb      $1, imm($2)     load byte: $1 <- mem[$2 + imm]
+    sb      $1, imm($2)     store byte: mem[$2 + imm] <- $1

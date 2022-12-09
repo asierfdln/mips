@@ -35,7 +35,7 @@ use IEEE.STD_LOGIC_1164.all;
 
 entity mux2 is
     generic(
-        g_width : integer := 32  -- g_width-bit wide registers
+        g_width : integer := 32 -- g_width-bit wide registers
     );
     port(
         i_a   : in STD_LOGIC_VECTOR(g_width-1 downto 0);
