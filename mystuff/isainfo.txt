@@ -1,30 +1,22 @@
-0x0     R   ADD     r1, r2, r3
-0x1     R   SUB     r1, r2, r3
-0x2     R   AND     r1, r2, r3
-0x3     R   OR      r1, r2, r3
-0x4     R   SLT     r1, r2, r3
-0x5     R   MUL     r1, r2, r3
-    TODO diff block and such, buff...
-0x6     R   MOV     r1, r2, REG0_to_do_a_sum...
-    but this would make it an M-type instruction whose offset must always be zeroes...
-    TODO this is a bit of a chapuza, must have some block to set all r3 bits to zero governed by a control signal... like just a bunch of and_gates with all the remaining bits of r3andbeyond and ALUctrl set to add stuff... or just a mux2 with aluresult and move result... this is much better
-(Rñeh) ADDI??... this would allow us to do fibonacci
-    TODO should be as simple as playing around with control signals i think...
-0x10    M   LDB     imm(r1), r0
-    // load byte: $1 <- mem[$2 + imm]
-0x11    M   LDW     imm(r1), r0
-    // load byte: $1 <- mem[$2 + imm]
-0x12    M   STB     r0, imm(r1)
-    // store byte: mem[$2 + imm] <- $1
-0x13    M   STW     r0, imm(r1)
-    // store byte: mem[$2 + imm] <- $1
-0x30    B   BEQ     r1, r2, offset
-    // if r1==r2, PC = PC + offset
-0x31    B   JUMP    r1, offset
-    // PC = r1 + offset
-// others...
-0x15    B   TLBWR   ...
-0x16    B   IRET    ...
+0x0     R   ADD     r1, r2, r3         // r1 <- r2 + r3
+0x1     R   SUB     r1, r2, r3         // r1 <- r2 - r3
+0x2     R   AND     r1, r2, r3         // r1 <- r2 AND r3
+0x3     R   OR      r1, r2, r3         // r1 <- r2 OR r3
+0x4     R   SLT     r1, r2, r3         // r1 <- "1" if r2 < r3, otherwise r1 <- "0"
+0x5     R   MUL     r1, r2, r3         // r1 <- r2 * r3
+    TODO MUL instruction oof... would be kinda cool to have it be another normal operation...
+
+0x7     M   ADDI    r1, r2, imm         // r1 <- r2 + imm
+0x10    M   LDB     r1, r2, imm         // r1 <- mem[r2 + imm]
+0x11    M   LDW     r1, r2, imm         // r1 <- mem[r2 + imm]
+0x12    M   STB     r1, r2, imm         // mem[r2 + imm] <- r1                      // s.t. r1 --> r3
+0x13    M   STW     r1, r2, imm         // mem[r2 + imm] <- r1                      // s.t. r1 --> r3
+
+0x30    B   BEQ     r1, r2, imm         // if r1 == r2, PC = PC_plus4 + imm         // s.t. r1 --> r3
+0x31    B   JMP     imm                 // PC = concat(PC(31 downto 27, imm, "00")  // imm is instr(24 downto 0)
+0x40    B   MOV     rm0-bisness         // ...
+0x41    B   TLBWR   (~)                 // ...
+0x42    B   IRET    (~)                 // ...
 
 
 [encoding]
@@ -41,6 +33,40 @@
     31-25    24-20       19-15       14-10               9-0
     opcode   offsethi    src1        src2/offsetmid      offsetlo
 
+    [R-type]    opcode_31-25    dst_24-20       src1_19-15      src2_14-10              zeroes_9-0
+                0000000         00000           00000           00000                   0000000000
+                00000000000000000000000000000000
+                0000 0000 0000 0000 0000 0000 0000 0000
+                0    0    0    0    0    0    0    0
+                00000000
+    [M-type]    opcode_31-25    dst_24-20       src1_19-15      offset_14-0
+                0000000         00000           00000           000000000000000
+                00000000000000000000000000000000
+                0000 0000 0000 0000 0000 0000 0000 0000
+                0    0    0    0    0    0    0    0
+                00000000
+
+    [LIES : start]
+    [B-type]    opcode_31-25    offsethi_24-20  src1_19-15      src2/offsetmid_14-10    offsetlo_9-0
+                0000000         00000           00000           00000                   0000000000
+                00000000000000000000000000000000
+                0000 0000 0000 0000 0000 0000 0000 0000
+                0    0    0    0    0    0    0    0
+                00000000
+    [LIES :   end]
+
+    [BEQ-type]  opcode_31-25    dst_24-20       src1_19-15      offset_14-0
+                0000000         00000           00000           000000000000000
+                00000000000000000000000000000000
+                0000 0000 0000 0000 0000 0000 0000 0000
+                0    0    0    0    0    0    0    0
+                00000000
+    [JMP-type]  opcode_31-25    offset_24-0
+                0000000         0000000000000000000000000
+                00000000000000000000000000000000
+                0000 0000 0000 0000 0000 0000 0000 0000
+                0    0    0    0    0    0    0    0
+                00000000
 
 [Neil Weste]
 
@@ -50,7 +76,7 @@
     and     $1, $2, $3
     or      $1, $2, $3
     slt     $1, $2, $3      set less than: $1 <- 1 if $2 < $3
-                                        $1 <- 0 otherwise
+                                           $1 <- 0 otherwise
     addi    $1, $2, imm
     beq     $1, $2, imm
     j       destination

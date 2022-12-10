@@ -59,8 +59,7 @@ architecture Behavioral of decoder is
         instrAND,
         instrOR,
         instrSLT,
-        instrMUL,
-        instrMOV,
+        -- instrMUL,
         instrADDI,
         instrLDB,
         instrLDW,
@@ -138,28 +137,16 @@ begin
             --     o_dmem_memWctrl      <= '-';
             --     o_dmem_memWctrl8or32 <= '-';
             --     o_wbsrc_ctrl         <= '-';
-            -- -- TODO move func...
-            -- when "0000110" => -- MOV 0x06
-            --     curr_instr           <= instrMOV;
-            --     o_jmpsrc_ctrl        <= '-';
-            --     o_regfile_wen        <= '-';
-            --     o_alusrc_ctrl        <= '-';
-            --     o_pcsrc_ctrl         <= '-';
-            --     o_alunit_ctrl        <= "---";
-            --     o_dmem_memWctrl      <= '-';
-            --     o_dmem_memWctrl8or32 <= '-';
-            --     o_wbsrc_ctrl         <= '-';
-            -- -- TODO add immediate func...
-            -- when "0000111" => -- ADDI 0x07
-            --     curr_instr           <= instrADDI;
-            --     o_jmpsrc_ctrl        <= '-';
-            --     o_regfile_wen        <= '-';
-            --     o_alusrc_ctrl        <= '-';
-            --     o_pcsrc_ctrl         <= '-';
-            --     o_alunit_ctrl        <= "---";
-            --     o_dmem_memWctrl      <= '-';
-            --     o_dmem_memWctrl8or32 <= '-';
-            --     o_wbsrc_ctrl         <= '-';
+            when "0000111" => -- ADDI 0x07
+                curr_instr           <= instrADDI;
+                o_jmpsrc_ctrl        <= '0';
+                o_regfile_wen        <= '1';
+                o_alusrc_ctrl        <= '1';
+                o_pcsrc_ctrl         <= '0';
+                o_alunit_ctrl        <= "010";
+                o_dmem_memWctrl      <= '0';
+                o_dmem_memWctrl8or32 <= '0';
+                o_wbsrc_ctrl         <= '1';
             when "0010000" => -- LDB 0x10
                 curr_instr           <= instrLDB;
                 o_jmpsrc_ctrl        <= '0';
