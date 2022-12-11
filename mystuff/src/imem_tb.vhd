@@ -56,7 +56,7 @@ architecture Behavioral of imem_tb is
             i_clk             : in  STD_LOGIC;
             i_adr             : in  STD_LOGIC_VECTOR(g_adrbits-1 downto 0);
             i_memWctrl        : in  STD_LOGIC;
-            i_memWctrl8or32   : in  STD_LOGIC;
+            i_memctrl8or32    : in  STD_LOGIC;
             i_memWdata        : in  STD_LOGIC_VECTOR(g_datawidth-1 downto 0);
             o_memRdata        : out STD_LOGIC_VECTOR(g_datawidth-1 downto 0)
         );
@@ -65,7 +65,7 @@ architecture Behavioral of imem_tb is
     signal si_clk            : STD_LOGIC;
     signal si_adr            : STD_LOGIC_VECTOR(ent_adrbits-1 downto 0);
     signal si_memwrite       : STD_LOGIC;
-    signal si_memwrite8or32  : STD_LOGIC;
+    signal si_mem8or32       : STD_LOGIC;
     signal si_writedata      : STD_LOGIC_VECTOR(ent_datawidth-1 downto 0);
     signal so_memdata        : STD_LOGIC_VECTOR(ent_datawidth-1 downto 0);
 
@@ -81,7 +81,7 @@ begin
             i_clk             => si_clk,
             i_adr             => si_adr,
             i_memWctrl        => si_memwrite,
-            i_memWctrl8or32   => si_memwrite8or32,
+            i_memctrl8or32    => si_mem8or32,
             i_memWdata        => si_writedata,
             o_memRdata        => so_memdata
         );
@@ -97,112 +97,184 @@ begin
     manual_signals : process
     begin
 
+        -- read byte 1/19
+        si_adr           <= "00000000";
+        si_memwrite      <= '0';
+        si_mem8or32      <= '0';
+        si_writedata     <= x"00000000";
+        wait for 5 ns;
+        assert so_memdata = x"00000044" report "read byte 1/19 failed";
+        wait for 5 ns;
         -- read line 1/19
         si_adr           <= "00000000";
         si_memwrite      <= '0';
-        si_memwrite8or32 <= '0';
+        si_mem8or32      <= '1';
         si_writedata     <= x"00000000";
         wait for 5 ns;
         assert so_memdata = x"80020044" report "read line 1/19 failed";
         wait for 5 ns;
 
+        -- read byte 2/19
+        si_adr           <= "00000100";
+        si_memwrite      <= '0';
+        si_mem8or32      <= '0';
+        si_writedata     <= x"00000000";
+        wait for 5 ns;
+        assert so_memdata = x"00000040" report "read byte 2/19 failed";
+        wait for 5 ns;
         -- read line 2/19
         si_adr           <= "00000100";
         si_memwrite      <= '0';
-        si_memwrite8or32 <= '0';
+        si_mem8or32      <= '1';
         si_writedata     <= x"00000000";
         wait for 5 ns;
         assert so_memdata = x"80070040" report "read line 2/19 failed";
         wait for 5 ns;
 
+        -- read byte starting from byte 252
+        si_adr           <= "11111100";
+        si_memwrite      <= '0';
+        si_mem8or32      <= '0';
+        si_writedata     <= x"00000000";
+        wait for 5 ns;
+        assert so_memdata = x"00000000" report "read byte starting from byte 252 failed";
+        wait for 5 ns;
         -- read starting from byte 252
         si_adr           <= "11111100";
         si_memwrite      <= '0';
-        si_memwrite8or32 <= '0';
+        si_mem8or32      <= '1';
         si_writedata     <= x"00000000";
         wait for 5 ns;
         assert so_memdata = x"00000000" report "read starting from byte 252 failed";
         wait for 5 ns;
 
+        -- read byte starting from byte 253
+        si_adr           <= "11111101";
+        si_memwrite      <= '0';
+        si_mem8or32      <= '0';
+        si_writedata     <= x"00000000";
+        wait for 5 ns;
+        assert so_memdata = x"00000000" report "read byte starting from byte 253 failed";
+        wait for 5 ns;
         -- read starting from byte 253
         si_adr           <= "11111101";
         si_memwrite      <= '0';
-        si_memwrite8or32 <= '0';
+        si_mem8or32      <= '1';
         si_writedata     <= x"00000000";
         wait for 5 ns;
         assert so_memdata = x"44000000" report "read starting from byte 253 failed";
         wait for 5 ns;
 
+        -- read byte starting from byte 254
+        si_adr           <= "11111110";
+        si_memwrite      <= '0';
+        si_mem8or32      <= '0';
+        si_writedata     <= x"00000000";
+        wait for 5 ns;
+        assert so_memdata = x"00000000" report "read byte starting from byte 254 failed";
+        wait for 5 ns;
         -- read starting from byte 254
         si_adr           <= "11111110";
         si_memwrite      <= '0';
-        si_memwrite8or32 <= '0';
+        si_mem8or32      <= '1';
         si_writedata     <= x"00000000";
         wait for 5 ns;
         assert so_memdata = x"00440000" report "read starting from byte 254 failed";
         wait for 5 ns;
 
+        -- read byte starting from byte 255
+        si_adr           <= "11111111";
+        si_memwrite      <= '0';
+        si_mem8or32      <= '0';
+        si_writedata     <= x"00000000";
+        wait for 5 ns;
+        assert so_memdata = x"00000000" report "read byte starting from byte 255 failed";
+        wait for 5 ns;
         -- read starting from byte 255
         si_adr           <= "11111111";
         si_memwrite      <= '0';
-        si_memwrite8or32 <= '0';
+        si_mem8or32      <= '1';
         si_writedata     <= x"00000000";
         wait for 5 ns;
         assert so_memdata = x"02004400" report "read starting from byte 255 failed";
         wait for 5 ns;
 
+        -- read byte 1/19 again
+        si_adr           <= "00000000";
+        si_memwrite      <= '0';
+        si_mem8or32      <= '0';
+        si_writedata     <= x"00000000";
+        wait for 5 ns;
+        assert so_memdata = x"00000044" report "read byte 1/19 again failed";
+        wait for 5 ns;
         -- read line 1/19 again
         si_adr           <= "00000000";
         si_memwrite      <= '0';
-        si_memwrite8or32 <= '0';
+        si_mem8or32      <= '1';
         si_writedata     <= x"00000000";
         wait for 5 ns;
         assert so_memdata = x"80020044" report "read line 1/19 again failed";
         wait for 5 ns;
 
+        -- write byte 1/19[0]
+        si_adr           <= "00000000";
+        si_memwrite      <= '1';
+        si_mem8or32      <= '0';
+        si_writedata     <= x"00000169";
+        wait for 10 ns;
+
+            -- read byte 1/19 after write byte 1/19[0]
+            si_adr           <= "00000000";
+            si_memwrite      <= '0';
+            si_mem8or32      <= '1';
+            si_writedata     <= x"00000000";
+            wait for 5 ns;
+            assert so_memdata = x"80020069" report "read byte 1/19 after write byte 1/19[0] failed";
+            wait for 5 ns;
+
         -- write line 1/19[0]
         si_adr           <= "00000000";
         si_memwrite      <= '1';
-        si_memwrite8or32 <= '0';
+        si_mem8or32      <= '1';
         si_writedata     <= x"00000069";
         wait for 10 ns;
 
             -- read line 1/19 after write 1/19[0]
             si_adr           <= "00000000";
             si_memwrite      <= '0';
-            si_memwrite8or32 <= '0';
+            si_mem8or32      <= '1';
             si_writedata     <= x"00000000";
             wait for 5 ns;
-            assert so_memdata = x"80020069" report "read line 1/19 after write 1/19[0] failed";
+            assert so_memdata = x"00000069" report "read line 1/19 after write 1/19[0] failed";
             wait for 5 ns;
 
-        -- write line 1/19[1]
+        -- write byte 1/19[1]
         si_adr           <= "00000001";
         si_memwrite      <= '1';
-        si_memwrite8or32 <= '0';
+        si_mem8or32      <= '0';
         si_writedata     <= x"00000069";
         wait for 10 ns;
 
-            -- read line 1/19 after write 1/19[1]
+            -- read byte 1/19 after write byte 1/19[1]
             si_adr           <= "00000000";
             si_memwrite      <= '0';
-            si_memwrite8or32 <= '0';
+            si_mem8or32      <= '1';
             si_writedata     <= x"00000000";
             wait for 5 ns;
-            assert so_memdata = x"80026969" report "read line 1/19 after write 1/19[1] failed";
+            assert so_memdata = x"00006969" report "read byte 1/19 after write byte 1/19[1] failed";
             wait for 5 ns;
 
         -- write line 2/19
         si_adr           <= "00000100";
         si_memwrite      <= '1';
-        si_memwrite8or32 <= '1';
+        si_mem8or32      <= '1';
         si_writedata     <= x"69696969";
         wait for 10 ns;
 
             -- read line 2/19 after write 2/19
             si_adr           <= "00000100";
             si_memwrite      <= '0';
-            si_memwrite8or32 <= '0';
+            si_mem8or32      <= '1';
             si_writedata     <= x"00000000";
             wait for 5 ns;
             assert so_memdata = x"69696969" report "read line 2/19 after write 2/19 failed";
@@ -211,7 +283,7 @@ begin
         -- reset everything to 0
         si_adr           <= "00000000";
         si_memwrite      <= '0';
-        si_memwrite8or32 <= '0';
+        si_mem8or32      <= '0';
         si_writedata     <= x"00000000";
 
         wait;

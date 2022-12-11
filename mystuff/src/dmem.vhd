@@ -44,7 +44,7 @@ entity dmem is
         i_clk             : in    STD_LOGIC;
         i_adr             : in    STD_LOGIC_VECTOR(g_adrbits-1 downto 0);
         i_memWctrl        : in    STD_LOGIC;
-        i_memWctrl8or32   : in    STD_LOGIC;
+        i_memctrl8or32    : in    STD_LOGIC;
         i_memWdata        : in    STD_LOGIC_VECTOR(g_datawidth-1 downto 0);
         o_memRdata        : out   STD_LOGIC_VECTOR(g_datawidth-1 downto 0)
     );
@@ -115,7 +115,7 @@ begin
             -- whahappens with 255, 254, 253 (adrbits=8)?? --> loops back xD
             if i_clk'event and i_clk = '1' then
                 if (i_memWctrl = '1') then
-                    if i_memWctrl8or32 = '0' then
+                    if i_memctrl8or32 = '0' then
                         -- variable-to-signal conversion
                         -- s_mem(conv_integer(i_adr))      := i_memWdata(7 downto 0);
                         s_mem(conv_integer(i_adr))      <= i_memWdata(7 downto 0);
@@ -134,11 +134,15 @@ begin
             end if;
 
             -- read_stuff
-            -- whahappens with 255, 254, 253 (adrbits=8)?? --> loops back xD
-            o_memRdata <= s_mem(conv_integer(i_adr + 3))
-                        & s_mem(conv_integer(i_adr + 2))
-                        & s_mem(conv_integer(i_adr + 1))
-                        & s_mem(conv_integer(i_adr));
+            if i_memctrl8or32 = '0' then
+                o_memRdata <= conv_std_logic_vector(conv_integer(s_mem(conv_integer(i_adr))), g_datawidth);
+            else
+                -- whahappens with 255, 254, 253 (adrbits=8)?? --> loops back xD
+                o_memRdata <= s_mem(conv_integer(i_adr + 3))
+                            & s_mem(conv_integer(i_adr + 2))
+                            & s_mem(conv_integer(i_adr + 1))
+                            & s_mem(conv_integer(i_adr));
+            end if ;
 
             -- sensitivity list
             wait on i_clk, i_adr;

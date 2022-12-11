@@ -56,16 +56,16 @@ architecture Behavioral of datapath is
 
     component decoder is
         port(
-            i_opcode             : in  STD_LOGIC_VECTOR(6 downto 0);
-            o_jmpsrc_ctrl        : out STD_LOGIC;
-            o_reg3src_ctrl       : out STD_LOGIC;
-            o_regfile_wen        : out STD_LOGIC;
-            o_alusrc_ctrl        : out STD_LOGIC;
-            o_beqsrc_ctrl        : out STD_LOGIC;
-            o_alunit_ctrl        : out STD_LOGIC_VECTOR(2 downto 0);
-            o_dmem_memWctrl      : out STD_LOGIC;
-            o_dmem_memWctrl8or32 : out STD_LOGIC;
-            o_wbsrc_ctrl         : out STD_LOGIC
+            i_opcode            : in  STD_LOGIC_VECTOR(6 downto 0);
+            o_jmpsrc_ctrl       : out STD_LOGIC;
+            o_reg3src_ctrl      : out STD_LOGIC;
+            o_regfile_wen       : out STD_LOGIC;
+            o_alusrc_ctrl       : out STD_LOGIC;
+            o_beqsrc_ctrl       : out STD_LOGIC;
+            o_alunit_ctrl       : out STD_LOGIC_VECTOR(2 downto 0);
+            o_dmem_memWctrl     : out STD_LOGIC;
+            o_dmem_memctrl8or32 : out STD_LOGIC;
+            o_wbsrc_ctrl        : out STD_LOGIC
         );
     end component; -- decoder
 
@@ -89,12 +89,12 @@ architecture Behavioral of datapath is
             g_adrbits   : integer
         );
         port(
-            i_clk           : in  STD_LOGIC;
-            i_adr           : in  STD_LOGIC_VECTOR(g_adrbits-1 downto 0);
-            i_memWctrl      : in  STD_LOGIC;
-            i_memWctrl8or32 : in  STD_LOGIC;
-            i_memWdata      : in  STD_LOGIC_VECTOR(g_datawidth-1 downto 0);
-            o_memRdata      : out STD_LOGIC_VECTOR(g_datawidth-1 downto 0)
+            i_clk          : in  STD_LOGIC;
+            i_adr          : in  STD_LOGIC_VECTOR(g_adrbits-1 downto 0);
+            i_memWctrl     : in  STD_LOGIC;
+            i_memctrl8or32 : in  STD_LOGIC;
+            i_memWdata     : in  STD_LOGIC_VECTOR(g_datawidth-1 downto 0);
+            o_memRdata     : out STD_LOGIC_VECTOR(g_datawidth-1 downto 0)
         );
     end component; -- imem
 
@@ -135,12 +135,12 @@ architecture Behavioral of datapath is
             g_adrbits   : integer
         );
         port(
-            i_clk           : in  STD_LOGIC;
-            i_adr           : in  STD_LOGIC_VECTOR(g_adrbits-1 downto 0);
-            i_memWctrl      : in  STD_LOGIC;
-            i_memWctrl8or32 : in  STD_LOGIC;
-            i_memWdata      : in  STD_LOGIC_VECTOR(g_datawidth-1 downto 0);
-            o_memRdata      : out STD_LOGIC_VECTOR(g_datawidth-1 downto 0)
+            i_clk          : in  STD_LOGIC;
+            i_adr          : in  STD_LOGIC_VECTOR(g_adrbits-1 downto 0);
+            i_memWctrl     : in  STD_LOGIC;
+            i_memctrl8or32 : in  STD_LOGIC;
+            i_memWdata     : in  STD_LOGIC_VECTOR(g_datawidth-1 downto 0);
+            o_memRdata     : out STD_LOGIC_VECTOR(g_datawidth-1 downto 0)
         );
     end component; -- dmem
 
@@ -165,10 +165,10 @@ architecture Behavioral of datapath is
 
 
     -- Instruction memory signals
-    signal s_imem_memWctrl      : STD_LOGIC;
-    signal s_imem_memWctrl8or32 : STD_LOGIC;
-    signal s_imem_memWdata      : STD_LOGIC_VECTOR(g_width-1 downto 0);
-    signal s_imem_outdata       : STD_LOGIC_VECTOR(g_width-1 downto 0);
+    signal s_imem_memWctrl     : STD_LOGIC;
+    signal s_imem_memctrl8or32 : STD_LOGIC;
+    signal s_imem_memWdata     : STD_LOGIC_VECTOR(g_width-1 downto 0);
+    signal s_imem_outdata      : STD_LOGIC_VECTOR(g_width-1 downto 0);
 
         signal s_reg3src_ctrl                       : STD_LOGIC;
         signal s_r1r3orr3r3                         : STD_LOGIC_VECTOR(g_regbits-1 downto 0);
@@ -199,9 +199,9 @@ architecture Behavioral of datapath is
 
 
     -- Data memory signals
-    signal s_dmem_memWctrl      : STD_LOGIC;
-    signal s_dmem_memWctrl8or32 : STD_LOGIC;
-    signal s_dmem_outdata       : STD_LOGIC_VECTOR(g_width-1 downto 0);
+    signal s_dmem_memWctrl     : STD_LOGIC;
+    signal s_dmem_memctrl8or32 : STD_LOGIC;
+    signal s_dmem_outdata      : STD_LOGIC_VECTOR(g_width-1 downto 0);
 
         signal s_wbsrc_ctrl     : STD_LOGIC;
         signal s_datawb_regfile : STD_LOGIC_VECTOR(g_width-1 downto 0);
@@ -212,16 +212,16 @@ begin
     -- Decoder
     decodunit : decoder
         port map(
-            i_opcode             => s_imem_outdata(31 downto 25), -- : in  STD_LOGIC_VECTOR(6 downto 0);
-            o_jmpsrc_ctrl        => s_jmpsrc_ctrl,                -- : out STD_LOGIC;
-            o_reg3src_ctrl       => s_reg3src_ctrl,               -- : out STD_LOGIC;
-            o_regfile_wen        => s_regfile_wen,                -- : out STD_LOGIC;
-            o_alusrc_ctrl        => s_alusrc_ctrl,                -- : out STD_LOGIC;
-            o_beqsrc_ctrl        => s_beqsrc_ctrl,                -- : out STD_LOGIC;
-            o_alunit_ctrl        => s_alunit_ctrl,                -- : out STD_LOGIC_VECTOR(2 downto 0);
-            o_dmem_memWctrl      => s_dmem_memWctrl,              -- : out STD_LOGIC;
-            o_dmem_memWctrl8or32 => s_dmem_memWctrl8or32,         -- : out STD_LOGIC;
-            o_wbsrc_ctrl         => s_wbsrc_ctrl                  -- : out STD_LOGIC
+            i_opcode            => s_imem_outdata(31 downto 25), -- : in  STD_LOGIC_VECTOR(6 downto 0);
+            o_jmpsrc_ctrl       => s_jmpsrc_ctrl,                -- : out STD_LOGIC;
+            o_reg3src_ctrl      => s_reg3src_ctrl,               -- : out STD_LOGIC;
+            o_regfile_wen       => s_regfile_wen,                -- : out STD_LOGIC;
+            o_alusrc_ctrl       => s_alusrc_ctrl,                -- : out STD_LOGIC;
+            o_beqsrc_ctrl       => s_beqsrc_ctrl,                -- : out STD_LOGIC;
+            o_alunit_ctrl       => s_alunit_ctrl,                -- : out STD_LOGIC_VECTOR(2 downto 0);
+            o_dmem_memWctrl     => s_dmem_memWctrl,              -- : out STD_LOGIC;
+            o_dmem_memctrl8or32 => s_dmem_memctrl8or32,          -- : out STD_LOGIC;
+            o_wbsrc_ctrl        => s_wbsrc_ctrl                  -- : out STD_LOGIC
         );
 
 
@@ -253,15 +253,15 @@ begin
         port map(
             i_clk           => i_clk,                                  -- : in    STD_LOGIC;
             -- TODO this could break if i_adr has more bits than PC...
-            i_adr           => s_pcreg_outvalue(g_adrbits-1 downto 0), -- : in    STD_LOGIC_VECTOR(g_adrbits-1 downto 0);
-            i_memWctrl      => s_imem_memWctrl,                        -- : in    STD_LOGIC;
-            i_memWctrl8or32 => s_imem_memWctrl8or32,                   -- : in    STD_LOGIC;
-            i_memWdata      => s_imem_memWdata,                        -- : in    STD_LOGIC_VECTOR(g_datawidth-1 downto 0);
-            o_memRdata      => s_imem_outdata                          -- : out   STD_LOGIC_VECTOR(g_datawidth-1 downto 0)
+            i_adr          => s_pcreg_outvalue(g_adrbits-1 downto 0), -- : in    STD_LOGIC_VECTOR(g_adrbits-1 downto 0);
+            i_memWctrl     => s_imem_memWctrl,                        -- : in    STD_LOGIC;
+            i_memctrl8or32 => s_imem_memctrl8or32,                    -- : in    STD_LOGIC;
+            i_memWdata     => s_imem_memWdata,                        -- : in    STD_LOGIC_VECTOR(g_datawidth-1 downto 0);
+            o_memRdata     => s_imem_outdata                          -- : out   STD_LOGIC_VECTOR(g_datawidth-1 downto 0)
         );
-        s_imem_memWctrl      <= '0';                                       -- TODO caches stuff, if time...
-        s_imem_memWctrl8or32 <= '0';                                       -- TODO caches stuff, if time...
-        s_imem_memWdata      <= STD_LOGIC_VECTOR(to_unsigned(0, g_width)); -- TODO caches stuff, if time...
+        s_imem_memWctrl     <= '0';                                       -- TODO caches stuff, if time...
+        s_imem_memctrl8or32 <= '1';                                       -- TODO caches stuff, if time...
+        s_imem_memWdata     <= STD_LOGIC_VECTOR(to_unsigned(0, g_width)); -- TODO caches stuff, if time...
 
         r1r3src : mux2 generic map(g_regbits) port map(s_imem_outdata(24 downto 20), s_imem_outdata(14 downto 10), s_reg3src_ctrl, s_r1r3orr3r3);
             -- s_reg3src_ctrl <= '0'; -- mapped to decoder
@@ -328,16 +328,16 @@ begin
             g_adrbits   => g_adrbits -- : integer
         )
         port map(
-            i_clk           => i_clk,                                  -- : in    STD_LOGIC;
+            i_clk           => i_clk,                                 -- : in    STD_LOGIC;
             -- TODO this could break if i_adr has more bits than s_alunit_outval...
-            i_adr           => s_alunit_outval(g_adrbits-1 downto 0),  -- : in    STD_LOGIC_VECTOR(g_adrbits-1 downto 0);
-            i_memWctrl      => s_dmem_memWctrl,                        -- : in    STD_LOGIC;
-            i_memWctrl8or32 => s_dmem_memWctrl8or32,                   -- : in    STD_LOGIC;
-            i_memWdata      => s_regfile_reg3out,                      -- : in    STD_LOGIC_VECTOR(g_datawidth-1 downto 0);
-            o_memRdata      => s_dmem_outdata                          -- : out   STD_LOGIC_VECTOR(g_datawidth-1 downto 0)
+            i_adr          => s_alunit_outval(g_adrbits-1 downto 0), -- : in    STD_LOGIC_VECTOR(g_adrbits-1 downto 0);
+            i_memWctrl     => s_dmem_memWctrl,                       -- : in    STD_LOGIC;
+            i_memctrl8or32 => s_dmem_memctrl8or32,                   -- : in    STD_LOGIC;
+            i_memWdata     => s_regfile_reg3out,                     -- : in    STD_LOGIC_VECTOR(g_datawidth-1 downto 0);
+            o_memRdata     => s_dmem_outdata                         -- : out   STD_LOGIC_VECTOR(g_datawidth-1 downto 0)
         );
-        -- s_dmem_memWctrl      <= '0'; -- mapped to decoder
-        -- s_dmem_memWctrl8or32 <= '0'; -- mapped to decoder
+        -- s_dmem_memWctrl     <= '0'; -- mapped to decoder
+        -- s_dmem_memctrl8or32 <= '0'; -- mapped to decoder
 
         wbsrc : mux2 generic map(g_width) port map(s_dmem_outdata, s_alunit_outval, s_wbsrc_ctrl, s_datawb_regfile);
             -- s_wbsrc_ctrl <= '0'; -- mapped to decoder
