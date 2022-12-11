@@ -9,10 +9,10 @@
 0x7     M   ADDI    r1, r2, imm         // r1 <- r2 + imm
 0x10    M   LDB     r1, r2, imm         // r1 <- mem[r2 + imm]
 0x11    M   LDW     r1, r2, imm         // r1 <- mem[r2 + imm]
-0x12    M   STB     r1, r2, imm         // mem[r2 + imm] <- r1                      // s.t. r1 --> r3
-0x13    M   STW     r1, r2, imm         // mem[r2 + imm] <- r1                      // s.t. r1 --> r3
+0x12    M   STB     r1, r2, imm         // mem[r2 + imm] <- r1                      // s.t. r1 is moved to r3
+0x13    M   STW     r1, r2, imm         // mem[r2 + imm] <- r1                      // s.t. r1 is moved to r3
 
-0x30    B   BEQ     r1, r2, imm         // if r1 == r2, PC = PC_plus4 + imm         // s.t. r1 --> r3
+0x30    B   BEQ     r1, r2, imm         // if r1 == r2, PC = PC_plus4 + imm         // s.t. r1 is moved to r3
 0x31    B   JMP     imm                 // PC = concat(PC(31 downto 27, imm, "00")  // imm is instr(24 downto 0)
 0x40    B   MOV     rm0-bisness         // ...
 0x41    B   TLBWR   (~)                 // ...

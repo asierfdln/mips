@@ -75,8 +75,8 @@ def m_instruction(list_of_arguments):
     #     "ADDI",     # r1 <- r2 + imm
     #     "LDB",      # r1 <- mem[r2 + imm]
     #     "LDW",      # r1 <- mem[r2 + imm]
-    #     "STB",      # mem[r2 + imm] <- r1                       # s.t. r1 --> r3
-    #     "STW",      # mem[r2 + imm] <- r1                       # s.t. r1 --> r3
+    #     "STB",      # mem[r2 + imm] <- r1                       # s.t. r1 is moved to r3
+    #     "STW",      # mem[r2 + imm] <- r1                       # s.t. r1 is moved to r3
     # ]
 
     opcode_31_25    = '0000000'
@@ -147,7 +147,7 @@ def b_instruction(list_of_arguments):
     #             00000000
 
     # b_type = [
-    #     "BEQ",      # if r1 == r2, PC = PC_plus4 + imm          # s.t. r1 --> r3
+    #     "BEQ",      # if r1 == r2, PC = PC_plus4 + imm          # s.t. r1 is moved to r3
     #     "JMP",      # PC = concat(PC(31 downto 27, imm, "00")   # imm is instr(24 downto 0)
     # ]
 
@@ -217,32 +217,50 @@ m_type = [
     "ADDI",     # r1 <- r2 + imm
     "LDB",      # r1 <- mem[r2 + imm]
     "LDW",      # r1 <- mem[r2 + imm]
-    "STB",      # mem[r2 + imm] <- r1                       # s.t. r1 --> r3
-    "STW",      # mem[r2 + imm] <- r1                       # s.t. r1 --> r3
+    "STB",      # mem[r2 + imm] <- r1                       # s.t. r1 is moved to r3
+    "STW",      # mem[r2 + imm] <- r1                       # s.t. r1 is moved to r3
 ]
 
 b_type = [
-    "BEQ",      # if r1 == r2, PC = PC_plus4 + imm          # s.t. r1 --> r3
+    "BEQ",      # if r1 == r2, PC = PC_plus4 + imm          # s.t. r1 is moved to r3
     "JMP",      # PC = concat(PC(31 downto 27, imm, "00")   # imm is instr(24 downto 0)
 ]
 
 asm_src = [
-    "LDB 2 0 32768",
-    "LDB 2 0 32767",
-    "LDB 2 0 68",
-    "LDW 2 0 68",
-    "BEQ 2 0 68",
-    "JMP 15",
-    "ADD 2 0 30",
-    "ADD 2 0 31",
-    "ADD 2 0 32",
-    "ADD 2 0 31",
-    "SUB 2 0 31",
-    "AND 2 0 31",
-    "OR 2 0 31",
-    "SLT 2 0 31",
-    "ADDI 2 0 31",
-    "ADDI 2 2 68",
+
+    # "LDB 2 0 32768",
+    # "LDB 2 0 32767",
+    # "LDB 2 0 68",
+    # "LDW 2 0 68",
+    # "BEQ 2 0 68",
+    # "JMP 15",
+    # "ADD 2 0 30",
+    # "ADD 2 0 31",
+    # "ADD 2 0 32",
+    # "ADD 2 0 31",
+    # "SUB 2 0 31",
+    # "AND 2 0 31",
+    # "OR 2 0 31",
+    # "SLT 2 0 31",
+    # "ADDI 2 0 31",
+    # "ADDI 2 2 68",
+
+    # "LDB 2 0 8",
+    # "STB 2 0 3",
+    # "LDW 3 0 8",
+    # "STW 3 0 4",
+    # "OR 0 0 3",
+
+    # "ADDI 1 0 0",
+    # "ADDI 2 0 1",
+    # "ADD 1 1 2",
+    # "ADD 1 1 2",
+    # "ADD 1 1 2",
+    # "ADD 1 1 2",
+
+    # NeilWeste check program, end up writing a 7 in adr 76
+    # "LDB 1 1 2",
+
 ]
 
 isa_instrs = []

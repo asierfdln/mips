@@ -93,9 +93,9 @@ begin
     manual_signals : process
     begin
 
-        -- reset everything, puts zeros in important places...
+        -- put PC at zero...
         si_reset    <= '1';
-        wait for 12 ns;
+        wait for 2 ns;
 
         -- see wusup
         si_reset    <= '0';

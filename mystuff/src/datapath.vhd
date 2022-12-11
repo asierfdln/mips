@@ -58,9 +58,10 @@ architecture Behavioral of datapath is
         port(
             i_opcode             : in  STD_LOGIC_VECTOR(6 downto 0);
             o_jmpsrc_ctrl        : out STD_LOGIC;
+            o_reg3src_ctrl       : out STD_LOGIC;
             o_regfile_wen        : out STD_LOGIC;
             o_alusrc_ctrl        : out STD_LOGIC;
-            o_pcsrc_ctrl         : out STD_LOGIC;
+            o_beqsrc_ctrl        : out STD_LOGIC;
             o_alunit_ctrl        : out STD_LOGIC_VECTOR(2 downto 0);
             o_dmem_memWctrl      : out STD_LOGIC;
             o_dmem_memWctrl8or32 : out STD_LOGIC;
@@ -169,9 +170,11 @@ architecture Behavioral of datapath is
     signal s_imem_memWdata      : STD_LOGIC_VECTOR(g_width-1 downto 0);
     signal s_imem_outdata       : STD_LOGIC_VECTOR(g_width-1 downto 0);
 
+        signal s_reg3src_ctrl                       : STD_LOGIC;
+        signal s_r1r3orr3r3                         : STD_LOGIC_VECTOR(g_regbits-1 downto 0);
         signal s_imem_instrMtype_offset32bit        : STD_LOGIC_VECTOR(g_width-1 downto 0);
         signal s_imem_instrMtype_offset32bit_2shift : STD_LOGIC_VECTOR(g_width-1 downto 0);
-        signal s_pcsrc_ctrl                         : STD_LOGIC;
+        signal s_beqsrc_ctrl                        : STD_LOGIC;
         signal s_branchtarget                       : STD_LOGIC_VECTOR(g_width-1 downto 0);
         signal s_pcp4orbranch_value                 : STD_LOGIC_VECTOR(g_width-1 downto 0);
         signal s_jmpsrc_ctrl                        : STD_LOGIC;
@@ -211,9 +214,10 @@ begin
         port map(
             i_opcode             => s_imem_outdata(31 downto 25), -- : in  STD_LOGIC_VECTOR(6 downto 0);
             o_jmpsrc_ctrl        => s_jmpsrc_ctrl,                -- : out STD_LOGIC;
+            o_reg3src_ctrl       => s_reg3src_ctrl,               -- : out STD_LOGIC;
             o_regfile_wen        => s_regfile_wen,                -- : out STD_LOGIC;
             o_alusrc_ctrl        => s_alusrc_ctrl,                -- : out STD_LOGIC;
-            o_pcsrc_ctrl         => s_pcsrc_ctrl,                 -- : out STD_LOGIC;
+            o_beqsrc_ctrl        => s_beqsrc_ctrl,                -- : out STD_LOGIC;
             o_alunit_ctrl        => s_alunit_ctrl,                -- : out STD_LOGIC_VECTOR(2 downto 0);
             o_dmem_memWctrl      => s_dmem_memWctrl,              -- : out STD_LOGIC;
             o_dmem_memWctrl8or32 => s_dmem_memWctrl8or32,         -- : out STD_LOGIC;
@@ -259,15 +263,18 @@ begin
         s_imem_memWctrl8or32 <= '0';                                       -- TODO caches stuff, if time...
         s_imem_memWdata      <= STD_LOGIC_VECTOR(to_unsigned(0, g_width)); -- TODO caches stuff, if time...
 
+        r1r3src : mux2 generic map(g_regbits) port map(s_imem_outdata(24 downto 20), s_imem_outdata(14 downto 10), s_reg3src_ctrl, s_r1r3orr3r3);
+            -- s_reg3src_ctrl <= '0'; -- mapped to decoder
+
         -- -- below magic trick does the same as below...
-        -- s_imem_instrMtype_offset32bit(14 downto 0) <= s_imem_outdata(14 downto 0);
+        -- s_imem_instrMtype_offset32bit(14 downto 0)                                  <= s_imem_outdata(14 downto 0);
         -- s_imem_instrMtype_offset32bit(s_imem_instrMtype_offset32bit'left downto 15) <= (s_imem_instrMtype_offset32bit'left downto 15 => s_imem_outdata(14));
         s_imem_instrMtype_offset32bit        <= STD_LOGIC_VECTOR(resize(signed(s_imem_outdata(14 downto 0)), s_imem_instrMtype_offset32bit'length));
         s_imem_instrMtype_offset32bit_2shift <= STD_LOGIC_VECTOR(shift_left(unsigned(s_imem_instrMtype_offset32bit), 2));
         s_branchtarget                       <= STD_LOGIC_VECTOR(unsigned(s_pcreg_outvalue_plus4) + unsigned(s_imem_instrMtype_offset32bit_2shift));
 
-        pcsrc : mux2 generic map(g_width) port map(s_pcreg_outvalue_plus4, s_branchtarget, s_branchtaken, s_pcp4orbranch_value);
-        -- s_pcsrc_ctrl <= '0'; -- mapped to decoder
+        beqsrc : mux2 generic map(g_width) port map(s_pcreg_outvalue_plus4, s_branchtarget, s_branchtaken, s_pcp4orbranch_value);
+            -- s_beqsrc_ctrl <= '0'; -- mapped to decoder
 
         s_jump_value <= s_pcreg_outvalue_plus4(31 downto 27) & s_imem_outdata(24 downto 0) & "00";
 
@@ -285,7 +292,7 @@ begin
             i_write_enable  => s_regfile_wen,                -- : in    STD_LOGIC;
             i_reg1_addr     => s_imem_outdata(24 downto 20), -- : in    STD_LOGIC_VECTOR(g_regbits-1 downto 0);
             i_reg2_addr     => s_imem_outdata(19 downto 15), -- : in    STD_LOGIC_VECTOR(g_regbits-1 downto 0);
-            i_reg3_addr     => s_imem_outdata(14 downto 10), -- : in    STD_LOGIC_VECTOR(g_regbits-1 downto 0);
+            i_reg3_addr     => s_r1r3orr3r3,                 -- : in    STD_LOGIC_VECTOR(g_regbits-1 downto 0);
             i_write_data    => s_datawb_regfile,             -- : in    STD_LOGIC_VECTOR(g_width-1 downto 0);
             o_reg2_contents => s_regfile_reg2out,            -- : out   STD_LOGIC_VECTOR(g_width-1 downto 0);
             o_reg3_contents => s_regfile_reg3out             -- : out   STD_LOGIC_VECTOR(g_width-1 downto 0)
@@ -310,7 +317,7 @@ begin
         );
         -- s_alunit_ctrl <= "000"; -- mapped to decoder
 
-        s_branchtaken <= s_alunit_zerodet and s_pcsrc_ctrl;
+        s_branchtaken <= s_alunit_zerodet and s_beqsrc_ctrl;
 
 
     -- Data memory

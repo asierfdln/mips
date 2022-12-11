@@ -37,9 +37,10 @@ entity decoder is
     port(
         i_opcode             : in  STD_LOGIC_VECTOR(6 downto 0);
         o_jmpsrc_ctrl        : out STD_LOGIC;
+        o_reg3src_ctrl       : out STD_LOGIC;
         o_regfile_wen        : out STD_LOGIC;
         o_alusrc_ctrl        : out STD_LOGIC;
-        o_pcsrc_ctrl         : out STD_LOGIC;
+        o_beqsrc_ctrl        : out STD_LOGIC;
         o_alunit_ctrl        : out STD_LOGIC_VECTOR(2 downto 0);
         o_dmem_memWctrl      : out STD_LOGIC;
         o_dmem_memWctrl8or32 : out STD_LOGIC;
@@ -80,9 +81,10 @@ begin
             when "0000000" => -- ADD 0x00
                 curr_instr           <= instrADD;
                 o_jmpsrc_ctrl        <= '0';
+                o_reg3src_ctrl       <= '1';
                 o_regfile_wen        <= '1';
                 o_alusrc_ctrl        <= '0';
-                o_pcsrc_ctrl         <= '0';
+                o_beqsrc_ctrl        <= '0';
                 o_alunit_ctrl        <= "010";
                 o_dmem_memWctrl      <= '0';
                 o_dmem_memWctrl8or32 <= '0';
@@ -90,9 +92,10 @@ begin
             when "0000001" => -- SUB 0x01
                 curr_instr           <= instrSUB;
                 o_jmpsrc_ctrl        <= '0';
+                o_reg3src_ctrl       <= '1';
                 o_regfile_wen        <= '1';
                 o_alusrc_ctrl        <= '0';
-                o_pcsrc_ctrl         <= '0';
+                o_beqsrc_ctrl        <= '0';
                 o_alunit_ctrl        <= "110";
                 o_dmem_memWctrl      <= '0';
                 o_dmem_memWctrl8or32 <= '0';
@@ -100,9 +103,10 @@ begin
             when "0000010" => -- AND 0x02
                 curr_instr           <= instrAND;
                 o_jmpsrc_ctrl        <= '0';
+                o_reg3src_ctrl       <= '1';
                 o_regfile_wen        <= '1';
                 o_alusrc_ctrl        <= '0';
-                o_pcsrc_ctrl         <= '0';
+                o_beqsrc_ctrl        <= '0';
                 o_alunit_ctrl        <= "000";
                 o_dmem_memWctrl      <= '0';
                 o_dmem_memWctrl8or32 <= '0';
@@ -110,9 +114,10 @@ begin
             when "0000011" => -- OR 0x03
                 curr_instr           <= instrOR;
                 o_jmpsrc_ctrl        <= '0';
+                o_reg3src_ctrl       <= '1';
                 o_regfile_wen        <= '1';
                 o_alusrc_ctrl        <= '0';
-                o_pcsrc_ctrl         <= '0';
+                o_beqsrc_ctrl        <= '0';
                 o_alunit_ctrl        <= "001";
                 o_dmem_memWctrl      <= '0';
                 o_dmem_memWctrl8or32 <= '0';
@@ -120,9 +125,10 @@ begin
             when "0000100" => -- SLT 0x04
                 curr_instr           <= instrSLT;
                 o_jmpsrc_ctrl        <= '0';
+                o_reg3src_ctrl       <= '1';
                 o_regfile_wen        <= '1';
                 o_alusrc_ctrl        <= '0';
-                o_pcsrc_ctrl         <= '0';
+                o_beqsrc_ctrl        <= '0';
                 o_alunit_ctrl        <= "111";
                 o_dmem_memWctrl      <= '0';
                 o_dmem_memWctrl8or32 <= '0';
@@ -131,9 +137,10 @@ begin
             -- when "0000101" => -- MUL 0x05
             --     curr_instr           <= instrMUL;
             --     o_jmpsrc_ctrl        <= '-';
+            --     o_reg3src_ctrl       <= '-';
             --     o_regfile_wen        <= '-';
             --     o_alusrc_ctrl        <= '-';
-            --     o_pcsrc_ctrl         <= '-';
+            --     o_beqsrc_ctrl        <= '-';
             --     o_alunit_ctrl        <= "---";
             --     o_dmem_memWctrl      <= '-';
             --     o_dmem_memWctrl8or32 <= '-';
@@ -141,9 +148,10 @@ begin
             when "0000111" => -- ADDI 0x07
                 curr_instr           <= instrADDI;
                 o_jmpsrc_ctrl        <= '0';
+                o_reg3src_ctrl       <= '1';
                 o_regfile_wen        <= '1';
                 o_alusrc_ctrl        <= '1';
-                o_pcsrc_ctrl         <= '0';
+                o_beqsrc_ctrl        <= '0';
                 o_alunit_ctrl        <= "010";
                 o_dmem_memWctrl      <= '0';
                 o_dmem_memWctrl8or32 <= '0';
@@ -151,9 +159,10 @@ begin
             when "0010000" => -- LDB 0x10
                 curr_instr           <= instrLDB;
                 o_jmpsrc_ctrl        <= '0';
+                o_reg3src_ctrl       <= '1';
                 o_regfile_wen        <= '1';
                 o_alusrc_ctrl        <= '1';
-                o_pcsrc_ctrl         <= '0';
+                o_beqsrc_ctrl        <= '0';
                 o_alunit_ctrl        <= "010";
                 o_dmem_memWctrl      <= '0';
                 o_dmem_memWctrl8or32 <= '0'; -- TODO this should be '0'
@@ -161,9 +170,10 @@ begin
             when "0010001" => -- LDW 0x11
                 curr_instr           <= instrLDW;
                 o_jmpsrc_ctrl        <= '0';
+                o_reg3src_ctrl       <= '1';
                 o_regfile_wen        <= '1';
                 o_alusrc_ctrl        <= '1';
-                o_pcsrc_ctrl         <= '0';
+                o_beqsrc_ctrl        <= '0';
                 o_alunit_ctrl        <= "010";
                 o_dmem_memWctrl      <= '0';
                 o_dmem_memWctrl8or32 <= '0'; -- TODO this should be '1'
@@ -171,9 +181,10 @@ begin
             when "0010010" => -- STB 0x12
                 curr_instr           <= instrSTB;
                 o_jmpsrc_ctrl        <= '0';
+                o_reg3src_ctrl       <= '0';
                 o_regfile_wen        <= '0';
                 o_alusrc_ctrl        <= '1';
-                o_pcsrc_ctrl         <= '0';
+                o_beqsrc_ctrl        <= '0';
                 o_alunit_ctrl        <= "010";
                 o_dmem_memWctrl      <= '1';
                 o_dmem_memWctrl8or32 <= '0';
@@ -181,9 +192,10 @@ begin
             when "0010011" => -- STW 0x13
                 curr_instr           <= instrSTW;
                 o_jmpsrc_ctrl        <= '0';
+                o_reg3src_ctrl       <= '0';
                 o_regfile_wen        <= '0';
                 o_alusrc_ctrl        <= '1';
-                o_pcsrc_ctrl         <= '0';
+                o_beqsrc_ctrl        <= '0';
                 o_alunit_ctrl        <= "010";
                 o_dmem_memWctrl      <= '1';
                 o_dmem_memWctrl8or32 <= '1';
@@ -191,9 +203,10 @@ begin
             when "0110000" => -- BEQ 0x30
                 curr_instr           <= instrBEQ;
                 o_jmpsrc_ctrl        <= '0';
+                o_reg3src_ctrl       <= '0';
                 o_regfile_wen        <= '0';
                 o_alusrc_ctrl        <= '0';
-                o_pcsrc_ctrl         <= '1';
+                o_beqsrc_ctrl        <= '1';
                 o_alunit_ctrl        <= "110";
                 o_dmem_memWctrl      <= '0';
                 o_dmem_memWctrl8or32 <= '0';
@@ -201,9 +214,10 @@ begin
             when "0110001" => -- JUMP 0x31
                 curr_instr           <= instrJUMP;
                 o_jmpsrc_ctrl        <= '1';
+                o_reg3src_ctrl       <= '1';
                 o_regfile_wen        <= '0';
                 o_alusrc_ctrl        <= '0';
-                o_pcsrc_ctrl         <= '0';
+                o_beqsrc_ctrl        <= '0';
                 o_alunit_ctrl        <= "000";
                 o_dmem_memWctrl      <= '0';
                 o_dmem_memWctrl8or32 <= '0';
@@ -211,9 +225,10 @@ begin
             when others =>
                 curr_instr           <= UNKNOWN;
                 o_jmpsrc_ctrl        <= '-';
+                o_reg3src_ctrl       <= '-';
                 o_regfile_wen        <= '-';
                 o_alusrc_ctrl        <= '-';
-                o_pcsrc_ctrl         <= '-';
+                o_beqsrc_ctrl        <= '-';
                 o_alunit_ctrl        <= "---";
                 o_dmem_memWctrl      <= '-';
                 o_dmem_memWctrl8or32 <= '-';
