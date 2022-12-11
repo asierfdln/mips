@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="datapath_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="datapath_tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0.000 ns"></ZoomStartTime>
+      <ZoomEndTime time="67.701 ns"></ZoomEndTime>
+      <Cursor1Time time="0.000 ns"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="274"></NameColumnWidth>
+      <ValueColumnWidth column_width="89"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="23" />
+   <wvobject type="other" fp_name="/datapath_tb/datapath_DUT/decodunit/curr_instr">
+      <obj_property name="ElementShortName">curr_instr</obj_property>
+      <obj_property name="ObjectShortName">curr_instr</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/datapath_tb/datapath_DUT/i_clk">
+      <obj_property name="ElementShortName">i_clk</obj_property>
+      <obj_property name="ObjectShortName">i_clk</obj_property>
+   </wvobject>
+   <wvobject type="group" fp_name="group179">
+      <obj_property name="label">regfile</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject type="logic" fp_name="/datapath_tb/datapath_DUT/regfile/i_write_enable">
+         <obj_property name="ElementShortName">i_write_enable</obj_property>
+         <obj_property name="ObjectShortName">i_write_enable</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/datapath_tb/datapath_DUT/regfile/i_reg1_addr">
+         <obj_property name="ElementShortName">i_reg1_addr[4:0]</obj_property>
+         <obj_property name="ObjectShortName">i_reg1_addr[4:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/datapath_tb/datapath_DUT/regfile/i_reg2_addr">
+         <obj_property name="ElementShortName">i_reg2_addr[4:0]</obj_property>
+         <obj_property name="ObjectShortName">i_reg2_addr[4:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/datapath_tb/datapath_DUT/regfile/i_reg3_addr">
+         <obj_property name="ElementShortName">i_reg3_addr[4:0]</obj_property>
+         <obj_property name="ObjectShortName">i_reg3_addr[4:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/datapath_tb/datapath_DUT/regfile/i_write_data">
+         <obj_property name="ElementShortName">i_write_data[31:0]</obj_property>
+         <obj_property name="ObjectShortName">i_write_data[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/datapath_tb/datapath_DUT/regfile/o_reg2_contents">
+         <obj_property name="ElementShortName">o_reg2_contents[31:0]</obj_property>
+         <obj_property name="ObjectShortName">o_reg2_contents[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/datapath_tb/datapath_DUT/regfile/o_reg3_contents">
+         <obj_property name="ElementShortName">o_reg3_contents[31:0]</obj_property>
+         <obj_property name="ObjectShortName">o_reg3_contents[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/datapath_tb/datapath_DUT/regfile/s_regs[2]">
+         <obj_property name="ElementShortName">[2][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[2][31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/datapath_tb/datapath_DUT/regfile/s_regs[3]">
+         <obj_property name="ElementShortName">[3][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[3][31:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="logic" fp_name="/datapath_tb/datapath_DUT/regfile/i_write_enable">
+      <obj_property name="ElementShortName">i_write_enable</obj_property>
+      <obj_property name="ObjectShortName">i_write_enable</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_tb/datapath_DUT/regfile/i_reg1_addr">
+      <obj_property name="ElementShortName">i_reg1_addr[4:0]</obj_property>
+      <obj_property name="ObjectShortName">i_reg1_addr[4:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_tb/datapath_DUT/regfile/i_reg2_addr">
+      <obj_property name="ElementShortName">i_reg2_addr[4:0]</obj_property>
+      <obj_property name="ObjectShortName">i_reg2_addr[4:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_tb/datapath_DUT/regfile/i_reg3_addr">
+      <obj_property name="ElementShortName">i_reg3_addr[4:0]</obj_property>
+      <obj_property name="ObjectShortName">i_reg3_addr[4:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_tb/datapath_DUT/regfile/i_write_data">
+      <obj_property name="ElementShortName">i_write_data[31:0]</obj_property>
+      <obj_property name="ObjectShortName">i_write_data[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_tb/datapath_DUT/regfile/o_reg2_contents">
+      <obj_property name="ElementShortName">o_reg2_contents[31:0]</obj_property>
+      <obj_property name="ObjectShortName">o_reg2_contents[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_tb/datapath_DUT/regfile/o_reg3_contents">
+      <obj_property name="ElementShortName">o_reg3_contents[31:0]</obj_property>
+      <obj_property name="ObjectShortName">o_reg3_contents[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_tb/datapath_DUT/regfile/s_regs[1]">
+      <obj_property name="ElementShortName">[1][31:0]</obj_property>
+      <obj_property name="ObjectShortName">[1][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_tb/datapath_DUT/regfile/s_regs[2]">
+      <obj_property name="ElementShortName">[2][31:0]</obj_property>
+      <obj_property name="ObjectShortName">[2][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_tb/datapath_DUT/regfile/s_regs[3]">
+      <obj_property name="ElementShortName">[3][31:0]</obj_property>
+      <obj_property name="ObjectShortName">[3][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="group" fp_name="group180">
+      <obj_property name="label">dmem</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject type="logic" fp_name="/datapath_tb/datapath_DUT/s_dmem_memWctrl">
+         <obj_property name="ElementShortName">s_dmem_memWctrl</obj_property>
+         <obj_property name="ObjectShortName">s_dmem_memWctrl</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/datapath_tb/datapath_DUT/data_mem/s_mem[7]">
+         <obj_property name="ElementShortName">[7][7:0]</obj_property>
+         <obj_property name="ObjectShortName">[7][7:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/datapath_tb/datapath_DUT/data_mem/s_mem[6]">
+         <obj_property name="ElementShortName">[6][7:0]</obj_property>
+         <obj_property name="ObjectShortName">[6][7:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/datapath_tb/datapath_DUT/data_mem/s_mem[5]">
+         <obj_property name="ElementShortName">[5][7:0]</obj_property>
+         <obj_property name="ObjectShortName">[5][7:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/datapath_tb/datapath_DUT/data_mem/s_mem[4]">
+         <obj_property name="ElementShortName">[4][7:0]</obj_property>
+         <obj_property name="ObjectShortName">[4][7:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/datapath_tb/datapath_DUT/data_mem/s_mem[3]">
+         <obj_property name="ElementShortName">[3][7:0]</obj_property>
+         <obj_property name="ObjectShortName">[3][7:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/datapath_tb/datapath_DUT/data_mem/s_mem[2]">
+         <obj_property name="ElementShortName">[2][7:0]</obj_property>
+         <obj_property name="ObjectShortName">[2][7:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/datapath_tb/datapath_DUT/data_mem/s_mem[1]">
+         <obj_property name="ElementShortName">[1][7:0]</obj_property>
+         <obj_property name="ObjectShortName">[1][7:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/datapath_tb/datapath_DUT/data_mem/s_mem[0]">
+         <obj_property name="ElementShortName">[0][7:0]</obj_property>
+         <obj_property name="ObjectShortName">[0][7:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="logic" fp_name="/datapath_tb/datapath_DUT/s_dmem_memWctrl">
+      <obj_property name="ElementShortName">s_dmem_memWctrl</obj_property>
+      <obj_property name="ObjectShortName">s_dmem_memWctrl</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_tb/datapath_DUT/data_mem/s_mem[7]">
+      <obj_property name="ElementShortName">[7][7:0]</obj_property>
+      <obj_property name="ObjectShortName">[7][7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_tb/datapath_DUT/data_mem/s_mem[6]">
+      <obj_property name="ElementShortName">[6][7:0]</obj_property>
+      <obj_property name="ObjectShortName">[6][7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_tb/datapath_DUT/data_mem/s_mem[5]">
+      <obj_property name="ElementShortName">[5][7:0]</obj_property>
+      <obj_property name="ObjectShortName">[5][7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_tb/datapath_DUT/data_mem/s_mem[4]">
+      <obj_property name="ElementShortName">[4][7:0]</obj_property>
+      <obj_property name="ObjectShortName">[4][7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_tb/datapath_DUT/data_mem/s_mem[3]">
+      <obj_property name="ElementShortName">[3][7:0]</obj_property>
+      <obj_property name="ObjectShortName">[3][7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_tb/datapath_DUT/data_mem/s_mem[2]">
+      <obj_property name="ElementShortName">[2][7:0]</obj_property>
+      <obj_property name="ObjectShortName">[2][7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_tb/datapath_DUT/data_mem/s_mem[1]">
+      <obj_property name="ElementShortName">[1][7:0]</obj_property>
+      <obj_property name="ObjectShortName">[1][7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_tb/datapath_DUT/data_mem/s_mem[0]">
+      <obj_property name="ElementShortName">[0][7:0]</obj_property>
+      <obj_property name="ObjectShortName">[0][7:0]</obj_property>
+   </wvobject>
+</wave_config>

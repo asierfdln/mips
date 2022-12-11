@@ -1,0 +1,18 @@
+0.7
+2020.2
+Apr 18 2022
+15:53:03
+/home/asier/Desktop/mips/mystuff/src/alu.vhd,1670366452,vhdl,,,,alu,,,,,,,,
+/home/asier/Desktop/mips/mystuff/src/alu_tb.vhd,1670365238,vhdl,,,,alu_tb,,,,,,,,
+/home/asier/Desktop/mips/mystuff/src/datapath.vhd,1670724398,vhdl,,,,datapath,,,,,,,,
+/home/asier/Desktop/mips/mystuff/src/datapath_tb.vhd,1670715420,vhdl,,,,datapath_tb,,,,,,,,
+/home/asier/Desktop/mips/mystuff/src/decoder.vhd,1670725066,vhdl,,,,decoder,,,,,,,,
+/home/asier/Desktop/mips/mystuff/src/dmem.vhd,1670723772,vhdl,,,,dmem,,,,,,,,
+/home/asier/Desktop/mips/mystuff/src/dmem_tb.vhd,1670723920,vhdl,,,,dmem_tb,,,,,,,,
+/home/asier/Desktop/mips/mystuff/src/flopenr.vhd,1670424175,vhdl,,,,flopenr,,,,,,,,
+/home/asier/Desktop/mips/mystuff/src/flopenr_tb.vhd,1668548913,vhdl,,,,flopenr_tb,,,,,,,,
+/home/asier/Desktop/mips/mystuff/src/imem.vhd,1670723772,vhdl,,,,imem,,,,,,,,
+/home/asier/Desktop/mips/mystuff/src/imem_tb.vhd,1670723920,vhdl,,,,imem_tb,,,,,,,,
+/home/asier/Desktop/mips/mystuff/src/mux2.vhd,1670513280,vhdl,,,,mux2,,,,,,,,
+/home/asier/Desktop/mips/mystuff/src/register_file.vhd,1670250161,vhdl,,,,register_file,,,,,,,,
+/home/asier/Desktop/mips/mystuff/src/register_file_tb.vhd,1670368938,vhdl,,,,register_file_tb,,,,,,,,
