@@ -23,7 +23,7 @@ around:     SLT 6 7 2               # $6 <= 3 < 5 = 1           08638800        
             SUB 7 7 2               # $7 <= 12 - 5 = 7          02738800        00e23822        48
             JMP 15                  # should be taken           6200000f        0800000f        52
             LDB 7 0 0               # shouldn’t happen          20700000        80070000        56
-end:        STB 7 2 71              # write adr 76 <= $7         24710047        a0470047        60
+end:        STB 7 2 71              # write adr 76 <= $7        24710047        a0470047        60
             STW 7 0 0               # mem(0) <= $7 word-wise    26700000                        64
             STB 7 0 1               # mem(1) <= $7 byte-wise    24700001                        68
             LDB 1 0 1               # $1 <= mem(1) byte-wise    20100001                        72
