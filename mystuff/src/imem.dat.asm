@@ -23,7 +23,7 @@ around:     SLT 6 7 2               # $6 <= 3 < 5 = 1           08638800        
             SUB 7 7 2               # $7 <= 12 - 5 = 7          02738800        00e23822        48
             JMP 15                  # should be taken           6200000f        0800000f        52
             LDB 7 0 0               # shouldn’t happen          20700000        80070000        56
-end:        STB 7 2 71              # write adr 76 <= 7         24710047        a0470047        60
+end:        STB 7 2 71              # write adr 76 <= $7         24710047        a0470047        60
             STW 7 0 0               # mem(0) <= $7 word-wise    26700000                        64
             STB 7 0 1               # mem(1) <= $7 byte-wise    24700001                        68
             LDB 1 0 1               # $1 <= mem(1) byte-wise    20100001                        72
@@ -71,3 +71,47 @@ a0470047
 00000003
 00000005
 0000000c
+
+
+
+# fib.asm
+# Register usage: $3: n $4: f1 $5: f2
+# return value written to address 255
+fib:    addi $3, $0, 8      # initialize n=8
+        addi $4, $0, 1      # initialize f1 = 1
+        addi $5, $0, -1     # initialize f2 = -1
+loop:   beq $3, $0, end     # Done with loop if n = 0
+        add $4, $4, $5      # f1 = f1 + f2
+        sub $5, $4, $5      # f2 = f1 - f2
+        addi $3, $3, -1     # n = n - 1
+        j loop              # repeat until done
+end:    sb $4, 255($0)      # store result in address 255
+
+    ##############################
+    # translation to monkey format
+    ##############################
+    fib:    ADDI 3 0 8      # initialize n=8
+            ADDI 4 0 1      # initialize f1 = 1
+            ADDI 5 0 -1     # initialize f2 = -1
+    loop:   BEQ 3 0 4       # Done with loop if n = 0
+            ADD 4 4 5       # f1 = f1 + f2
+            SUB 5 4 5       # f2 = f1 - f2
+            ADDI 3 3 -1     # n = n - 1
+            JMP 3           # repeat until done
+    end:    STB 4 0 255     # store result in address 255
+
+    #############
+    # actual code
+    #############
+    int fib(void)
+    {
+        int n = 8;              /* compute nth Fibonacci number */
+        int f1 = 1, f2 = -1;    /* last two Fibonacci numbers */
+
+        while (n != 0) {        /* count down to n = 0 */
+            f1 = f1 + f2;
+            f2 = f1 - f2;
+            n = n - 1;
+        }
+        return f1;
+    }
