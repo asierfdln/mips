@@ -139,6 +139,49 @@ begin
         assert so_result  = x"00000001" report "do 0 SLT 1 failed";
         assert so_zerodet =  '0'        report "do 0 SLT 1 failed in zerodet";
         wait for 5 ns;
+        -- do 0 MUL 1
+        si_a         <= x"00000000";
+        si_b         <= x"00000001";
+        si_alucont   <= "011";
+        wait for 5 ns;
+        assert so_result  = x"00000000" report "do 0 MUL 1 failed";
+        assert so_zerodet =  '1'        report "do 0 MUL 1 failed in zerodet";
+        wait for 5 ns;
+        -- do 0 MUL 0
+        si_a         <= x"00000000";
+        si_b         <= x"00000000";
+        si_alucont   <= "011";
+        wait for 5 ns;
+        assert so_result  = x"00000000" report "do 0 MUL 0 failed";
+        assert so_zerodet =  '1'        report "do 0 MUL 0 failed in zerodet";
+        wait for 5 ns;
+        -- do 1 MUL 1
+        si_a         <= x"00000001";
+        si_b         <= x"00000001";
+        si_alucont   <= "011";
+        wait for 5 ns;
+        assert so_result  = x"00000001" report "do 1 MUL 1 failed";
+        assert so_zerodet =  '0'        report "do 1 MUL 1 failed in zerodet";
+        wait for 5 ns;
+        -- do 1 MUL 2
+        si_a         <= x"00000001";
+        si_b         <= x"00000010";
+        si_alucont   <= "011";
+        wait for 5 ns;
+        assert so_result  = x"00000010" report "do 1 MUL 2 failed";
+        assert so_zerodet =  '0'        report "do 1 MUL 2 failed in zerodet";
+        wait for 5 ns;
+        -- do 2 MUL 2
+        si_a         <= x"00000010";
+        si_b         <= x"00000010";
+        si_alucont   <= "011";
+        wait for 5 ns;
+        assert so_result  = x"00000100" report "do 2 MUL 2 failed";
+        assert so_zerodet =  '0'        report "do 2 MUL 2 failed in zerodet";
+        wait for 5 ns;
+
+        -- TODO corner cases: maximum and negative numbers xD
+
         -- reset everything to 0
         si_a         <= x"00000000";
         si_b         <= x"00000000";
