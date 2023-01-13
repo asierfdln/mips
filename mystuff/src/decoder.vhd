@@ -60,8 +60,7 @@ architecture Behavioral of decoder is
         instrAND,
         instrOR,
         instrSLT,
-        -- -- TODO MUL
-        -- instrMUL,
+        instrMUL,
         instrADDI,
         instrLDB,
         instrLDW,
@@ -133,18 +132,17 @@ begin
                 o_dmem_memWctrl     <= '0';
                 o_dmem_memctrl8or32 <= '0';
                 o_wbsrc_ctrl        <= '1';
-            -- -- TODO MUL multiplication func...
-            -- when "0000101" => -- MUL 0x05
-            --     curr_instr          <= instrMUL;
-            --     o_jmpsrc_ctrl       <= '-';
-            --     o_reg3src_ctrl      <= '-';
-            --     o_regfile_wen       <= '-';
-            --     o_alusrc_ctrl       <= '-';
-            --     o_beqsrc_ctrl       <= '-';
-            --     o_alunit_ctrl       <= "---";
-            --     o_dmem_memWctrl     <= '-';
-            --     o_dmem_memctrl8or32 <= '-';
-            --     o_wbsrc_ctrl        <= '-';
+            when "0000101" => -- MUL 0x05
+                curr_instr          <= instrMUL;
+                o_jmpsrc_ctrl       <= '0';
+                o_reg3src_ctrl      <= '1';
+                o_regfile_wen       <= '1';
+                o_alusrc_ctrl       <= '0';
+                o_beqsrc_ctrl       <= '0';
+                o_alunit_ctrl       <= "011";
+                o_dmem_memWctrl     <= '0';
+                o_dmem_memctrl8or32 <= '0';
+                o_wbsrc_ctrl        <= '1';
             when "0000111" => -- ADDI 0x07
                 curr_instr          <= instrADDI;
                 o_jmpsrc_ctrl       <= '0';

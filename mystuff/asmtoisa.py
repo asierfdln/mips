@@ -41,8 +41,8 @@ def r_instruction(list_of_arguments):
         opcode_31_25 = '0000011'
     elif list_of_arguments[0] == "SLT":
         opcode_31_25 = '0000100'
-    # elif list_of_arguments[0] == "MUL":
-    #     opcode_31_25 = '0000101'
+    elif list_of_arguments[0] == "MUL":
+        opcode_31_25 = '0000101'
     else:
         print(f'Oops, "{list_of_arguments[0]}" is not in r_instruction()')
         exit(1)
@@ -210,7 +210,7 @@ r_type = [
     "AND",      # r1 <- r2 AND r3
     "OR",       # r1 <- r2 OR r3
     "SLT",      # r1 <- "1" if r2 < r3, otherwise r1 <- "0"
-    # "MUL",      # r1 <- r2 * r3
+    "MUL",      # r1 <- r2 * r3
 ]
 
 m_type = [
@@ -282,6 +282,7 @@ asm_src = [
     "LDB 1 0 1",
     "LDW 1 0 0",
     "ADDI 3 3 -1",
+    "MUL 3 3 3",
 
     # ###########################################################################
     # # NeilWeste nth Fibonacci number

@@ -4,4 +4,25 @@ Running: /xilinx/Vivado/2022.1/bin/unwrapped/lnx64.o/xelab --incr --debug typica
 Using 8 slave threads.
 Starting static elaboration
 Completed static elaboration
-INFO: [XSIM 43-4323] No Change in HDL. Linking previously generated obj files to create kernel
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling package std.standard
+Compiling package std.textio
+Compiling package ieee.std_logic_1164
+Compiling package ieee.numeric_std
+Compiling package ieee.std_logic_arith
+Compiling package ieee.std_logic_unsigned
+Compiling package synopsys.attributes
+Compiling package ieee.std_logic_misc
+Compiling architecture behavioral of entity xil_defaultlib.decoder [decoder_default]
+Compiling architecture behavioral of entity xil_defaultlib.flopenr [flopenr_default]
+Compiling architecture behavioral of entity xil_defaultlib.imem [imem_default]
+Compiling architecture behavioral of entity xil_defaultlib.mux2 [\mux2(g_width=5)\]
+Compiling architecture behavioral of entity xil_defaultlib.mux2 [mux2_default]
+Compiling architecture behavioral of entity xil_defaultlib.register_file [register_file_default]
+Compiling architecture behavioral of entity xil_defaultlib.alu [\alu(g_width=32)\]
+Compiling architecture behavioral of entity xil_defaultlib.dmem [dmem_default]
+Compiling architecture behavioral of entity xil_defaultlib.datapath [datapath_default]
+Compiling architecture behavioral of entity xil_defaultlib.datapath_tb
+Built simulation snapshot datapath_tb_behav

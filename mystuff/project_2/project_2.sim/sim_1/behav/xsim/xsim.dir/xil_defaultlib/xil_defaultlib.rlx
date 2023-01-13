@@ -6,7 +6,7 @@ Apr 18 2022
 /home/asier/Desktop/mips/mystuff/src/alu_tb.vhd,1673615058,vhdl,,,,alu_tb,,,,,,,,
 /home/asier/Desktop/mips/mystuff/src/datapath.vhd,1670724398,vhdl,,,,datapath,,,,,,,,
 /home/asier/Desktop/mips/mystuff/src/datapath_tb.vhd,1670715420,vhdl,,,,datapath_tb,,,,,,,,
-/home/asier/Desktop/mips/mystuff/src/decoder.vhd,1670725066,vhdl,,,,decoder,,,,,,,,
+/home/asier/Desktop/mips/mystuff/src/decoder.vhd,1673618409,vhdl,,,,decoder,,,,,,,,
 /home/asier/Desktop/mips/mystuff/src/dmem.vhd,1670723772,vhdl,,,,dmem,,,,,,,,
 /home/asier/Desktop/mips/mystuff/src/dmem_tb.vhd,1670723920,vhdl,,,,dmem_tb,,,,,,,,
 /home/asier/Desktop/mips/mystuff/src/flopenr.vhd,1670424175,vhdl,,,,flopenr,,,,,,,,
