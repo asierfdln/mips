@@ -4,7 +4,7 @@
 -- 
 -- Create Date: 
 -- Design Name: 
--- Module Name: register_file - Behavioral
+-- Module Name: register_file_PP - Behavioral
 -- Project Name: 
 -- Target Devices: 
 -- Tool Versions: 
@@ -33,7 +33,7 @@ use IEEE.STD_LOGIC_ARITH.all;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity register_file is
+entity register_file_PP is
     generic(
         g_width   : integer   := 32;  -- g_width-bit wide registers
         g_regbits : integer   := 5    -- 2**g_regbits number of registers
@@ -48,7 +48,7 @@ entity register_file is
         o_reg2_contents : out   STD_LOGIC_VECTOR(g_width-1 downto 0);
         o_reg3_contents : out   STD_LOGIC_VECTOR(g_width-1 downto 0)
     );
-end register_file;
+end register_file_PP;
 
 
 -- three-ported register file
@@ -56,7 +56,7 @@ end register_file;
 -- write third port on rising edge of clock
 
 
-architecture Behavioral of register_file is
+architecture Behavioral of register_file_PP is
 
     type registers is array (2**g_regbits - 1 downto 0) of STD_LOGIC_VECTOR(g_width-1 downto 0);
     -- signal s_regs : registers;
@@ -80,15 +80,15 @@ begin
             o_reg2_contents <= conv_std_logic_vector(0, g_width); -- register 0 holds 0
         else
 
-            -- this would read registers with no write-priority, so with outdated values...
-            o_reg2_contents <= s_regs(conv_integer(i_reg2_addr));
+            -- -- this would read registers with no write-priority, so with outdated values...
+            -- o_reg2_contents <= s_regs(conv_integer(i_reg2_addr));
 
-            -- -- this takes into account the write_data being entered when the write_enable is high...
-            -- if i_write_enable = '1' and i_reg2_addr = i_reg1_addr then
-            --     o_reg2_contents <= i_write_data;
-            -- else
-            --     o_reg2_contents <= s_regs(conv_integer(i_reg2_addr));
-            -- end if;
+            -- this takes into account the write_data being entered when the write_enable is high...
+            if i_write_enable = '1' and i_reg2_addr = i_reg1_addr then
+                o_reg2_contents <= i_write_data;
+            else
+                o_reg2_contents <= s_regs(conv_integer(i_reg2_addr));
+            end if;
 
         end if;
     end process; -- read_reg2
@@ -100,15 +100,15 @@ begin
             o_reg3_contents <= conv_std_logic_vector(0, g_width); -- register 0 holds 0
         else
 
-            -- this would read registers with no write-priority, so with outdated values...
-            o_reg3_contents <= s_regs(conv_integer(i_reg3_addr));
+            -- -- this would read registers with no write-priority, so with outdated values...
+            -- o_reg3_contents <= s_regs(conv_integer(i_reg3_addr));
 
-            -- -- this takes into account the write_data being entered when the write_enable is high...
-            -- if i_write_enable = '1' and i_reg3_addr = i_reg1_addr then
-            --     o_reg3_contents <= i_write_data;
-            -- else
-            --     o_reg3_contents <= s_regs(conv_integer(i_reg3_addr));
-            -- end if;
+            -- this takes into account the write_data being entered when the write_enable is high...
+            if i_write_enable = '1' and i_reg3_addr = i_reg1_addr then
+                o_reg3_contents <= i_write_data;
+            else
+                o_reg3_contents <= s_regs(conv_integer(i_reg3_addr));
+            end if;
 
         end if;
     end process; -- read_reg3
@@ -127,4 +127,4 @@ begin
     --     end if;
     -- end process; -- read_stuff
 
-end Behavioral; -- register_file
+end Behavioral; -- register_file_PP

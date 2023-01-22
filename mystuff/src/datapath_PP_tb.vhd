@@ -4,7 +4,7 @@
 -- 
 -- Create Date: 
 -- Design Name: 
--- Module Name: datapath_tb - Behavioral
+-- Module Name: datapath_PP_tb - Behavioral
 -- Project Name: 
 -- Target Devices: 
 -- Tool Versions: 
@@ -31,22 +31,22 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity datapath_tb is
+entity datapath_PP_tb is
     generic(
         ent_width       : integer   := 32;  -- ent_width-bit wide registers
         ent_regbits     : integer   := 5;   -- 2**ent_regbits number of registers
         ent_struct      : integer   := 8;   -- byte-structured memory...
         ent_adrbits     : integer   := 8    -- 2**ent_adrbits number of ent_struct-bit positions in memory array
     );
-end datapath_tb;
+end datapath_PP_tb;
 
 
--- MIPS datapath
+-- MIPS datapath_PP
 
 
-architecture Behavioral of datapath_tb is
+architecture Behavioral of datapath_PP_tb is
 
-    component datapath is
+    component datapath_PP is
         generic(
             g_width     : integer;  -- g_width-bit wide registers
             g_regbits   : integer;  -- 2**g_regbits number of registers
@@ -57,14 +57,14 @@ architecture Behavioral of datapath_tb is
             i_clk     : in  STD_LOGIC;
             i_reset   : in  STD_LOGIC  -- reset is for PC...
         );
-    end component; -- datapath
+    end component; -- datapath_PP
 
     signal si_clk   : STD_LOGIC;
     signal si_reset : STD_LOGIC := '1';
 
 begin
 
-    datapath_DUT : datapath
+    datapath_DUT : datapath_PP
         generic map(
             g_width     => ent_width,   -- : integer   := 32;
             g_regbits   => ent_regbits, -- : integer   := 5;
@@ -87,7 +87,7 @@ begin
     manual_signals : process
     begin
 
-        -- maintain PC at zero...
+        -- maintain PC and PPregisters at zero...
         si_reset    <= '1';
         wait for 2 ns;
 
@@ -98,4 +98,4 @@ begin
 
     end process; -- manual_signals
 
-end Behavioral; -- datapath_tb
+end Behavioral; -- datapath_PP_tb

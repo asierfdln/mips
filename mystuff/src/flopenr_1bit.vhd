@@ -4,7 +4,7 @@
 -- 
 -- Create Date: 
 -- Design Name: 
--- Module Name: mux2 - Behavioral
+-- Module Name: flopenr_1bit - Behavioral
 -- Project Name: 
 -- Target Devices: 
 -- Tool Versions: 
@@ -26,42 +26,40 @@ use IEEE.STD_LOGIC_1164.all;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx leaf cells in this code.
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity mux2 is
-    generic(
-        g_width : integer := 32 -- g_width-bit wide registers
-    );
+entity flopenr_1bit is
     port(
-        i_a   : in STD_LOGIC_VECTOR(g_width-1 downto 0);
-        i_b   : in STD_LOGIC_VECTOR(g_width-1 downto 0);
-        i_sel : in STD_LOGIC;
-        o_res : out STD_LOGIC_VECTOR(g_width-1 downto 0)
+        i_clk     : in  STD_LOGIC;
+        i_reset   : in  STD_LOGIC;
+        i_wen     : in  STD_LOGIC;
+        i_d       : in  STD_LOGIC;
+        o_q       : out STD_LOGIC
     );
-end mux2;
+end flopenr_1bit;
 
 
--- 2-to-1 multiplexer
+-- flip-flop with enable and synchronous i_reset for STD_LOGICs
 
 
-architecture Behavioral of mux2 is
+architecture Behavioral of flopenr_1bit is
 
 begin
 
-    only_process : process(i_sel, i_a, i_b)
+    only_process : process(i_clk)
     begin
-        case i_sel is
-            -- TODO this is dangerous for unsafe control values
-            when '0' =>
-                o_res <= i_a;
-            when others =>
-                o_res <= i_b;
-        end case;
+        if i_clk'event and i_clk = '1' then
+            if i_reset = '1' then
+                o_q <= '0';
+            elsif i_wen = '1' then
+                o_q <= i_d;
+            end if;
+        end if;
     end process; -- only_process
 
-end Behavioral; -- mux2
+end Behavioral; -- flopenr_1bit

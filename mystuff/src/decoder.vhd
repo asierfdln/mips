@@ -224,11 +224,11 @@ begin
                 curr_instr          <= UNKNOWN;
                 o_jmpsrc_ctrl       <= '-';
                 o_reg3src_ctrl      <= '-';
-                o_regfile_wen       <= '-';
+                o_regfile_wen       <= '0';
                 o_alusrc_ctrl       <= '-';
                 o_beqsrc_ctrl       <= '-';
                 o_alunit_ctrl       <= "---";
-                o_dmem_memWctrl     <= '-';
+                o_dmem_memWctrl     <= '0';
                 o_dmem_memctrl8or32 <= '-';
                 o_wbsrc_ctrl        <= '-';
         end case;

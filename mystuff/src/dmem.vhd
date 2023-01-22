@@ -118,6 +118,8 @@ begin
                     if i_memctrl8or32 = '0' then
                         -- variable-to-signal conversion
                         -- s_mem(conv_integer(i_adr))      := i_memWdata(7 downto 0);
+
+                        -- TODO this breaks and doesn't work for other than 8 bit stuff
                         s_mem(conv_integer(i_adr))      <= i_memWdata(7 downto 0);
                     else
                         -- variable-to-signal conversion
@@ -125,6 +127,8 @@ begin
                         -- s_mem(conv_integer(i_adr + 2))  := i_memWdata(23 downto 16);
                         -- s_mem(conv_integer(i_adr + 1))  := i_memWdata(15 downto 8);
                         -- s_mem(conv_integer(i_adr))      := i_memWdata(7  downto 0);
+
+                        -- TODO this breaks and doesn't work for other than 32-bit stuff...
                         s_mem(conv_integer(i_adr + 3))  <= i_memWdata(31 downto 24);
                         s_mem(conv_integer(i_adr + 2))  <= i_memWdata(23 downto 16);
                         s_mem(conv_integer(i_adr + 1))  <= i_memWdata(15 downto 8);
@@ -137,6 +141,7 @@ begin
             if i_memctrl8or32 = '0' then
                 o_memRdata <= conv_std_logic_vector(conv_integer(s_mem(conv_integer(i_adr))), g_datawidth);
             else
+                -- TODO this breaks and doesn't work for other than 32-bit stuff...
                 -- whahappens with 255, 254, 253 (adrbits=8)?? --> loops back xD
                 o_memRdata <= s_mem(conv_integer(i_adr + 3))
                             & s_mem(conv_integer(i_adr + 2))
