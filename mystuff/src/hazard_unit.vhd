@@ -62,7 +62,10 @@ entity hazard_unit is
         i_regfile_wen_EX             : in  STD_LOGIC;
         i_wbsrc_ctrl_ME              : in  STD_LOGIC;
         o_ME_toDE_regcontents2_DE    : out STD_LOGIC;
-        o_ME_toDE_regcontents3_DE    : out STD_LOGIC
+        o_ME_toDE_regcontents3_DE    : out STD_LOGIC;
+        -- ArithLoadSTORE stuff
+        i_wbsrc_ctrl_WB              : in  STD_LOGIC;
+        o_MEorWB_toEX_memWdata_EX    : out STD_LOGIC_VECTOR(1 downto 0)
     );
 end hazard_unit;
 
@@ -222,6 +225,37 @@ begin
                 )
             )
         );
+
+    -- ArithLoadSTORE stuff
+    -- la señal del multiplexor del memWdata tiene que ser
+        -- 10 cuando haya una operacion de alu justo delante en ME...
+            -- cogemos el valor actualizado de reg3
+            -- condicion: i_reg3_addr_EX /= conv_std_logic_vector(0, g_regbits) and i_reg3_addr_EX = i_regf_writeregaddr_ME and i_regfile_wen_ME = '1' and i_dmem_memWctrl_EX = '1'
+        -- 01 cuando (no lo anterior y) haya (una load en WB o una arithopdist2)...
+            -- cogemos el valor actualizado de reg3
+            -- condicion: i_reg3_addr_EX /= conv_std_logic_vector(0, g_regbits) and i_reg3_addr_EX = i_regf_writeregaddr_WB and i_regfile_wen_WB = '1' and i_dmem_memWctrl_EX = '1'
+        -- 00 por defecto si no se cumple alguna de las dos cosas anteriores
+    MEorWB_toEX_memWdata_EX : process(
+        i_reg3_addr_EX,
+        i_regf_writeregaddr_ME,
+        i_regfile_wen_ME,
+        i_regf_writeregaddr_WB,
+        i_wbsrc_ctrl_WB
+    )
+    begin
+
+        -- if i_reg3_addr_EX /= conv_std_logic_vector(0, g_regbits) and i_reg3_addr_EX = i_regf_writeregaddr_ME and i_regfile_wen_ME = '1' and i_dmem_memWctrl_EX = '1' then
+        if i_reg3_addr_EX /= conv_std_logic_vector(0, g_regbits) and i_reg3_addr_EX = i_regf_writeregaddr_ME and i_regfile_wen_ME = '1' then
+            o_MEorWB_toEX_memWdata_EX <= "10"; -- use memWdata value from ARITHop in ME
+        -- elsif i_reg3_addr_EX /= conv_std_logic_vector(0, g_regbits) and i_reg3_addr_EX = i_regf_writeregaddr_WB and i_regfile_wen_WB = '1' and i_dmem_memWctrl_EX = '1' then
+        elsif i_reg3_addr_EX /= conv_std_logic_vector(0, g_regbits) and i_reg3_addr_EX = i_regf_writeregaddr_WB and i_regfile_wen_WB = '1' then
+            o_MEorWB_toEX_memWdata_EX <= "01"; -- use memWdata value from LOADop or ARITHopdistance2 in WB
+        else
+            o_MEorWB_toEX_memWdata_EX <= "00"; -- use default memWdata value
+        end if;
+
+    end process; -- MEorWB_toEX_memWdata_EX
+
 
 
     -- stalls and clears

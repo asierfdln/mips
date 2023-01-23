@@ -303,22 +303,79 @@ asm_src = [
     # "STB 1 0 0",
     # "STW 2 0 0",
 
-    # # 134(70)-75
+    # # 134(70)
     # "ADDI 1 1 1",
     # "ADDI 2 2 2",
     # "ADDI 3 3 3",
+    # "ADDI 4 4 4",
     # "ADDI 5 5 5",
     # "ADDI 6 6 6",
-    # "ADDI 0 0 0",
-    # "ADDI 0 0 0",
-    # "ADDI 0 0 0",
-    # "ADD 2 1 3",    # reg2 should have a 4
-    # "AND 12 2 5",   # reg12 should have a 4
-    # "OR 13 6 2",    # reg13 should have a 6
-    # "ADD 14 2 2",   # reg14 should have a 8
-    # "ADDI 0 0 0",
-    # "ADDI 0 0 0",
-    # "STW 14 2 100", # dmem(107-104) should have a 8
+    # "OR 0 0 0",
+    # "OR 0 0 0",
+    # "OR 0 0 0",
+    # "ADD 2 1 3",
+    # "AND 12 2 5",
+    # "OR 13 6 2",
+    # "ADD 14 2 2",
+
+    # # CHECK
+    # "STB 2 2 0", # dmem(4) should have a 4
+
+    # # # CHECK
+    # # "STB 2 14 0", # dmem(8) should have a 4 bc ME_toEX_alu_bypass
+
+    # # # CHECK
+    # # "OR 0 0 0",
+    # # "STB 2 14 0", # dmem(8) should have a 4 bc ME_toEX_alu_bypass
+
+    # # # CHECK
+    # # "STB 14 2 0", # dmem(4) should have a 8 bc ME_toEX_memWdata_bypass
+
+    # # # CHECK
+    # # "OR 0 0 0",
+    # # "STB 14 2 0", # dmem(4) should have a 8 bc ME_toEX_memWdata_bypass
+
+    # # # CHECK
+    # # "STB 14 14 0", # dmem(8) should have a 8 bc ME_toEX_alu_bypass __and__ ME_toEX_memWdata_bypass
+
+    # # # CHECK
+    # # "OR 0 0 0",
+    # # "STB 14 14 0", # dmem(8) should have a 8 bc ME_toEX_alu_bypass __and__ ME_toEX_memWdata_bypass
+
+    #############################################################################
+
+    # # CHECK
+    # "LDB 1 0 2", # reg1 should have a 2
+    # "STB 2 1 0", # dmem(2) should have a 0
+
+    # # CHECK
+    # "LDB 1 0 2", # reg1 should have a 2
+    # "OR 0 0 0",
+    # "STB 2 1 0", # dmem(2) should have a 0
+
+    # # CHECK
+    # "LDB 1 0 2", # reg1 should have a 2
+    # "STB 1 2 0", # dmem(0) should have a 2
+
+    # # CHECK
+    # "LDB 1 0 2", # reg1 should have a 2
+    # "OR 0 0 0",
+    # "STB 1 2 0", # dmem(0) should have a 2
+
+    # # CHECK
+    # "LDB 1 0 2", # reg1 should have a 2
+    # "STB 1 1 1", # dmem(3) should have a 2
+
+    # # CHECK
+    # "LDB 1 0 2", # reg1 should have a 2
+    # "OR 0 0 0",
+    # "STB 1 1 1", # dmem(3) should have a 2
+
+    #############################################################################
+    # load add store...
+    # add load store...
+    #############################################################################
+
 
     # # double data hazard
     # "ADDI 1 1 1",
@@ -339,15 +396,6 @@ asm_src = [
     # "ADDI 2 1 1",   # reg2 should have a 129
     # "ADD 3 2 1",    # reg3 should have a 257
     # "ADD 4 1 3",    # reg4 should have a 385
-
-    # # load-arith plusplus
-    # "LDW 1 0 0",
-    # "LDW 2 0 4",
-    # "ADD 3 1 2",
-    # "STW 3 0 12",
-    # "LDW 4 0 8",
-    # "ADD 5 1 4",
-    # "STW 5 0 16",
 
     # # BEQstallstuff distance 1
     # "ADDI 1 1 1",
@@ -418,6 +466,15 @@ asm_src = [
     # "BEQ 1 4 1",
     # "ADDI 1 2 3",
     # "OR 4 5 6",
+
+    # # 134(45)
+    # "LDB 1 0 0",  # reg1 should have a 68
+    # "LDB 2 0 4",  # reg2 shoudl have a 64
+    # "ADD 3 1 2",  # reg3 should have a 132
+    # "STB 3 0 12", # dmem(12) should have a 132
+    # "LDB 4 0 8",  # reg4 should have a 69
+    # "ADD 5 1 4",  # reg5 should have a 137
+    # "STB 5 0 16", # demem(16) shoudl have a 137
 
 ]
 

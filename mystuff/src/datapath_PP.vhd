@@ -233,7 +233,10 @@ architecture Behavioral of datapath_PP is
             i_regfile_wen_EX             : in  STD_LOGIC;
             i_wbsrc_ctrl_ME              : in  STD_LOGIC;
             o_ME_toDE_regcontents2_DE    : out STD_LOGIC;
-            o_ME_toDE_regcontents3_DE    : out STD_LOGIC
+            o_ME_toDE_regcontents3_DE    : out STD_LOGIC;
+            -- ArithLoadSTORE stuff
+            i_wbsrc_ctrl_WB              : in  STD_LOGIC;
+            o_MEorWB_toEX_memWdata_EX    : out STD_LOGIC_VECTOR(1 downto 0)
         );
     end component; -- hazard_unit
 
@@ -355,6 +358,8 @@ architecture Behavioral of datapath_PP is
         signal s_ME_toDE_regcontents3_DE    : STD_LOGIC;
             signal s_beqopA                 : STD_LOGIC_VECTOR(g_width-1 downto 0);
             signal s_beqopB                 : STD_LOGIC_VECTOR(g_width-1 downto 0);
+        signal s_MEorWB_toEX_memWdata_EX    : STD_LOGIC_VECTOR(1 downto 0);
+            signal s_memWdatamuxEXout_EX        : STD_LOGIC_VECTOR(g_width-1 downto 0);
         -- EX-ME
         -- ME-WB
 
@@ -621,7 +626,8 @@ begin
                     i_clk   => i_clk,                -- : in  STD_LOGIC;
                     i_reset => s_EX_reset,           -- : in  STD_LOGIC;
                     i_wen   => s_EX_wen,             -- : in  STD_LOGIC;
-                    i_d     => s_regfile_reg3out_EX, -- : in  STD_LOGIC_VECTOR(g_width-1 downto 0);
+                    -- i_d     => s_regfile_reg3out_EX, -- : in  STD_LOGIC_VECTOR(g_width-1 downto 0);
+                    i_d     => s_memWdatamuxEXout_EX, -- : in  STD_LOGIC_VECTOR(g_width-1 downto 0);
                     o_q     => s_regfile_reg3out_ME  -- : out STD_LOGIC_VECTOR(g_width-1 downto 0)
                 );
 
@@ -856,6 +862,11 @@ begin
         alusrc : mux2 generic map(g_width) port map(s_aluopB_hazardmuxout, s_imem_instrMtype_offset32bit_EX, s_alusrc_ctrl_EX, s_alusrc_operand);
             -- s_alusrc_ctrl <= '0'; -- mapped to decoder
 
+        aluopA : mux3 generic map(g_width) port map(s_regfile_reg2out_EX, s_datawb_regfile, s_alunit_outval_ME, s_MEorWB_toEX_ALUoperandA_EX, s_aluopA_hazardmuxout);
+        aluopB : mux3 generic map(g_width) port map(s_regfile_reg3out_EX, s_datawb_regfile, s_alunit_outval_ME, s_MEorWB_toEX_ALUoperandB_EX, s_aluopB_hazardmuxout);
+
+        memWdatamuxEX : mux3 generic map(g_width) port map(s_regfile_reg3out_EX, s_datawb_regfile, s_alunit_outval_ME, s_MEorWB_toEX_memWdata_EX, s_memWdatamuxEXout_EX);
+
     -- ALU
     alunit : alu
         generic map(
@@ -922,11 +933,11 @@ begin
             i_regfile_wen_EX             => s_regfile_wen_EX,                -- : in  STD_LOGIC;
             i_wbsrc_ctrl_ME              => s_wbsrc_ctrl_ME,                 -- : in  STD_LOGIC;
             o_ME_toDE_regcontents2_DE    => s_ME_toDE_regcontents2_DE,       -- : out STD_LOGIC;
-            o_ME_toDE_regcontents3_DE    => s_ME_toDE_regcontents3_DE        -- : out STD_LOGIC
+            o_ME_toDE_regcontents3_DE    => s_ME_toDE_regcontents3_DE,       -- : out STD_LOGIC;
+            -- ArithLoadSTORE stuff
+            i_wbsrc_ctrl_WB              => s_wbsrc_ctrl_WB,          -- : in  STD_LOGIC;
+            o_MEorWB_toEX_memWdata_EX    => s_MEorWB_toEX_memWdata_EX -- : out STD_LOGIC_VECTOR(1 downto 0)
         );
-
-        aluopA : mux3 generic map(g_width) port map(s_regfile_reg2out_EX, s_datawb_regfile, s_alunit_outval_ME, s_MEorWB_toEX_ALUoperandA_EX, s_aluopA_hazardmuxout);
-        aluopB : mux3 generic map(g_width) port map(s_regfile_reg3out_EX, s_datawb_regfile, s_alunit_outval_ME, s_MEorWB_toEX_ALUoperandB_EX, s_aluopB_hazardmuxout);
 
 
 
