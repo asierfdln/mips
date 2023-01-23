@@ -340,23 +340,84 @@ asm_src = [
     # "ADD 3 2 1",    # reg3 should have a 257
     # "ADD 4 1 3",    # reg4 should have a 385
 
+    # # load-arith plusplus
+    # "LDW 1 0 0",
+    # "LDW 2 0 4",
+    # "ADD 3 1 2",
+    # "STW 3 0 12",
+    # "LDW 4 0 8",
+    # "ADD 5 1 4",
+    # "STW 5 0 16",
 
-    # moneyharris(96) branch stuff
+    # # BEQstallstuff distance 1
+    # "ADDI 1 1 1",
+    # "ADDI 10 10 8",
+    # "BEQ 10 10 3",
+    # "SUB 1 1 1",
+    # "ADDI 2 2 2",
+    # "SUB 3 3 3",
+    # "LDB 4 0 0",
 
-    # 102(62)
-    # 102(65)
-    # 102(67)
+    # # BEQstallstuff distance 2
+    # "ADDI 1 1 1",
+    # "ADDI 10 10 8",
+    # "OR 0 0 0",
+    # "BEQ 10 10 3",
+    # "SUB 1 1 1",
+    # "ADDI 2 2 2",
+    # "SUB 3 3 3",
+    # "LDB 4 0 0",
 
-    # # 134(70)-75
-    # "SUB 2 1 3",
-    # "AND 12 2 5",
-    # "OR 13 6 2",
-    # "ADD 14 2 2",
-    # "SW 15 2 100",
+    # # BEQstallstuff sanitycheck1
+    # "ADDI 1 1 1",
+    # "ADDI 2 2 2",
+    # "ADDI 3 3 3",
+    # "ADDI 4 4 4",
+    # "ADDI 5 5 5",
+    # "ADDI 6 6 6",
+    # "ADDI 0 0 0",
+    # "ADDI 0 0 0",
+    # "ADDI 0 0 0",
+    # "ADD 1 2 3",
+    # "ADD 4 5 6",
+    # # "ADD 4 2 3", # for takingbranch
+    # "BEQ 1 4 1",
+    # "ADDI 1 2 3",
+    # "OR 4 5 6",
 
-    # 134(76)
-    # 134(79) similar to moneyharris(90)
-    # 102(85)- and 134(87)- branch stuff
+    # # BEQstallstuff sanitycheck2
+    # "ADDI 1 1 1",
+    # "ADDI 2 2 2",
+    # "ADDI 3 3 3",
+    # "ADDI 4 4 4",
+    # "ADDI 5 5 5",
+    # "ADDI 6 6 6",
+    # "ADDI 0 0 0",
+    # "ADDI 0 0 0",
+    # "ADDI 0 0 0",
+    # "LDB 1 0 0",
+    # "ADD 4 5 6",
+    # # "ADDI 4 0 68", # for takingbranch
+    # "BEQ 1 4 1",
+    # "ADDI 1 2 3",
+    # "OR 4 5 6",
+
+    # # BEQstallstuff sanitycheck3
+    # "ADDI 1 1 1",
+    # "ADDI 2 2 2",
+    # "ADDI 3 3 3",
+    # "ADDI 4 4 4",
+    # "ADDI 5 5 5",
+    # "ADDI 6 6 6",
+    # "ADDI 0 0 0",
+    # "ADDI 0 0 0",
+    # "ADDI 0 0 0",
+    # "ADD 4 5 6",
+    # # "ADDI 4 0 68", # for takingbranch
+    # "LDB 1 0 0",
+    # "BEQ 1 4 1",
+    # "ADDI 1 2 3",
+    # "OR 4 5 6",
 
 ]
 
