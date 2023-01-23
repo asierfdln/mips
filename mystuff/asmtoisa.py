@@ -228,61 +228,31 @@ b_type = [
 
 asm_src = [
 
-    # "LDB 2 0 32768",
-    # "LDB 2 0 32767",
-    # "LDB 2 0 68",
-    # "LDW 2 0 68",
-    # "BEQ 2 0 68",
-    # "JMP 15",
-    # "ADD 2 0 30",
-    # "ADD 2 0 31",
-    # "ADD 2 0 32",
-    # "ADD 2 0 31",
-    # "SUB 2 0 31",
-    # "AND 2 0 31",
-    # "OR 2 0 31",
-    # "SLT 2 0 31",
-    # "ADDI 2 0 31",
-    # "ADDI 2 2 68",
-
-    # "LDB 2 0 8",
-    # "LDW 3 0 8",
-    # "OR 1 2 3",
-    # "STB 2 0 3",
-    # "STW 3 0 4",
-
-    # "ADDI 1 0 0",
-    # "ADDI 2 0 1",
-    # "ADD 1 1 2",
-    # "ADD 1 1 2",
-    # "ADD 1 1 2",
-    # "ADD 1 1 2",
-
     # ###########################################################################
     # # NeilWeste check program, end up writing a 7 in adr 76
     # ###########################################################################
-    "LDB 2 0 68",
-    "LDB 7 0 64",
-    "LDB 3 7 69",
-    "OR 4 7 2",
-    "AND 5 3 4",
-    "ADD 5 5 4",
-    "BEQ 5 7 8",
-    "SLT 6 3 4",
-    "BEQ 6 0 1",
-    "LDB 5 0 0",
-    "SLT 6 7 2",
-    "ADD 7 6 5",
-    "SUB 7 7 2",
-    "JMP 15",
-    "LDB 7 0 0",
-    "STB 7 2 71",
-    "STW 7 0 0",
-    "STB 7 0 1",
-    "LDB 1 0 1",
-    "LDW 1 0 0",
-    "ADDI 3 3 -1",
-    "MUL 3 3 3",
+    # "LDB 2 0 68",
+    # "LDB 7 0 64",
+    # "LDB 3 7 69",
+    # "OR 4 7 2",
+    # "AND 5 3 4",
+    # "ADD 5 5 4",
+    # "BEQ 5 7 8",
+    # "SLT 6 3 4",
+    # "BEQ 6 0 1",
+    # "LDB 5 0 0",
+    # "SLT 6 7 2",
+    # "ADD 7 6 5",
+    # "SUB 7 7 2",
+    # "JMP 15",
+    # "LDB 7 0 0",
+    # "STB 7 2 71",
+    # "STW 7 0 0",
+    # "STB 7 0 1",
+    # "LDB 1 0 1",
+    # "LDW 1 0 0",
+    # "ADDI 3 3 -1",
+    # "MUL 3 3 3",
 
     # ###########################################################################
     # # NeilWeste nth Fibonacci number
@@ -296,6 +266,97 @@ asm_src = [
     # "ADDI 3 3 -1",
     # "JMP 3",
     # "STB 4 0 255",
+
+    # # moneyharris(84)
+    # "ADDI 1 1 1",
+    # "ADDI 2 2 2",
+    # "ADDI 3 3 3",
+    # "ADDI 4 4 4",
+    # "ADDI 5 5 5",
+    # "ADDI 6 6 6",
+    # "ADDI 0 0 0",
+    # "ADDI 0 0 0",
+    # "ADDI 0 0 0",
+    # "ADD 6 2 3",    # reg6 should have a 5
+    # "AND 7 6 1",    # reg7 should have a 1
+    # "OR 7 4 6",     # reg7 should have a 5
+    # "SUB 7 6 5",    # reg7 should have a 0
+
+    # # ADDIstuff
+    # "ADDI 1 1 5", # $1 <- "5"
+    # "ADDI 2 2 6", # $2 <- "6"
+    # "ADDI 0 0 0", # NOP
+    # "ADDI 0 0 0", # NOP
+    # "ADDI 0 0 0", # NOP
+    # "ADDI 0 0 0", # NOP
+    # "ADDI 1 1 1", # increase $1 by one
+    # "ADDI 0 0 0", # NOP
+    # "ADDI 0 0 0", # NOP
+    # "ADD 2 1 2", # $2 <- $1 + $2, which should be "12"
+    # "ADDI 0 0 0", # NOP
+    # "ADDI 0 0 0", # NOP
+    # "LDB 2 0 68",
+    # "LDW 1 0 0",
+    # "ADDI 0 0 0", # NOP
+    # "ADDI 0 0 0", # NOP
+    # "STB 2 0 0",
+    # "STB 1 0 0",
+    # "STW 2 0 0",
+
+    # # 134(70)-75
+    # "ADDI 1 1 1",
+    # "ADDI 2 2 2",
+    # "ADDI 3 3 3",
+    # "ADDI 5 5 5",
+    # "ADDI 6 6 6",
+    # "ADDI 0 0 0",
+    # "ADDI 0 0 0",
+    # "ADDI 0 0 0",
+    # "ADD 2 1 3",    # reg2 should have a 4
+    # "AND 12 2 5",   # reg12 should have a 4
+    # "OR 13 6 2",    # reg13 should have a 6
+    # "ADD 14 2 2",   # reg14 should have a 8
+    # "ADDI 0 0 0",
+    # "ADDI 0 0 0",
+    # "STW 14 2 100", # dmem(107-104) should have a 8
+
+    # # double data hazard
+    # "ADDI 1 1 1",
+    # "ADDI 2 2 2",
+    # "ADDI 3 3 3",
+    # "ADDI 4 4 4",
+    # "ADDI 0 0 0",
+    # "ADDI 0 0 0",
+    # "ADDI 0 0 0",
+    # "ADD 1 1 2",    # reg1 should have a 3
+    # "ADD 1 1 3",    # reg1 should have a 6
+    # "ADD 1 1 4",    # reg1 should have a 10
+    # # "ADD 1 2 3",    # reg1 should have a 5
+    # # "ADD 1 1 4",    # reg1 should have a 9
+
+    # # load-arith
+    # "LDB 1 0 39",   # put an 0x80, 0d128 into reg1
+    # "ADDI 2 1 1",   # reg2 should have a 129
+    # "ADD 3 2 1",    # reg3 should have a 257
+    # "ADD 4 1 3",    # reg4 should have a 385
+
+
+    # moneyharris(96) branch stuff
+
+    # 102(62)
+    # 102(65)
+    # 102(67)
+
+    # # 134(70)-75
+    # "SUB 2 1 3",
+    # "AND 12 2 5",
+    # "OR 13 6 2",
+    # "ADD 14 2 2",
+    # "SW 15 2 100",
+
+    # 134(76)
+    # 134(79) similar to moneyharris(90)
+    # 102(85)- and 134(87)- branch stuff
 
 ]
 

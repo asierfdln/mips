@@ -77,6 +77,9 @@ architecture Behavioral of datapath_PP is
     signal curr_instr_ME : instr_type;
     signal curr_instr_WB : instr_type;
 
+
+    -- Component declaration
+
     component decoder is
         port(
             i_opcode            : in  STD_LOGIC_VECTOR(6 downto 0);
@@ -104,16 +107,6 @@ architecture Behavioral of datapath_PP is
             o_q     : out STD_LOGIC_VECTOR(g_width-1 downto 0)
         );
     end component; -- flopenr
-
-    component flopenr_1bit is
-        port(
-            i_clk   : in  STD_LOGIC;
-            i_reset : in  STD_LOGIC;
-            i_wen   : in  STD_LOGIC;
-            i_d     : in  STD_LOGIC;
-            o_q     : out STD_LOGIC
-        );
-    end component; -- flopenr_1bit
 
     component imem is
         generic(
@@ -188,6 +181,62 @@ architecture Behavioral of datapath_PP is
             o_res : out STD_LOGIC_VECTOR(g_width-1 downto 0)
         );
     end component; -- mux2
+
+    component flopenr_1bit is
+        port(
+            i_clk   : in  STD_LOGIC;
+            i_reset : in  STD_LOGIC;
+            i_wen   : in  STD_LOGIC;
+            i_d     : in  STD_LOGIC;
+            o_q     : out STD_LOGIC
+        );
+    end component; -- flopenr_1bit
+
+    component mux3 is
+        generic(
+            g_width : integer := 32  -- g_width-bit wide registers
+        );
+        port(
+            i_a   : in STD_LOGIC_VECTOR(g_width-1 downto 0);
+            i_b   : in STD_LOGIC_VECTOR(g_width-1 downto 0);
+            i_c   : in STD_LOGIC_VECTOR(g_width-1 downto 0);
+            i_sel : in STD_LOGIC_VECTOR(1 downto 0);
+            o_res : out STD_LOGIC_VECTOR(g_width-1 downto 0)
+        );
+    end component; -- mux3
+
+    component hazard_unit is
+        generic(
+            g_width   : integer   := 32;  -- g_width-bit wide registers
+            g_regbits : integer   := 5    -- 2**g_regbits number of registers
+        );
+        port(
+            -- MEorWB_toEX_ALUoperands A and B
+            i_reg2_addr_EX               : in  STD_LOGIC_VECTOR(g_regbits-1 downto 0);
+            i_reg3_addr_EX               : in  STD_LOGIC_VECTOR(g_regbits-1 downto 0);
+            i_regf_writeregaddr_ME       : in  STD_LOGIC_VECTOR(g_regbits-1 downto 0);
+            i_regfile_wen_ME             : in  STD_LOGIC;
+            i_regf_writeregaddr_WB       : in  STD_LOGIC_VECTOR(g_regbits-1 downto 0);
+            i_regfile_wen_WB             : in  STD_LOGIC;
+            o_MEorWB_toEX_ALUoperandA_EX : out STD_LOGIC_VECTOR(1 downto 0);
+            o_MEorWB_toEX_ALUoperandB_EX : out STD_LOGIC_VECTOR(1 downto 0);
+            -- load-arith stall PC, stall IFDE and clear DEEX
+            i_regf_writeregaddr_EX       : in  STD_LOGIC_VECTOR(g_regbits-1 downto 0);
+            i_reg2_addr_DE               : in  STD_LOGIC_VECTOR(g_regbits-1 downto 0);
+            i_reg3_addr_DE               : in  STD_LOGIC_VECTOR(g_regbits-1 downto 0);
+            i_wbsrc_ctrl_EX              : in  STD_LOGIC;
+            o_stall_PC                   : out STD_LOGIC;
+            o_stall_IFDE_PPregs          : out STD_LOGIC;
+            o_clear_DEEX_PPregs          : out STD_LOGIC;
+            -- BEQstallstuff
+            i_beqsrc_ctrl_DE             : in  STD_LOGIC;
+            i_regfile_wen_EX             : in  STD_LOGIC;
+            i_wbsrc_ctrl_ME              : in  STD_LOGIC;
+            o_ME_toDE_regcontents2_DE    : out STD_LOGIC;
+            o_ME_toDE_regcontents3_DE    : out STD_LOGIC
+        );
+    end component; -- hazard_unit
+
 
     -- PC register signals
     signal s_pcreg_wen      : STD_LOGIC;
@@ -288,12 +337,33 @@ architecture Behavioral of datapath_PP is
         signal s_alunit_outval_WB        : STD_LOGIC_VECTOR(g_width-1 downto 0);
         signal s_imem_outdata_WB         : STD_LOGIC_VECTOR(g_width-1 downto 0);
 
+
+    -- Hazard unit signals and deriv. signals
+        -- stalls and clears
+        signal s_stall_PC                   : STD_LOGIC;
+        signal s_stall_IFDE_PPregs          : STD_LOGIC;
+        signal s_clear_DEEX_PPregs          : STD_LOGIC;
+        -- IF-DE
+        -- DE-EX
+        signal s_reg2_addr_EX               : STD_LOGIC_VECTOR(g_regbits-1 downto 0);
+        signal s_reg3_addr_EX               : STD_LOGIC_VECTOR(g_regbits-1 downto 0);
+        signal s_MEorWB_toEX_ALUoperandA_EX : STD_LOGIC_VECTOR(1 downto 0);
+        signal s_MEorWB_toEX_ALUoperandB_EX : STD_LOGIC_VECTOR(1 downto 0);
+            signal s_aluopA_hazardmuxout    : STD_LOGIC_VECTOR(g_width-1 downto 0);
+            signal s_aluopB_hazardmuxout    : STD_LOGIC_VECTOR(g_width-1 downto 0);
+        signal s_ME_toDE_regcontents2_DE    : STD_LOGIC;
+        signal s_ME_toDE_regcontents3_DE    : STD_LOGIC;
+            signal s_beqopA                 : STD_LOGIC_VECTOR(g_width-1 downto 0);
+            signal s_beqopB                 : STD_LOGIC_VECTOR(g_width-1 downto 0);
+        -- EX-ME
+        -- ME-WB
+
 begin
 
     -- Pipeline registers --> IF-DE
 
-        s_IF_reset  <= i_reset or '0';
-        s_IF_wen    <= '1';
+        s_IF_reset  <= i_reset or '0' or (s_changepcval and not s_stall_IFDE_PPregs);
+        s_IF_wen    <= '1' and (not s_stall_IFDE_PPregs);
 
             r_pcreg_outvalue_plus4_DE : flopenr
                 generic map(
@@ -333,7 +403,7 @@ begin
 
     -- Pipeline registers --> DE-EX
 
-        s_DE_reset  <= i_reset or '0';
+        s_DE_reset  <= i_reset or s_clear_DEEX_PPregs;
         s_DE_wen    <= '1';
 
             r_regfile_wen_EX: flopenr_1bit
@@ -650,6 +720,36 @@ begin
                     o_q     => s_imem_outdata_WB  -- : out STD_LOGIC_VECTOR(g_width-1 downto 0)
                 );
 
+    -- Hazard unit pipeline registers --> IF-DE
+    -- Hazard unit pipeline registers --> DE-EX
+
+            r_reg2_addr_EX : flopenr
+                generic map(
+                    g_width => g_regbits -- : integer
+                )
+                port map(
+                    i_clk   => i_clk,                           -- : in  STD_LOGIC;
+                    i_reset => s_DE_reset,                      -- : in  STD_LOGIC;
+                    i_wen   => s_DE_wen,                        -- : in  STD_LOGIC;
+                    -- TODO this is hardcoded, use g_regbits and mapping info...
+                    i_d     => s_imem_outdata_DE(19 downto 15), -- : in  STD_LOGIC_VECTOR(g_width-1 downto 0);
+                    o_q     => s_reg2_addr_EX                   -- : out STD_LOGIC_VECTOR(g_width-1 downto 0)
+                );
+
+            r_reg3_addr_EX : flopenr
+                generic map(
+                    g_width => g_regbits -- : integer
+                )
+                port map(
+                    i_clk   => i_clk,         -- : in  STD_LOGIC;
+                    i_reset => s_DE_reset,    -- : in  STD_LOGIC;
+                    i_wen   => s_DE_wen,      -- : in  STD_LOGIC;
+                    i_d     => s_r1r3orr3r3,  -- : in  STD_LOGIC_VECTOR(g_width-1 downto 0);
+                    o_q     => s_reg3_addr_EX -- : out STD_LOGIC_VECTOR(g_width-1 downto 0)
+                );
+
+    -- Hazard unit pipeline registers --> EX-ME
+    -- Hazard unit pipeline registers --> ME-WB
 
     -- Decoder
     decodunit : decoder
@@ -679,7 +779,7 @@ begin
             i_d     => s_pcreg_invalue, -- : in  STD_LOGIC_VECTOR(g_width-1 downto 0);
             o_q     => s_pcreg_outvalue -- : out STD_LOGIC_VECTOR(g_width-1 downto 0)
         );
-        s_pcreg_wen <= '1';
+        s_pcreg_wen <= '1' and (not s_stall_PC);
 
         -- increase of PC by 4
         s_pcreg_outvalue_plus4 <= STD_LOGIC_VECTOR(unsigned(s_pcreg_outvalue) + 4);
@@ -748,9 +848,12 @@ begin
         -- s_regfile_wen <= '0'; -- mapped to decoder
 
         s_branchtaken <= s_regfoutssame and s_beqsrc_ctrl;
-            s_regfoutssame <= not or_reduce(s_regfile_reg2out xor s_regfile_reg3out);
+            -- s_regfoutssame <= not or_reduce(s_regfile_reg2out xor s_regfile_reg3out);
+            s_regfoutssame <= not or_reduce(s_beqopA xor s_beqopB);
+                beqopA : mux2 generic map(g_width) port map(s_regfile_reg2out, s_alunit_outval_ME, s_ME_toDE_regcontents2_DE, s_beqopA);
+                beqopB : mux2 generic map(g_width) port map(s_regfile_reg3out, s_alunit_outval_ME, s_ME_toDE_regcontents3_DE, s_beqopB);
 
-        alusrc : mux2 generic map(g_width) port map(s_regfile_reg3out_EX, s_imem_instrMtype_offset32bit_EX, s_alusrc_ctrl_EX, s_alusrc_operand);
+        alusrc : mux2 generic map(g_width) port map(s_aluopB_hazardmuxout, s_imem_instrMtype_offset32bit_EX, s_alusrc_ctrl_EX, s_alusrc_operand);
             -- s_alusrc_ctrl <= '0'; -- mapped to decoder
 
     -- ALU
@@ -759,11 +862,11 @@ begin
             g_width => g_width -- : integer
         )
         port map(
-            i_a       => s_regfile_reg2out_EX, -- : in  STD_LOGIC_VECTOR(g_width-1 downto 0);
-            i_b       => s_alusrc_operand,     -- : in  STD_LOGIC_VECTOR(g_width-1 downto 0);
-            i_alucont => s_alunit_ctrl_EX,     -- : in  STD_LOGIC_VECTOR(2 downto 0);
-            o_zerodet => s_alunit_zerodet,     -- : out STD_LOGIC;
-            o_result  => s_alunit_outval       -- : out STD_LOGIC_VECTOR(g_width-1 downto 0)
+            i_a       => s_aluopA_hazardmuxout, -- : in  STD_LOGIC_VECTOR(g_width-1 downto 0);
+            i_b       => s_alusrc_operand,      -- : in  STD_LOGIC_VECTOR(g_width-1 downto 0);
+            i_alucont => s_alunit_ctrl_EX,      -- : in  STD_LOGIC_VECTOR(2 downto 0);
+            o_zerodet => s_alunit_zerodet,      -- : out STD_LOGIC;
+            o_result  => s_alunit_outval        -- : out STD_LOGIC_VECTOR(g_width-1 downto 0)
         );
         -- s_alunit_ctrl <= "000"; -- mapped to decoder
 
@@ -790,6 +893,40 @@ begin
 
         wbsrc : mux2 generic map(g_width) port map(s_dmem_outdata_WB, s_alunit_outval_WB, s_wbsrc_ctrl_WB, s_datawb_regfile);
             -- s_wbsrc_ctrl <= '0'; -- mapped to decoder
+
+    hz_unit : hazard_unit
+        generic map(
+            g_width   => g_width,  -- : integer;
+            g_regbits => g_regbits -- : integer
+        )
+        port map(
+            -- MEorWB_toEX_ALUoperands A and B
+            i_reg2_addr_EX               => s_reg2_addr_EX,               -- : in  STD_LOGIC_VECTOR(g_regbits-1 downto 0);
+            i_reg3_addr_EX               => s_reg3_addr_EX,               -- : in  STD_LOGIC_VECTOR(g_regbits-1 downto 0);
+            i_regf_writeregaddr_ME       => s_regf_writeregaddr_ME,       -- : in  STD_LOGIC_VECTOR(g_regbits-1 downto 0);
+            i_regfile_wen_ME             => s_regfile_wen_ME,             -- : in  STD_LOGIC;
+            i_regf_writeregaddr_WB       => s_regf_writeregaddr_WB,       -- : in  STD_LOGIC_VECTOR(g_regbits-1 downto 0);
+            i_regfile_wen_WB             => s_regfile_wen_WB,             -- : in  STD_LOGIC;
+            o_MEorWB_toEX_ALUoperandA_EX => s_MEorWB_toEX_ALUoperandA_EX, -- : out STD_LOGIC_VECTOR(1 downto 0);
+            o_MEorWB_toEX_ALUoperandB_EX => s_MEorWB_toEX_ALUoperandB_EX, -- : out STD_LOGIC_VECTOR(1 downto 0)
+            -- load-arith stall PC, stall IFDE and clear DEEX
+            i_regf_writeregaddr_EX       => s_regf_writeregaddr_EX,          -- : in  STD_LOGIC_VECTOR(g_regbits-1 downto 0);
+            i_reg2_addr_DE               => s_imem_outdata_DE(19 downto 15), -- : in  STD_LOGIC_VECTOR(g_regbits-1 downto 0);
+            i_reg3_addr_DE               => s_r1r3orr3r3,                    -- : in  STD_LOGIC_VECTOR(g_regbits-1 downto 0);
+            i_wbsrc_ctrl_EX              => s_wbsrc_ctrl_EX,                 -- : in  STD_LOGIC;
+            o_stall_PC                   => s_stall_PC,                      -- : out STD_LOGIC;
+            o_stall_IFDE_PPregs          => s_stall_IFDE_PPregs,             -- : out STD_LOGIC;
+            o_clear_DEEX_PPregs          => s_clear_DEEX_PPregs,             -- : out STD_LOGIC;
+            -- BEQstallstuff
+            i_beqsrc_ctrl_DE             => s_beqsrc_ctrl,                   -- : in  STD_LOGIC;
+            i_regfile_wen_EX             => s_regfile_wen_EX,                -- : in  STD_LOGIC;
+            i_wbsrc_ctrl_ME              => s_wbsrc_ctrl_ME,                 -- : in  STD_LOGIC;
+            o_ME_toDE_regcontents2_DE    => s_ME_toDE_regcontents2_DE,       -- : out STD_LOGIC;
+            o_ME_toDE_regcontents3_DE    => s_ME_toDE_regcontents3_DE        -- : out STD_LOGIC
+        );
+
+        aluopA : mux3 generic map(g_width) port map(s_regfile_reg2out_EX, s_datawb_regfile, s_alunit_outval_ME, s_MEorWB_toEX_ALUoperandA_EX, s_aluopA_hazardmuxout);
+        aluopB : mux3 generic map(g_width) port map(s_regfile_reg3out_EX, s_datawb_regfile, s_alunit_outval_ME, s_MEorWB_toEX_ALUoperandB_EX, s_aluopB_hazardmuxout);
 
 
 
