@@ -265,7 +265,7 @@ asm_src = [
     # "SUB 5 4 5",
     # "ADDI 3 3 -1",
     # "JMP 3",
-    # "STB 4 0 255",
+    # "STW 4 0 255",
 
     # # moneyharris(84)
     # "ADDI 1 1 1",
@@ -475,6 +475,78 @@ asm_src = [
     # "LDB 4 0 8",  # reg4 should have a 69
     # "ADD 5 1 4",  # reg5 should have a 137
     # "STB 5 0 16", # demem(16) shoudl have a 137
+
+    # # perftest 1
+    # "ADDI 1 0 128", # limit of 128
+    # "ADD 2 0 0",    # sum
+    # "ADD 3 0 0",    # i
+    # "BEQ 1 3 4",    # start loop
+    # "LDB 4 3 0",
+    # "ADD 2 2 4",    # sum = a[i]
+    # "ADDI 3 3 1",   # i++
+    # "JMP 3",        # try loop condition again
+    # "ADDI 5 0 1",   # finish flag
+
+    # # perftest 2
+    # "ADDI 1 0 128", # limit of 128
+    # "ADDI 2 0 5",   # 5 value
+    # "ADD 3 0 0",    # i
+    # "ADDI 4 0 0",   # base pointer for a[128]
+    # "ADDI 5 0 128", # base pointer for b[128]
+    # "BEQ 1 3 4",    # start loop #1
+    # "STB 2 4 0",    # a[i] = 5
+    # "ADDI 4 4 1",   # update pointer of a[128]
+    # "ADDI 3 3 1",   # i++
+    # "JMP 5",        # try loop condition again
+    # "SUB 4 4 3",    # reset pointer of a[128]
+    # "ADDI 3 0 0",   # reset i
+    # "BEQ 1 3 6",    # start loop #2
+    # "LDB 6 4 0",    # intermediate register to hold a[i] value
+    # "STB 6 5 0",    # b[i] = a[i]
+    # "ADDI 4 4 1",   # update pointer of a[128]
+    # "ADDI 5 5 1",   # update pointer of b[128]
+    # "ADDI 3 3 1",   # i++
+    # "JMP 12",       # try loop condition again
+    # "ADDI 31 0 1",  # finish flag
+
+    # perftest 3
+    "ADDI 1 0 10", # limit of 128
+    "ADD 2 0 0",    # i
+    "ADD 3 0 0",    # j
+    "ADD 4 0 0",    # k
+    "ADDI 5 0 0",   # base pointer for a[][]
+    "ADDI 6 0 0",   # base pointer for b[][]
+    "ADDI 7 0 0",   # base pointer for c[][]
+    "BEQ 1 2 22",   # start loop #1
+    "BEQ 1 3 18",   # start loop #2
+    "MUL 10 2 1",   # i*128
+    "ADD 11 10 3",  # (i*128)+j
+    "ADD 12 11 7",  # (i*128)+j+base_c_pointer
+    "STB 0 12 0",   # c[i][j] = 0
+    "BEQ 1 4 10",   # start loop #3
+    # a[i][k] section
+    "MUL 13 2 1",   # i*128
+    "ADD 14 13 4",  # (i*128)+k
+    "ADD 15 14 5",  # (i*128)+k+base_a_pointer
+    # b[k][j] section
+    "MUL 16 2 1",   # k*128
+    "ADD 17 16 3",  # (k*128)+j
+    "ADD 18 17 6",  # (k*128)+j+base_b_pointer
+    # a[i][k]*b[k][j] section
+    "MUL 19 15 18",
+    # c[i][j]=c[i][j]+a[i][k]*b[k][j] section
+    "ADD 12 12 19",
+    "ADDI 4 4 1",   # k++
+    "JMP 13",       # try loop #3 condition again
+    "ADDI 4 0 0",   # reset k
+    "ADDI 3 3 1",   # j++
+    "JMP 8",        # try loop #2 condition again
+    "ADDI 3 0 0",   # reset j
+    "ADDI 2 2 1",   # i++
+    "JMP 7",        # try loop #1 condition again
+    "ADDI 2 0 0",   # reset i
+    "ADDI 8 0 1",   # finish flag
+
 
 ]
 
