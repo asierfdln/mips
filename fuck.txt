@@ -1,0 +1,40 @@
+benchmarks con waveforms
+
+singlecycle
+fib 10    -> 550+1   (34)
+fib 50    -> 2550+1  (3483774753) log2(webval)=33...
+fib 100   -> 5050+1  (3405478146)
+fib 200   -> 10050+1 (305885837)
+fib 1000  -> 50050+1 (4057268386)
+
+pp
+fib 10    -> 690+1   (34)
+fib 50    -> 3090+1  (3483774753) log2(webval)=33...
+fib 100   -> 6090+1  (3405478146)
+fib 200   -> 12090+1 (305885837)
+fib 1000  -> 60090+1 (4057268386)
+
+buffersum singlecycle finishes at cycle 6450+1
+buffersum pp          finishes at cycle 9070+1
+
+memcopy singlecycle finishes at cycle 15460+1
+memcopy pp          finishes at cycle 19370+1
+
+matrix multiply for i = 10 singlecycle finishes at cycle 119600+1
+  dmem(216-215-214-213) -> 03a04700
+matrix multiply for i = 10 pp          finishes at cycle 143050+1
+  dmem(216-215-214-213) -> 03a04700
+
+excepcion hardware
+  o sea lo que queremos es un add overflow que salga de ALU que haga lo siguiente:
+    guarde el PC en el que estamos
+    ponga el flag de excepcion a 1
+    ponga el flag de excepcion de tipo overflow a 1, si eso que haya dos bits uno para overflow y otro para unrecognized instr
+    si pasa lo de overflow, clear pipeline before it and "jump" ala subrutina que queremos para multiplicar los dos registros por 16...
+      esto implica que necesitamos (1) los valores de los registros y (2) la direccion del registro destino
+      lo de "jump" es lo que dice el moneyharris con el multiplexor ese del final pero de tal manera que esté en EXstage...
+    algo pasa tb con el PC...
+      el valor de PC de la excepcion tiene que tener precedencia a BEQs o JUMPs y ese valor tiene que escribirse si o si
+        esto implica precedencia para la señal de PCwen desde el punto de vista de las exceptions
+            PCwen = exceptionraised or (1 and somecond and somecond ...)
+  mirar que es lo que pide esactamente espasa en las diapos...

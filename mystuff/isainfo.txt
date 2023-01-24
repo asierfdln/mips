@@ -4,7 +4,6 @@
 0x3     R   OR      r1, r2, r3         // r1 <- r2 OR r3
 0x4     R   SLT     r1, r2, r3         // r1 <- "1" if r2 < r3, otherwise r1 <- "0"
 0x5     R   MUL     r1, r2, r3         // r1 <- r2 * r3
-    TODO MUL instruction oof... would be kinda cool to have it be another normal operation...
 
 0x7     M   ADDI    r1, r2, imm         // r1 <- r2 + imm
 0x10    M   LDB     r1, r2, imm         // r1 <- mem[r2 + imm]
