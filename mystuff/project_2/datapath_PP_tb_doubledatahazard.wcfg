@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="datapath_PP_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="datapath_PP_tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="46.370 ns"></ZoomStartTime>
+      <ZoomEndTime time="178.671 ns"></ZoomEndTime>
+      <Cursor1Time time="102.470 ns"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="231"></NameColumnWidth>
+      <ValueColumnWidth column_width="56"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="21" />
+   <wave_markers>
+      <marker label="" time="122150" />
+      <marker label="" time="133650" />
+      <marker label="" time="142950" />
+   </wave_markers>
+   <wvobject type="logic" fp_name="/datapath_PP_tb/datapath_DUT/i_clk">
+      <obj_property name="ElementShortName">i_clk</obj_property>
+      <obj_property name="ObjectShortName">i_clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/datapath_PP_tb/datapath_DUT/i_reset">
+      <obj_property name="ElementShortName">i_reset</obj_property>
+      <obj_property name="ObjectShortName">i_reset</obj_property>
+   </wvobject>
+   <wvobject type="other" fp_name="/datapath_PP_tb/datapath_DUT/curr_instr_IF">
+      <obj_property name="ElementShortName">curr_instr_IF</obj_property>
+      <obj_property name="ObjectShortName">curr_instr_IF</obj_property>
+   </wvobject>
+   <wvobject type="other" fp_name="/datapath_PP_tb/datapath_DUT/curr_instr_DE">
+      <obj_property name="ElementShortName">curr_instr_DE</obj_property>
+      <obj_property name="ObjectShortName">curr_instr_DE</obj_property>
+   </wvobject>
+   <wvobject type="other" fp_name="/datapath_PP_tb/datapath_DUT/curr_instr_EX">
+      <obj_property name="ElementShortName">curr_instr_EX</obj_property>
+      <obj_property name="ObjectShortName">curr_instr_EX</obj_property>
+   </wvobject>
+   <wvobject type="other" fp_name="/datapath_PP_tb/datapath_DUT/curr_instr_ME">
+      <obj_property name="ElementShortName">curr_instr_ME</obj_property>
+      <obj_property name="ObjectShortName">curr_instr_ME</obj_property>
+   </wvobject>
+   <wvobject type="other" fp_name="/datapath_PP_tb/datapath_DUT/curr_instr_WB">
+      <obj_property name="ElementShortName">curr_instr_WB</obj_property>
+      <obj_property name="ObjectShortName">curr_instr_WB</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_PP_tb/datapath_DUT/s_pcreg_outvalue">
+      <obj_property name="ElementShortName">s_pcreg_outvalue[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_pcreg_outvalue[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_PP_tb/datapath_DUT/s_pcreg_outvalue_DE">
+      <obj_property name="ElementShortName">s_pcreg_outvalue_DE[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_pcreg_outvalue_DE[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_PP_tb/datapath_DUT/s_pcreg_outvalue_EX">
+      <obj_property name="ElementShortName">s_pcreg_outvalue_EX[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_pcreg_outvalue_EX[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_PP_tb/datapath_DUT/s_pcreg_outvalue_ME">
+      <obj_property name="ElementShortName">s_pcreg_outvalue_ME[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_pcreg_outvalue_ME[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_PP_tb/datapath_DUT/s_pcreg_outvalue_WB">
+      <obj_property name="ElementShortName">s_pcreg_outvalue_WB[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_pcreg_outvalue_WB[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_PP_tb/datapath_DUT/regfile/s_regs[1]">
+      <obj_property name="ElementShortName">[1][31:0]</obj_property>
+      <obj_property name="ObjectShortName">[1][31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_PP_tb/datapath_DUT/regfile/s_regs[2]">
+      <obj_property name="ElementShortName">[2][31:0]</obj_property>
+      <obj_property name="ObjectShortName">[2][31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_PP_tb/datapath_DUT/regfile/s_regs[3]">
+      <obj_property name="ElementShortName">[3][31:0]</obj_property>
+      <obj_property name="ObjectShortName">[3][31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_PP_tb/datapath_DUT/regfile/s_regs[4]">
+      <obj_property name="ElementShortName">[4][31:0]</obj_property>
+      <obj_property name="ObjectShortName">[4][31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_PP_tb/datapath_DUT/hz_unit/o_MEorWB_toEX_ALUoperandA_EX">
+      <obj_property name="ElementShortName">o_MEorWB_toEX_ALUoperandA_EX[1:0]</obj_property>
+      <obj_property name="ObjectShortName">o_MEorWB_toEX_ALUoperandA_EX[1:0]</obj_property>
+      <obj_property name="Radix">BINARYRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_PP_tb/datapath_DUT/s_aluopA_hazardmuxout">
+      <obj_property name="ElementShortName">s_aluopA_hazardmuxout[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_aluopA_hazardmuxout[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_PP_tb/datapath_DUT/s_regfile_reg2out_EX">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">s_regfile_reg2out_EX[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_regfile_reg2out_EX[31:0]</obj_property>
+      <obj_property name="label">00 -- s_regfile_reg2out_EX[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_PP_tb/datapath_DUT/s_datawb_regfile">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">s_datawb_regfile[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_datawb_regfile[31:0]</obj_property>
+      <obj_property name="label">01 -- -s_datawb_regfile[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_PP_tb/datapath_DUT/s_alunit_outval_ME">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">s_alunit_outval_ME[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_alunit_outval_ME[31:0]</obj_property>
+      <obj_property name="label">10 -- s_alunit_outval_ME[31:0]</obj_property>
+   </wvobject>
+</wave_config>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="datapath_PP_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="datapath_PP_tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0.000 ns"></ZoomStartTime>
+      <ZoomEndTime time="133.901 ns"></ZoomEndTime>
+      <Cursor1Time time="92.700 ns"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="215"></NameColumnWidth>
+      <ValueColumnWidth column_width="56"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="19" />
+   <wave_markers>
+      <marker label="" time="51800" />
+      <marker label="" time="73100" />
+      <marker label="" time="82800" />
+      <marker label="" time="92700" />
+   </wave_markers>
+   <wvobject type="logic" fp_name="/datapath_PP_tb/datapath_DUT/i_clk">
+      <obj_property name="ElementShortName">i_clk</obj_property>
+      <obj_property name="ObjectShortName">i_clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/datapath_PP_tb/datapath_DUT/i_reset">
+      <obj_property name="ElementShortName">i_reset</obj_property>
+      <obj_property name="ObjectShortName">i_reset</obj_property>
+   </wvobject>
+   <wvobject type="other" fp_name="/datapath_PP_tb/datapath_DUT/curr_instr_IF">
+      <obj_property name="ElementShortName">curr_instr_IF</obj_property>
+      <obj_property name="ObjectShortName">curr_instr_IF</obj_property>
+   </wvobject>
+   <wvobject type="other" fp_name="/datapath_PP_tb/datapath_DUT/curr_instr_DE">
+      <obj_property name="ElementShortName">curr_instr_DE</obj_property>
+      <obj_property name="ObjectShortName">curr_instr_DE</obj_property>
+   </wvobject>
+   <wvobject type="other" fp_name="/datapath_PP_tb/datapath_DUT/curr_instr_EX">
+      <obj_property name="ElementShortName">curr_instr_EX</obj_property>
+      <obj_property name="ObjectShortName">curr_instr_EX</obj_property>
+   </wvobject>
+   <wvobject type="other" fp_name="/datapath_PP_tb/datapath_DUT/curr_instr_ME">
+      <obj_property name="ElementShortName">curr_instr_ME</obj_property>
+      <obj_property name="ObjectShortName">curr_instr_ME</obj_property>
+   </wvobject>
+   <wvobject type="other" fp_name="/datapath_PP_tb/datapath_DUT/curr_instr_WB">
+      <obj_property name="ElementShortName">curr_instr_WB</obj_property>
+      <obj_property name="ObjectShortName">curr_instr_WB</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_PP_tb/datapath_DUT/s_pcreg_outvalue">
+      <obj_property name="ElementShortName">s_pcreg_outvalue[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_pcreg_outvalue[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_PP_tb/datapath_DUT/s_pcreg_outvalue_DE">
+      <obj_property name="ElementShortName">s_pcreg_outvalue_DE[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_pcreg_outvalue_DE[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_PP_tb/datapath_DUT/s_pcreg_outvalue_EX">
+      <obj_property name="ElementShortName">s_pcreg_outvalue_EX[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_pcreg_outvalue_EX[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_PP_tb/datapath_DUT/s_pcreg_outvalue_ME">
+      <obj_property name="ElementShortName">s_pcreg_outvalue_ME[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_pcreg_outvalue_ME[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_PP_tb/datapath_DUT/s_pcreg_outvalue_WB">
+      <obj_property name="ElementShortName">s_pcreg_outvalue_WB[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_pcreg_outvalue_WB[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/datapath_PP_tb/datapath_DUT/s_pcreg_wen">
+      <obj_property name="ElementShortName">s_pcreg_wen</obj_property>
+      <obj_property name="ObjectShortName">s_pcreg_wen</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/datapath_PP_tb/datapath_DUT/s_IF_wen">
+      <obj_property name="ElementShortName">s_IF_wen</obj_property>
+      <obj_property name="ObjectShortName">s_IF_wen</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/datapath_PP_tb/datapath_DUT/s_DE_reset">
+      <obj_property name="ElementShortName">s_DE_reset</obj_property>
+      <obj_property name="ObjectShortName">s_DE_reset</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_PP_tb/datapath_DUT/regfile/s_regs[1]">
+      <obj_property name="ElementShortName">[1][31:0]</obj_property>
+      <obj_property name="ObjectShortName">[1][31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_PP_tb/datapath_DUT/regfile/s_regs[2]">
+      <obj_property name="ElementShortName">[2][31:0]</obj_property>
+      <obj_property name="ObjectShortName">[2][31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_PP_tb/datapath_DUT/regfile/s_regs[3]">
+      <obj_property name="ElementShortName">[3][31:0]</obj_property>
+      <obj_property name="ObjectShortName">[3][31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/datapath_PP_tb/datapath_DUT/regfile/s_regs[4]">
+      <obj_property name="ElementShortName">[4][31:0]</obj_property>
+      <obj_property name="ObjectShortName">[4][31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+</wave_config>

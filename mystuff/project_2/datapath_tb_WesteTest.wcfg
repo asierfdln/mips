@@ -10,19 +10,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="136.770 ns"></ZoomStartTime>
-      <ZoomEndTime time="208.471 ns"></ZoomEndTime>
-      <Cursor1Time time="166.770 ns"></Cursor1Time>
+      <ZoomStartTime time="0.000 ns"></ZoomStartTime>
+      <ZoomEndTime time="129.501 ns"></ZoomEndTime>
+      <Cursor1Time time="9.100 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="267"></NameColumnWidth>
+      <NameColumnWidth column_width="259"></NameColumnWidth>
       <ValueColumnWidth column_width="56"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="14" />
-   <wvobject type="other" fp_name="/datapath_tb/datapath_DUT/decodunit/curr_instr">
-      <obj_property name="ElementShortName">curr_instr</obj_property>
-      <obj_property name="ObjectShortName">curr_instr</obj_property>
-   </wvobject>
    <wvobject type="logic" fp_name="/datapath_tb/datapath_DUT/i_clk">
       <obj_property name="ElementShortName">i_clk</obj_property>
       <obj_property name="ObjectShortName">i_clk</obj_property>
@@ -30,6 +26,10 @@
    <wvobject type="logic" fp_name="/datapath_tb/datapath_DUT/i_reset">
       <obj_property name="ElementShortName">i_reset</obj_property>
       <obj_property name="ObjectShortName">i_reset</obj_property>
+   </wvobject>
+   <wvobject type="other" fp_name="/datapath_tb/datapath_DUT/decodunit/curr_instr">
+      <obj_property name="ElementShortName">curr_instr</obj_property>
+      <obj_property name="ObjectShortName">curr_instr</obj_property>
    </wvobject>
    <wvobject type="group" fp_name="group1427">
       <obj_property name="label">loads or and add</obj_property>
