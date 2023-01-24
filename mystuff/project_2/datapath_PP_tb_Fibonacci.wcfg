@@ -10,12 +10,12 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="521.110 ns"></ZoomStartTime>
-      <ZoomEndTime time="603.211 ns"></ZoomEndTime>
-      <Cursor1Time time="581.110 ns"></Cursor1Time>
+      <ZoomStartTime time="599.107 ns"></ZoomStartTime>
+      <ZoomEndTime time="708.179 ns"></ZoomEndTime>
+      <Cursor1Time time="690.000 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="163"></NameColumnWidth>
+      <NameColumnWidth column_width="159"></NameColumnWidth>
       <ValueColumnWidth column_width="56"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="19" />
@@ -91,10 +91,30 @@
       <obj_property name="ObjectShortName">[3][31:0]</obj_property>
       <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/datapath_PP_tb/datapath_DUT/data_mem/s_mem[255]">
-      <obj_property name="ElementShortName">[255][7:0]</obj_property>
-      <obj_property name="ObjectShortName">[255][7:0]</obj_property>
+   <wvobject type="vbus" fp_name="vbus21925">
+      <obj_property name="label">dmem(2-1-0-255)</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
       <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <wvobject type="array" fp_name="/datapath_PP_tb/datapath_DUT/data_mem/s_mem[2]">
+         <obj_property name="ElementShortName">[2][7:0]</obj_property>
+         <obj_property name="ObjectShortName">[2][7:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/datapath_PP_tb/datapath_DUT/data_mem/s_mem[1]">
+         <obj_property name="ElementShortName">[1][7:0]</obj_property>
+         <obj_property name="ObjectShortName">[1][7:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/datapath_PP_tb/datapath_DUT/data_mem/s_mem[0]">
+         <obj_property name="ElementShortName">[0][7:0]</obj_property>
+         <obj_property name="ObjectShortName">[0][7:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/datapath_PP_tb/datapath_DUT/data_mem/s_mem[255]">
+         <obj_property name="ElementShortName">[255][7:0]</obj_property>
+         <obj_property name="ObjectShortName">[255][7:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
    </wvobject>
    <wvobject fp_name="divider13478" type="divider">
       <obj_property name="label">control signals below</obj_property>
