@@ -16,14 +16,14 @@ See [David Harris' personal webpage](https://pages.hmc.edu/harris/) for per-chap
 
 
 
-What to take a look at to understand stuff?
--------------------------------------------
+What to take a look at to understand stuff
+------------------------------------------
 
 The "mymips.drawio" and "step.by.step.proc.pdf" files provided lay out a step-by-step extension process of how to go from the single-cycle version of the processor to the fully-functional pipelined version. Each tab/slide of either file is aptly named/titled to refer to the motivation and purpose behind each extension step (note on drawio usage: Ctrl+Shift+H to centre the design in the window of drawio and thus see each transition from a sort of "fix-framed" position).
 
-All signals and modules depicted in the "mymips.drawio" and "step.by.step.proc.pdf" files are named after their actual implementation in code: 
+All signals and modules depicted in the "mymips.drawio" and "step.by.step.proc.pdf" files are named after their actual implementation in code, i.e. ...
 
-> **_YOU CAN CTRL+F THE NAME OF A SIGNAL/MODULE IN ANY .vhd FILE AS EXPLICITLY-STATED IN THE DIAGRAMS :)_**
+**_YOU CAN CTRL+F THE NAME OF A SIGNAL/MODULE IN ANY .vhd FILE AS EXPLICITLY-STATED IN THE DIAGRAMS :)_**
 
 The initial single-cycle version of the processor corresponds to the "datapath.vhd" file (simulated with the "datapath_tb.vhd" file) and the final pipelined version resides in the "datapath_PP{,_tb}.vhd" files. All modules have dedicated testbenches to verify their functionality, and most of them vary significantly from the original examples provided in [CMOS VLSI Design](http://pages.hmc.edu/harris/cmosvlsi/4e/index.html) and [Digital Design and Computer Architecture](https://pages.hmc.edu/harris/ddca/) as a result of tinkering, refactoring and fixing of code/stuff. I used Vivado 2022.1, but I have not used any novel VHDL 2008 features that might break stuff (as was the case in Vivado), so any tool really should do the trick.
 
